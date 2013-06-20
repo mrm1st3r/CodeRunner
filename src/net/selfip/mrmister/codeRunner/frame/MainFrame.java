@@ -1,5 +1,6 @@
 package net.selfip.mrmister.codeRunner.frame;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -13,7 +14,7 @@ import javax.swing.JMenuItem;
 import net.selfip.mrmister.codeRunner.CodeRunner;
 
 /**
- * 
+ * the main frame.
  * @author mrm1st3r
  *
  */
@@ -23,6 +24,8 @@ public class MainFrame extends JFrame {
 	
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 600;
+	
+	private RunnerPanel game;
 	
 	/**
 	 * Initialize the main window.
@@ -40,12 +43,11 @@ public class MainFrame extends JFrame {
         int top = (screenSize.height - DEFAULT_HEIGHT) / 2;
         int left = (screenSize.width - DEFAULT_WIDTH) / 2;
 		setLocation(left, top);
-        
-
-		//pack();
-		
 		buildMenu();
-		
+
+		setLayout(new BorderLayout());
+		buildGameComponent();
+
 		setVisible(true);
 	}
 	
@@ -54,8 +56,13 @@ public class MainFrame extends JFrame {
 		JMenu menu = new JMenu("Spiel");
 		mb.add(menu);
 		JMenuItem mi = new JMenuItem("Neu");
+		mi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				game.start();
+			}
+		});
 		menu.add(mi);
-		
+
 		mi = new JMenuItem("Beenden");
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -63,7 +70,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		menu.add(mi);
-		
+
 		menu = new JMenu("Hilfe");
 		mi = new JMenuItem("Über");
 		mi.addActionListener(new ActionListener() {
@@ -72,10 +79,14 @@ public class MainFrame extends JFrame {
 			}
 		});
 		menu.add(mi);
-		
+
 		mb.add(menu);
-		
-		
 		setJMenuBar(mb);
+	}
+
+	private void buildGameComponent() {
+		game = new RunnerPanel();
+		
+		add(game, BorderLayout.CENTER);
 	}
 }
