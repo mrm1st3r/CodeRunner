@@ -20,10 +20,10 @@ import net.selfip.mrmister.codeRunner.CodeRunner;
  */
 public class MainFrame extends JFrame {
 
-	static final long serialVersionUID = 0x1;
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 600;
 	
-	private static final int DEFAULT_WIDTH = 800;
-	private static final int DEFAULT_HEIGHT = 600;
+	static final long serialVersionUID = 0x1;
 	
 	private RunnerPanel game;
 	
@@ -33,15 +33,15 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		super(CodeRunner.getWindowTitle(true));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+
 		// fixed window-size
-		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		setSize(WIDTH, HEIGHT);
 		this.setResizable(false);
-		
+
 		// window opens in the middle of the screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int top = (screenSize.height - DEFAULT_HEIGHT) / 2;
-        int left = (screenSize.width - DEFAULT_WIDTH) / 2;
+        int top = (screenSize.height - HEIGHT) / 2;
+        int left = (screenSize.width - WIDTH) / 2;
 		setLocation(left, top);
 		buildMenu();
 
@@ -49,8 +49,11 @@ public class MainFrame extends JFrame {
 		buildGameComponent();
 
 		setVisible(true);
+		
+		Thread th = new Thread(game);
+		th.start();
 	}
-	
+
 	private void buildMenu() {
 		JMenuBar mb = new JMenuBar();
 		JMenu menu = new JMenu("Spiel");
@@ -85,7 +88,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void buildGameComponent() {
-		game = new RunnerPanel();
+		game = new RunnerPanel(this);
 		
 		add(game, BorderLayout.CENTER);
 	}
