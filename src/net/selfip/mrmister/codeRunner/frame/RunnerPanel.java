@@ -1,16 +1,19 @@
 package net.selfip.mrmister.codeRunner.frame;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
+import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.entities.AbstractEntity;
 import net.selfip.mrmister.codeRunner.entities.Player;
-import net.selfip.mrmister.codeRunner.entities.Sprite;
 import net.selfip.mrmister.codeRunner.event.MouseHandler;
 import net.selfip.mrmister.codeRunner.util.Time;
 
@@ -29,6 +32,8 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	private static final int FPS_LIMIT = 60;
 	private static final int FPS_POS_X = 10;
 	private static final int FPS_POS_Y = 20;
+	
+	private static final int START_MSG_SIZE = 20;
 
 	private double progress = 0;
 	private boolean paused = false;
@@ -39,7 +44,8 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	private long last = 0;
 	private long fps = 0;
 	
-	private Vector<Sprite> entities;
+	private BufferedImage bg;
+	private Vector<AbstractEntity> entities;
 
 	/**
 	 * @param main parent frame
@@ -57,9 +63,9 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 			calculateDelta();
 
 			if (entities != null) {
-				for (Sprite s : entities) {
-					s.doLogic();
-					s.move();
+				for (AbstractEntity s : entities) {
+					s.doLogic(delta);
+					s.move(delta);
 				}	
 			}
 
@@ -89,7 +95,9 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 		
 		addMouseListener(new MouseHandler(this));
 
-		entities = new Vector<Sprite>();
+		bg = CodeRunner.loadImages("background.png", 1)[0];
+		
+		entities = new Vector<AbstractEntity>();
 		Player p = new Player(this);
 		p.registerKeyHandler(mainFrame);
 		entities.add(p);
@@ -140,6 +148,14 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 		return progress;
 	}
 	
+	/**
+	 * increment game progress.
+	 * @param p increment value
+	 */
+	public void progress(int p) {
+		progress += p;
+	}
+	
 	private void calculateDelta() {
 		delta = System.nanoTime() - last;
 		last = System.nanoTime();
@@ -162,14 +178,24 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
+		if (!started) {
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("Lucida Console", 0, START_MSG_SIZE));
+			g.drawString("press ENTER to start", MainFrame.WIDTH / 3,
+					(MainFrame.HEIGHT - START_MSG_SIZE) / 2);
+			return;
+		}
+		
+		g.drawImage(bg, (int) -(progress % MainFrame.WIDTH), 0, this);
+		g.drawImage(bg, (int) -(progress % MainFrame.WIDTH) + MainFrame.WIDTH,
+				0, this);
+		
 		// write FPS-count to the upperleft corner
 		g.setColor(Color.BLACK);
-		g.drawString(fps + " FPS", FPS_POS_X, FPS_POS_Y);
+		g.drawString("FPS: " + fps, FPS_POS_X, FPS_POS_Y);
 
-		if (entities != null) {
-			for (Sprite e : entities) {
-				e.draw(g);
-			}
+		for (AbstractEntity e : entities) {
+			e.draw(g);
 		}
 	}
 }

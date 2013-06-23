@@ -1,57 +1,106 @@
 package net.selfip.mrmister.codeRunner.entities;
 
 import java.awt.Graphics;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 import net.selfip.mrmister.codeRunner.util.Time;
 
 /**
- * Base of all player- and NPC-classes.
+ * base class for non player entities.
  * @author mrm1st3r
  *
  */
-public abstract class AbstractEntity extends Rectangle2D.Double {
+public abstract class AbstractEntity
+	extends Rectangle2D.Double
+	implements Movable, Drawable {
 
 	public static final int SIGHT_OFFSET = 5;
 	
-	static Logger log = Logger.getLogger("AbstractEntity");
-	static final long serialVersionUID = 1L;
+	protected static Logger log = Logger.getLogger("AbstractEntity");
+	private static final long serialVersionUID = 1L;
 
 	protected int deltaX = 0;
 	protected int deltaY = 0;
+	
+	BufferedImage[] pics;
+	private int currPic = 0;
+	private long delay;
+	private long anim = 0;
 
 	private RunnerPanel env;
 
 	/**
-	 * draw the entity to the screen.
-	 * @param g graphics to draw with
+	 * 
+	 * @param i images representing the sprite
+	 * @param pos absolute position inside the Panel
+	 * @param d delay between animation images in millisecs
+	 * @param p environment
 	 */
-	public abstract void draw(Graphics g);
+	public AbstractEntity(BufferedImage[] i,
+			Point2D pos, long d, RunnerPanel p) {
 
-	/**
-	 * logical calculations.
-	 */
-	public abstract void doLogic();
+		pics = i;
+		x = pos.getX();
+		y = pos.getY();
+		this.delay = d;
+		height = pics[0].getHeight();
+		width = pics[0].getWidth();
+		setEnv(p);
+	}
 
-	public abstract int getRelHeight();
+
+	public int getRelativeY() {
+		return (int) (getEnv().getHeight() - y - pics[0].getHeight());
+	}
 	
-	public abstract void setRelHeight(int pos);
+	public void setRelativeY(int pos) {
+		y = (getEnv().getHeight() - pos - pics[0].getHeight());
+	}
 	
-	/**
-	 * move the entity on screen.
-	 */
-	public void move() {
-		if (deltaX != 0) {
-			x += deltaX * (1.0 * env.getDelta() / Time.NANOS_PER_SEC);
-		}
+	public int getRelativeX() {
+		return (int) (x - getEnv().getProgress());
+	}
+	
+	public void setRelativeX(int pos) {
+		x = pos + getEnv().getProgress();
+	}
 
-		if (deltaY != 0) {
-			y += deltaY * (1.0 * env.getDelta() / Time.NANOS_PER_SEC);
-			if (getRelHeight() < 0) {
-				setRelHeight(0);
+	public boolean onGround() {
+		return getRelativeY() == 0;
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		g.drawImage(pics[currPic], getRelativeX(), (int) y, null);
+		//log.info("drawing at " + x + "/" + y);
+	}
+
+	@Override
+	public void doLogic(long delta) {
+		anim += delta / Time.NANOS_PER_MILLI;
+
+		// show next animation image
+		if (anim > delay) {
+			anim = 0;
+			currPic++;
+			if (currPic >= pics.length) {
+				currPic = 0;
 			}
+		}
+	}
+
+	@Override
+	public void move(long delta) {
+		if (deltaX != 0) {
+			x += deltaX * (1.0 * delta / Time.NANOS_PER_SEC);
+		}
+	
+		if (deltaY != 0) {
+			y += deltaY * (1.0 * delta / Time.NANOS_PER_SEC);
 		}
 	}
 
@@ -61,7 +110,7 @@ public abstract class AbstractEntity extends Rectangle2D.Double {
 	 */
 	public boolean outOfSight() {
 		
-		return x < (env.getProgress() + SIGHT_OFFSET);
+		return x < (env.getProgress() + AbstractEntity.SIGHT_OFFSET);
 	}
 
 	/**

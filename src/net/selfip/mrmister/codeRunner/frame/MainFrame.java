@@ -3,11 +3,13 @@ package net.selfip.mrmister.codeRunner.frame;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import net.selfip.mrmister.codeRunner.CodeRunner;
 
@@ -55,6 +57,7 @@ public class MainFrame extends JFrame {
 				game.start();
 			}
 		});
+		mi.setAccelerator(KeyStroke.getKeyStroke((char) KeyEvent.VK_ENTER));
 		menu.add(mi);
 
 		mi = new JMenuItem("Beenden");

@@ -8,6 +8,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JFrame;
 
 import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.frame.MainFrame;
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 import net.selfip.mrmister.codeRunner.util.Time;
 
@@ -16,15 +17,16 @@ import net.selfip.mrmister.codeRunner.util.Time;
  * @author mrm1st3r
  *
  */
-public class Player extends Sprite {
+public class Player extends AbstractEntity {
 
 	public static final int KEY_LEFT = KeyEvent.VK_LEFT;
 	public static final int KEY_RIGHT = KeyEvent.VK_RIGHT;
 	public static final int KEY_JUMP = KeyEvent.VK_SPACE;
 
 	public static final int MOVE_SPEED = 100;
+	public static final int MIN_SIGHT = 250;
+
 	private static final int JUMP_TIME = 700;
-	
 	private static final int JUMP_SPEED = 100;
 
 	private static final long serialVersionUID = 1L;
@@ -46,33 +48,44 @@ public class Player extends Sprite {
 	}
 
 	@Override
-	public void doLogic() {
+	public void doLogic(long delta) {
 		
 	}
 
 	@Override
-	public void move() {
+	public void move(long delta) {
 		if (jump != 0) {
-			log.info("jumping!");
+			AbstractEntity.log.info("jumping!");
 			int calcX = (int) (System.nanoTime() - jump) / Time.NANOS_PER_MILLI;
 			if (calcX >= JUMP_TIME) {
-				log.info("jumping time is over!" + calcX);
-				endJump();			
+				AbstractEntity.log.info("jumping time is over!" + calcX);
+				endJump();
 			}
 			
-			if (deltaY == JUMP_SPEED && getRelHeight() <= 0) {
+			if (deltaY == JUMP_SPEED && getRelativeY() <= 0) {
 				deltaY = 0;
 				jump = 0;
-				setRelHeight(0);
+				setRelativeY(0);
 			}
 		}
 
-		super.move();
+		super.move(delta);
+
+		if (getRelativeX() >= (MainFrame.WIDTH - MIN_SIGHT)) {
+			getEnv().progress(getRelativeX() - (MainFrame.WIDTH - MIN_SIGHT));
+		}
+		
+		if (getRelativeX() < 0) {
+			setRelativeX(0);
+		}
+		if (getRelativeY() < 0) {
+			setRelativeY(0);
+		}
 	}
 
 	private void startJump() {
 		if (jump == 0 && onGround()) {
-			log.info("jumping");
+			AbstractEntity.log.info("jumping");
 			jump = System.nanoTime();
 			deltaY = -1 * JUMP_SPEED;
 		}
@@ -84,9 +97,9 @@ public class Player extends Sprite {
 
 	@Override
 	public void draw(Graphics g) {
-		g.drawString("pos: " + x + " / " + getRelHeight(), 10, 35);
+		g.drawString("pos: " + (int) x + " / " + (int) getRelativeY(), 10, 35);
 		g.drawString("speed: " + deltaX + " / " + deltaY, 10, 50);
-		
+
 		super.draw(g);
 	}
 
@@ -114,11 +127,11 @@ public class Player extends Sprite {
 
 			switch (key) {
 			case KEY_LEFT:
-				log.info("moving left");
+				AbstractEntity.log.info("moving left");
 				deltaX = -1 * MOVE_SPEED;
 				break;
 			case KEY_RIGHT:
-				log.info("moving right");
+				AbstractEntity.log.info("moving right");
 				deltaX = MOVE_SPEED;
 				break;
 			case KEY_JUMP:
@@ -128,7 +141,7 @@ public class Player extends Sprite {
 				getEnv().pause();
 				break;
 			default:
-				log.info("Key event! (" + (int) key + ")");
+				AbstractEntity.log.info("Key event! (" + (int) key + ")");
 			}
 		}
 
