@@ -1,7 +1,6 @@
 package net.selfip.mrmister.codeRunner.frame;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +12,7 @@ import javax.swing.JPanel;
 import net.selfip.mrmister.codeRunner.entities.Player;
 import net.selfip.mrmister.codeRunner.entities.Sprite;
 import net.selfip.mrmister.codeRunner.event.MouseHandler;
+import net.selfip.mrmister.codeRunner.util.Time;
 
 /**
  * where all the action goes.
@@ -26,8 +26,9 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	static final long serialVersionUID = 0x1;
 	private static Logger log = Logger.getLogger(RunnerPanel.class.getName());
 
-	private static final int FPS_X = 10;
-	private static final int FPS_Y = 20;
+	private static final int FPS_LIMIT = 60;
+	private static final int FPS_POS_X = 10;
+	private static final int FPS_POS_Y = 20;
 
 	private double progress = 0;
 	private boolean paused = false;
@@ -39,31 +40,37 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	private long fps = 0;
 	
 	private Vector<Sprite> entities;
+
 	/**
-	 * create a new RunnerPanel.
 	 * @param main parent frame
 	 */
 	public RunnerPanel(MainFrame main) {
-		setPreferredSize(new Dimension(MainFrame.HEIGHT, MainFrame.WIDTH));
+		super();
 		mainFrame = main;
-		addMouseListener(new MouseHandler(this));
 	}
 	
-	/**
-	 * 
-	 */
+	@Override
 	public void run() {
+		log.info("Main Loop starting");
 		while (mainFrame.isVisible()) {
 
 			calculateDelta();
 
+			if (entities != null) {
+				for (Sprite s : entities) {
+					s.doLogic();
+					s.move();
+				}	
+			}
+
 			repaint();
 
 			try {
-				Thread.sleep(10);
+				Thread.sleep((Time.MILLIS_PER_SEC / FPS_LIMIT));
+						//- (delta / Time.NANOS_PER_MILLI));
 			} catch (InterruptedException e) {
 				log.info("interrupted during sleep!");
-			}	
+			}
 		}
 
 		log.info("Main-Loop is over!");
@@ -76,14 +83,21 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 		if (started) {
 			return;
 		}
-		started = true;
+
+		Thread th = new Thread(this);
+		th.start();
 		
+		addMouseListener(new MouseHandler(this));
+
 		entities = new Vector<Sprite>();
-		Sprite p = new Player(this);
+		Player p = new Player(this);
+		p.registerKeyHandler(mainFrame);
 		entities.add(p);
-		
+
 		log.info("starting a new game");
 		last = System.nanoTime();
+		
+		started = true;
 	}
 
 	/**
@@ -129,21 +143,16 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	private void calculateDelta() {
 		delta = System.nanoTime() - last;
 		last = System.nanoTime();
-		fps = ((long) 1e9) / delta;
+		fps = Time.NANOS_PER_SEC / delta;
 	}
-	
+
 	/**
-	 * 
 	 * @return time needed for the last frame
 	 */
 	public long getDelta() {
 		return delta;
 	}
 
-	/**
-	 * blub.
-	 * @param e bla
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -155,8 +164,8 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 
 		// write FPS-count to the upperleft corner
 		g.setColor(Color.BLACK);
-		g.drawString(fps + " FPS", FPS_X, FPS_Y);
-		
+		g.drawString(fps + " FPS", FPS_POS_X, FPS_POS_Y);
+
 		if (entities != null) {
 			for (Sprite e : entities) {
 				e.draw(g);

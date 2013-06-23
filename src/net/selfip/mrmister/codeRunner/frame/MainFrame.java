@@ -1,8 +1,6 @@
 package net.selfip.mrmister.codeRunner.frame;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,20 +36,13 @@ public class MainFrame extends JFrame {
 		setSize(WIDTH, HEIGHT);
 		this.setResizable(false);
 
-		// window opens in the middle of the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int top = (screenSize.height - HEIGHT) / 2;
-        int left = (screenSize.width - WIDTH) / 2;
-		setLocation(left, top);
+		setLocationRelativeTo(null);
 		buildMenu();
 
 		setLayout(new BorderLayout());
 		buildGameComponent();
 
 		setVisible(true);
-		
-		Thread th = new Thread(game);
-		th.start();
 	}
 
 	private void buildMenu() {
@@ -89,6 +80,7 @@ public class MainFrame extends JFrame {
 
 	private void buildGameComponent() {
 		game = new RunnerPanel(this);
+		game.setSize(MainFrame.HEIGHT, MainFrame.WIDTH);
 		
 		add(game, BorderLayout.CENTER);
 	}
