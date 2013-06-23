@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
+import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 import net.selfip.mrmister.codeRunner.util.Time;
 
 /**
@@ -19,15 +20,15 @@ public abstract class AbstractEntity
 	implements Movable, Drawable {
 
 	public static final int SIGHT_OFFSET = 5;
-	
+
 	protected static Logger log = Logger.getLogger("AbstractEntity");
 	private static final long serialVersionUID = 1L;
 
 	protected int deltaX = 0;
 	protected int deltaY = 0;
-	
+
 	BufferedImage[] pics;
-	private int currPic = 0;
+	protected int currPic = 0;
 	private long delay;
 	private long anim = 0;
 
@@ -44,21 +45,24 @@ public abstract class AbstractEntity
 			Point2D pos, long d, RunnerPanel p) {
 
 		pics = i;
-		x = pos.getX();
-		y = pos.getY();
-		this.delay = d;
-		height = pics[0].getHeight();
-		width = pics[0].getWidth();
 		setEnv(p);
+		this.delay = d;
+		if (i != null) {
+			height = pics[0].getHeight();
+			width = pics[0].getWidth();
+		}
+		x = pos.getX();
+		setRelativeY((int) pos.getY());
 	}
 
+	public abstract boolean collidedWith(AbstractEntity e);
 
 	public int getRelativeY() {
-		return (int) (getEnv().getHeight() - y - pics[0].getHeight());
+		return (int) (getEnv().getHeight() - y - height);
 	}
 	
 	public void setRelativeY(int pos) {
-		y = (getEnv().getHeight() - pos - pics[0].getHeight());
+		y = (getEnv().getHeight() - pos - height);
 	}
 	
 	public int getRelativeX() {
@@ -74,9 +78,8 @@ public abstract class AbstractEntity
 	}
 
 	@Override
-	public void draw(Graphics g) {
+	public void draw(Graphics g, DisplayWriter d) {
 		g.drawImage(pics[currPic], getRelativeX(), (int) y, null);
-		//log.info("drawing at " + x + "/" + y);
 	}
 
 	@Override
@@ -110,7 +113,7 @@ public abstract class AbstractEntity
 	 */
 	public boolean outOfSight() {
 		
-		return x < (env.getProgress() + AbstractEntity.SIGHT_OFFSET);
+		return getRelativeX() + AbstractEntity.SIGHT_OFFSET < 0;
 	}
 
 	/**
