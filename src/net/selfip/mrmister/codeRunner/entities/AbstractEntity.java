@@ -113,7 +113,7 @@ public abstract class AbstractEntity
 	 */
 	public boolean outOfSight() {
 		
-		return getRelativeX() + AbstractEntity.SIGHT_OFFSET < 0;
+		return getRelativeX() + AbstractEntity.SIGHT_OFFSET + width < 0;
 	}
 
 	/**

@@ -3,6 +3,7 @@ package net.selfip.mrmister.codeRunner.entities;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
@@ -166,6 +167,14 @@ public class Player extends AbstractEntity {
 	 * @param p related frame
 	 */
 	public void registerKeyHandler(JFrame p) {
+		KeyListener[] l = p.getKeyListeners();
+
+		for (KeyListener k : l) {
+			if (k instanceof Keyboard) {
+				p.removeKeyListener(k);
+			}
+		}
+
 		p.addKeyListener(new Keyboard());
 	}
 

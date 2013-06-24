@@ -69,6 +69,10 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	public RunnerPanel(MainFrame main) {
 		super();
 		mainFrame = main;
+
+		bg = CodeRunner.loadImages("background.png", 1)[0];
+		Coffee.setPics(CodeRunner.loadImages("coffee.png", 1));
+		Bug.setPics(CodeRunner.loadImages("bug.png", 4));
 	}
 	
 	@Override
@@ -78,21 +82,20 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 
 			calculateDelta();
 
-			if (entities != null) {
-				for (ListIterator<AbstractEntity> it = entities.listIterator();
-						it.hasNext();) {
+			if (entities != null && !paused) {
+				for (int i = 0; i < entities.size(); i++) {
 
-					AbstractEntity s = it.next();
+					AbstractEntity s = entities.elementAt(i);
 					s.doLogic(delta);
 					s.move(delta);
 
 					if (s.outOfSight()) {
-						it.remove();
+						entities.remove(i);
 					}
-				}	
-			}
+				}
 
-			calculateCollisions();
+				calculateCollisions();
+			}
 
 			repaint();
 
@@ -114,7 +117,7 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 			}
 		}
 	}
-	
+
 	private void spawn() {
 		if (progress - lastSpawn < SPAWN_DIST) {
 			return;
@@ -158,10 +161,6 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 		progress = 0;
 		lastSpawn = 0;
 		addMouseListener(new MouseHandler(this));
-
-		bg = CodeRunner.loadImages("background.png", 1)[0];
-		Coffee.setPics(CodeRunner.loadImages("coffee.png", 1));
-		Bug.setPics(CodeRunner.loadImages("bug.png", 4));
 
 		entities = new Vector<AbstractEntity>();
 		player = new Player(this);
