@@ -134,7 +134,6 @@ implements Movable, Drawable {
 	 * @return true if not visible
 	 */
 	public boolean outOfSight() {
-
 		return getRelativeX() + AbstractEntity.SIGHT_OFFSET + width < 0;
 	}
 
