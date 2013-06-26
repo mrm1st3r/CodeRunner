@@ -9,4 +9,11 @@ is finished.
 
 ----------
 
+try to avoid:
+- energy falling below 0 (falling asleep)
+- energy going up to 10 (dying of coffeine shock)
+- touching bugs (getting depressions)
+
+----------
+
 Ironically this is the first project I started more or less early.

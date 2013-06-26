@@ -19,10 +19,9 @@ public final class CodeRunner {
 	// ---------------- general application informations ----------------------
 	public static final String APP_NAME = "Code Runner";
 	public static final String VERSION = "0.3.3";
-	public static final String AUTHOR = "Lukas Taake, Steffen Schiffel";
+	public static final String CODE_AUTHOR = "Lukas Taake, Steffen Schiffel";
+	public static final String GRAPHICS_AUTHOR = "Lukas Taake";
 	public static final String YEAR = "2013";
-
-	public static final String KEYCONFIG_FILE = "keyboard.ini";
 
 	// ---------------- global application settings ---------------------------
 	public static final int WIDTH = 800;
@@ -34,6 +33,8 @@ public final class CodeRunner {
 	public static final int KEY_LEFT = KeyEvent.VK_LEFT;
 	public static final int KEY_RIGHT = KeyEvent.VK_RIGHT;
 	public static final int KEY_JUMP = KeyEvent.VK_SPACE;
+
+	public static final String KEYCONFIG_FILE = "keyboard.ini";
 
 	public static final int SPAWN_TIMEOUT = 300;
 	public static final int SPAWN_POS = 20;

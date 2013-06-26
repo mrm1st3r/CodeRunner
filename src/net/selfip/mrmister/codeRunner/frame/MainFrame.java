@@ -20,9 +20,9 @@ import net.selfip.mrmister.codeRunner.CodeRunner;
 public class MainFrame extends JFrame {
 
 	static final long serialVersionUID = 0x1;
-	
+
 	private RunnerPanel game;
-	
+
 	/**
 	 * Initialize the main window.
 	 */
@@ -45,9 +45,9 @@ public class MainFrame extends JFrame {
 
 	private void buildMenu() {
 		JMenuBar mb = new JMenuBar();
-		JMenu menu = new JMenu("Spiel");
+		JMenu menu = new JMenu("Game");
 		mb.add(menu);
-		JMenuItem mi = new JMenuItem("Neu");
+		JMenuItem mi = new JMenuItem("New");
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (game.isStarted()) {
@@ -59,7 +59,7 @@ public class MainFrame extends JFrame {
 		mi.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
 		menu.add(mi);
 
-		mi = new JMenuItem("Beenden");
+		mi = new JMenuItem("Quit");
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.saveKeyConfig();
@@ -68,23 +68,39 @@ public class MainFrame extends JFrame {
 		});
 		menu.add(mi);
 
-		menu = new JMenu("Hilfe");
-		mi = new JMenuItem("Über");
+		menu = new JMenu("Help");
+		mb.add(menu);
+
+		mi = new JMenuItem("About");
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				new AboutFrame(MainFrame.this);
+				new AboutDialog(MainFrame.this);
 			}
 		});
 		menu.add(mi);
 
-		mb.add(menu);
+		mi = new JMenuItem("Key configuration");
+		mi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				new KeyConfigDialog(MainFrame.this);
+			}
+		});
+		menu.add(mi);
+
 		setJMenuBar(mb);
 	}
 
 	private void buildGameComponent() {
 		game = new RunnerPanel(this);
 		game.setSize(CodeRunner.HEIGHT, CodeRunner.WIDTH);
-		
+
 		add(game, BorderLayout.CENTER);
+	}
+
+	/**
+	 * @return the game panel
+	 */
+	public RunnerPanel getRunnerPanel() {
+		return game;
 	}
 }

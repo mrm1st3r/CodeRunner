@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
+import javax.swing.JPanel;
+
 /**
  * helper for drawing texts.
  * @author mrm1st3r
@@ -25,13 +27,16 @@ public class DisplayWriter {
 	private int currentLineHeight = FIRST_LINE;
 	private int rightLineHeight = FIRST_LINE;
 	private Graphics g;
+	private JPanel env;
 	private Color c;
 
 	/**
 	 * @param gra graphics to draw with
+	 * @param p panel to draw in
 	 */
-	public DisplayWriter(Graphics gra) {
+	public DisplayWriter(Graphics gra, JPanel p) {
 		g = gra;
+		env = p;
 		defFont = g.getFont();
 	}
 
@@ -58,7 +63,7 @@ public class DisplayWriter {
 		g.setFont(defFont);
 		g.drawString(msg, x, y);
 	}
-	
+
 	/**
 	 * print a text line centered on both axis.
 	 * @param msg text to print
@@ -69,8 +74,8 @@ public class DisplayWriter {
 
 		// calculate position
 		FontMetrics fm = g.getFontMetrics();
-		int x = (g.getClipBounds().width - fm.stringWidth(msg)) / 2;
-		int y = (g.getClipBounds().height - fm.getHeight()) / 2;
+		int x = (env.getWidth() - fm.stringWidth(msg)) / 2;
+		int y = (env.getHeight() - fm.getHeight()) / 2;
 
 		g.drawString(msg, x, y);
 	}
@@ -83,11 +88,11 @@ public class DisplayWriter {
 		g.setColor(c);
 		g.setFont(defFont);
 		g.drawString(msg, 
-				g.getClipBounds().width - g.getFontMetrics().stringWidth(msg)
+				env.getWidth() - g.getFontMetrics().stringWidth(msg)
 				- SIDE_MARGIN,
 				rightLineHeight);
 	}
-	
+
 	/**
 	 * set a new text-color.
 	 * @param newColor new color

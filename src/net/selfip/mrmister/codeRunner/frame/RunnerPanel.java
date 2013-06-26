@@ -237,11 +237,18 @@ public class RunnerPanel extends JPanel implements Runnable {
 		keyConf.save();
 	}
 
+	/**
+	 * @return the current key-configuration
+	 */
+	public KeyConfig getKeyConfig() {
+		return keyConf;
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		DisplayWriter out = new DisplayWriter(g);
+		DisplayWriter out = new DisplayWriter(g, this);
 		out.setColor(Color.BLACK);
 
 		// draw background

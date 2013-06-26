@@ -1,5 +1,6 @@
 package net.selfip.mrmister.codeRunner.event;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,11 +18,13 @@ import net.selfip.mrmister.codeRunner.CodeRunner;
  */
 public class KeyConfig {
 
+	private static final int LIST_COLS = 3;
+
 	private String configFile;
 	private Properties prop;
 	private Logger log;
 	private Hashtable<String, String> defaults;
-	
+
 	/**
 	 * create an empty key-configuration.
 	 */
@@ -39,7 +42,7 @@ public class KeyConfig {
 		configFile = file;
 		loadFrom(file);
 	}
-	
+
 	/**
 	 * set a default value for a specific key.
 	 * @param key key
@@ -48,11 +51,20 @@ public class KeyConfig {
 	public void setDefaultValue(String key, int value) {
 		if (prop != null && !prop.contains(key)) {
 			prop.setProperty(key, Integer.toString(value));
-		} else {
-			defaults.put(key, Integer.toString(value));
 		}
+
+		defaults.put(key, Integer.toString(value));
 	}
-	
+
+	/**
+	 * get the default value for a specific key.
+	 * @param key key
+	 * @return default value
+	 */
+	public int getDefaultValue(String key) {
+		return Integer.parseInt(defaults.get(key));
+	}
+
 	/**
 	 * get the specified key-value or if not found default value.
 	 * @param key name of the key
@@ -64,6 +76,23 @@ public class KeyConfig {
 		} else {
 			return Integer.parseInt(prop.getProperty(key));
 		}
+	}
+
+	/**
+	 * build a list of all keys, values and default-values.
+	 * @return String-array with all keys and values
+	 */
+	public String[][] list() {
+		String[] s = prop.keySet().toArray(new String[0]);
+		String[][] ret = new String[s.length][LIST_COLS];
+
+		for (int i = 0; i < s.length; i++) {
+			ret[i][0] = s[i];
+			ret[i][1] = KeyEvent.getKeyText(get(s[i]));
+			ret[i][2] = KeyEvent.getKeyText(getDefaultValue(s[i]));
+		}
+
+		return ret;
 	}
 
 	/**
@@ -99,7 +128,7 @@ public class KeyConfig {
 	public void save() {
 		save(configFile);
 	}
-	
+
 	/**
 	 * save the current key-configuration to
 	 * a specific file.
