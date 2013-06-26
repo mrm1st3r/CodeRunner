@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.logging.Logger;
 
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 import net.selfip.mrmister.codeRunner.util.DisplayWriter;
@@ -21,7 +20,6 @@ implements Movable, Drawable {
 
 	public static final int SIGHT_OFFSET = 5;
 
-	protected static Logger log = Logger.getLogger("AbstractEntity");
 	private static final long serialVersionUID = 1L;
 
 	protected int deltaX = 0;

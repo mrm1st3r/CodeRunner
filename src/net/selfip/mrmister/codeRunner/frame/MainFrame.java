@@ -3,7 +3,6 @@ package net.selfip.mrmister.codeRunner.frame;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -20,9 +19,6 @@ import net.selfip.mrmister.codeRunner.CodeRunner;
  */
 public class MainFrame extends JFrame {
 
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 600;
-	
 	static final long serialVersionUID = 0x1;
 	
 	private RunnerPanel game;
@@ -35,7 +31,7 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// fixed window-size
-		setSize(WIDTH, HEIGHT);
+		setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
 		this.setResizable(false);
 
 		setLocationRelativeTo(null);
@@ -54,15 +50,19 @@ public class MainFrame extends JFrame {
 		JMenuItem mi = new JMenuItem("Neu");
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (game.isStarted()) {
+					game.stop("");
+				}
 				game.start();
 			}
 		});
-		mi.setAccelerator(KeyStroke.getKeyStroke((char) KeyEvent.VK_ENTER));
+		mi.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
 		menu.add(mi);
 
 		mi = new JMenuItem("Beenden");
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				game.saveKeyConfig();
 				System.exit(0);
 			}
 		});
@@ -83,7 +83,7 @@ public class MainFrame extends JFrame {
 
 	private void buildGameComponent() {
 		game = new RunnerPanel(this);
-		game.setSize(MainFrame.HEIGHT, MainFrame.WIDTH);
+		game.setSize(CodeRunner.HEIGHT, CodeRunner.WIDTH);
 		
 		add(game, BorderLayout.CENTER);
 	}

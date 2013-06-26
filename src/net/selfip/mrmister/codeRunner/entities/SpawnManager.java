@@ -20,7 +20,7 @@ public class SpawnManager implements ActionListener {
 	private static final double COFFEE_CHANCE = 0.1;
 	private static final double BED_CHANCE = 0.2;
 	private static final double BUG_CHANCE = 0.02;
-	
+
 	private RunnerPanel env;
 	private Timer timer;
 	private long lastSpawn;
@@ -36,14 +36,14 @@ public class SpawnManager implements ActionListener {
 	}
 	
 	/**
-	 * 
+	 * start to spawn new entities.
 	 */
 	public void start() {
 		timer.start();
 	}
 	
 	/**
-	 * 
+	 * stop to spawn new entities.
 	 */
 	public void stop() {
 		timer.stop();
@@ -54,7 +54,7 @@ public class SpawnManager implements ActionListener {
 			return;
 		}
 		AbstractEntity e = null;
-		// spawn a new Coffee
+
 		if (Math.random() <= BUG_CHANCE) {
 			log.info("spawning new bug");
 			e = new Bug(

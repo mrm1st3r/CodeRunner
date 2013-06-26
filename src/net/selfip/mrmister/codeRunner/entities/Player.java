@@ -9,7 +9,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JFrame;
 
 import net.selfip.mrmister.codeRunner.CodeRunner;
-import net.selfip.mrmister.codeRunner.frame.MainFrame;
+import net.selfip.mrmister.codeRunner.event.KeyConfig;
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 import net.selfip.mrmister.codeRunner.util.Time;
@@ -20,10 +20,6 @@ import net.selfip.mrmister.codeRunner.util.Time;
  *
  */
 public class Player extends AbstractEntity {
-
-	public static final int KEY_LEFT = KeyEvent.VK_LEFT;
-	public static final int KEY_RIGHT = KeyEvent.VK_RIGHT;
-	public static final int KEY_JUMP = KeyEvent.VK_SPACE;
 
 	public static final int MOVE_SPEED = 180;
 	public static final int MIN_SIGHT = 250;
@@ -65,7 +61,7 @@ public class Player extends AbstractEntity {
 	 */
 	public void addEnergy() {
 		energy++;
-		
+
 		if (energy >= COFFEE_SHOCK) {
 			getEnv().stop("You died of a Coffeine shock! Score: " + (int) x);
 		}
@@ -76,7 +72,7 @@ public class Player extends AbstractEntity {
 	 */
 	public void reduceEnergy() {
 		energy--;
-		
+
 		if (energy < 0) {
 			getEnv().stop("You fell asleep! Score: " + (int) x);
 		}
@@ -87,7 +83,7 @@ public class Player extends AbstractEntity {
 	 */
 	public void depress() {
 		getEnv().stop("You got a depression and can't continue! Score: "
-	+ (int) x);
+				+ (int) x);
 	}
 
 	/**
@@ -104,8 +100,8 @@ public class Player extends AbstractEntity {
 		super.move(delta);
 
 		// Level weiterscrollen
-		if (getRelativeX() >= (MainFrame.WIDTH - MIN_SIGHT)) {
-			getEnv().progress(getRelativeX() - (MainFrame.WIDTH - MIN_SIGHT));
+		if (getRelativeX() >= (CodeRunner.WIDTH - MIN_SIGHT)) {
+			getEnv().progress(getRelativeX() - (CodeRunner.WIDTH - MIN_SIGHT));
 		}
 
 		if (getRelativeX() < 0) {
@@ -115,13 +111,11 @@ public class Player extends AbstractEntity {
 			setRelativeY(0);
 		}
 	}
-	
+
 	private void calculateJump() {
 		if (jump != 0) {
-			AbstractEntity.log.info("jumping!");
 			int calcX = (int) (System.nanoTime() - jump) / Time.NANOS_PER_MILLI;
 			if (calcX >= JUMP_TIME) {
-				AbstractEntity.log.info("jumping time is over!" + calcX);
 				endJump();
 			}
 
@@ -140,7 +134,6 @@ public class Player extends AbstractEntity {
 
 	private void startJump() {
 		if (jump == 0 && onGround()) {
-			AbstractEntity.log.info("jumping");
 			jump = System.nanoTime();
 			deltaY = -1 * JUMP_SPEED;
 		}
@@ -163,8 +156,9 @@ public class Player extends AbstractEntity {
 	/**
 	 * register the player input.
 	 * @param p related frame
+	 * @param c key-configuration to use
 	 */
-	public void registerKeyHandler(JFrame p) {
+	public void registerKeyHandler(JFrame p, KeyConfig c) {
 		KeyListener[] l = p.getKeyListeners();
 
 		for (KeyListener k : l) {
@@ -173,58 +167,54 @@ public class Player extends AbstractEntity {
 			}
 		}
 
-		p.addKeyListener(new Keyboard());
+		p.addKeyListener(new Keyboard(c));
 	}
 
 	class Keyboard extends KeyAdapter {
 
+		private KeyConfig conf;
+
+		public Keyboard(KeyConfig c) {
+			conf = c;
+		}
+
 		@Override
 		public void keyPressed(KeyEvent e) {
-			char key = Character.toLowerCase((char) e.getKeyCode());
+			int key = Character.toLowerCase((char) e.getKeyCode());
 
 			if (getEnv().isPaused()) {
-				if (key == RunnerPanel.KEY_PAUSE) {
+				if (key == conf.get("pause")) {
 					getEnv().resume();
 				}
 
 				return;
 			}
 
-			switch (key) {
-			case KEY_LEFT:
+			if (key == conf.get("move_left")) {
 				//AbstractEntity.log.info("moving left");
 				deltaX = -1 * MOVE_SPEED;
-				break;
-			case KEY_RIGHT:
+			} else if (key == conf.get("move_right")) {
 				//AbstractEntity.log.info("moving right");
 				deltaX = MOVE_SPEED;
-				break;
-			case KEY_JUMP:
+			} else if (key == conf.get("jump")) {
 				startJump();
-				break;
-			case RunnerPanel.KEY_PAUSE:
+			} else if (key == conf.get("pause")) {
 				getEnv().pause();
-				break;
-			default:
-				AbstractEntity.log.info("Key event! (" + (int) key + ")");
 			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			char key = Character.toLowerCase((char) e.getKeyCode());
+			int key = Character.toLowerCase((char) e.getKeyCode());
 
-			switch (key) {
-			case KEY_LEFT:
+			if (key == conf.get("move_left")) {
+				//AbstractEntity.log.info("moving left");
 				deltaX = 0;
-				break;
-			case KEY_RIGHT:
+			} else if (key == conf.get("move_right")) {
+				//AbstractEntity.log.info("moving right");
 				deltaX = 0;
-				break;
-			case KEY_JUMP:
+			} else if (key == conf.get("jump")) {
 				endJump();
-				break;
-			default:
 			}
 		}
 	}

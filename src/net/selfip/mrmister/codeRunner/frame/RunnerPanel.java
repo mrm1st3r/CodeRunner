@@ -14,6 +14,7 @@ import net.selfip.mrmister.codeRunner.entities.Bug;
 import net.selfip.mrmister.codeRunner.entities.Coffee;
 import net.selfip.mrmister.codeRunner.entities.Player;
 import net.selfip.mrmister.codeRunner.entities.SpawnManager;
+import net.selfip.mrmister.codeRunner.event.KeyConfig;
 import net.selfip.mrmister.codeRunner.event.MouseHandler;
 import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 import net.selfip.mrmister.codeRunner.util.Time;
@@ -25,12 +26,7 @@ import net.selfip.mrmister.codeRunner.util.Time;
  */
 public class RunnerPanel extends JPanel implements Runnable {
 
-	public static final int KEY_PAUSE = 'p';
-
 	private static final long serialVersionUID = 0x1;
-
-	private static final int FPS_LIMIT = 60;
-
 
 	private double progress = 0;
 	private boolean paused = false;
@@ -46,6 +42,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 	private String msg = "press ENTER to start";
 
 	private Player player;
+	private KeyConfig keyConf;
 	private Vector<AbstractEntity> entities;
 	private SpawnManager spawner;
 
@@ -57,6 +54,13 @@ public class RunnerPanel extends JPanel implements Runnable {
 		mainFrame = main;
 		log = Logger.getLogger(getClass().getName());
 
+		keyConf = new KeyConfig(CodeRunner.KEYCONFIG_FILE);
+		keyConf.setDefaultValue("start", CodeRunner.KEY_START);
+		keyConf.setDefaultValue("pause", CodeRunner.KEY_PAUSE);
+		keyConf.setDefaultValue("move_left", CodeRunner.KEY_LEFT);
+		keyConf.setDefaultValue("move_right", CodeRunner.KEY_RIGHT);
+		keyConf.setDefaultValue("jump", CodeRunner.KEY_JUMP);
+		
 		bg = CodeRunner.loadImages("background.png", 1)[0];
 		Coffee.init();
 		Bug.init();
@@ -76,7 +80,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 
 		entities = new Vector<AbstractEntity>();
 		player = new Player(this);
-		player.registerKeyHandler(mainFrame);
+		player.registerKeyHandler(mainFrame, keyConf);
 		entities.add(player);
 
 		log.info("starting a new game");
@@ -102,7 +106,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 			repaint();
 
 			try {
-				Thread.sleep((Time.MILLIS_PER_SEC / FPS_LIMIT));
+				Thread.sleep((Time.MILLIS_PER_SEC / CodeRunner.FPS_LIMIT));
 			} catch (InterruptedException e) {
 				log.info("interrupted during sleep!");
 			}
@@ -226,6 +230,13 @@ public class RunnerPanel extends JPanel implements Runnable {
 		return delta;
 	}
 
+	/**
+	 * save the key-configuration.
+	 */
+	public void saveKeyConfig() {
+		keyConf.save();
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -234,9 +245,9 @@ public class RunnerPanel extends JPanel implements Runnable {
 		out.setColor(Color.BLACK);
 
 		// draw background
-		g.drawImage(bg, (int) -(progress % MainFrame.WIDTH), 0, this);
+		g.drawImage(bg, (int) -(progress % CodeRunner.WIDTH), 0, this);
 		g.drawImage(bg,
-				(int) -(progress % MainFrame.WIDTH) + MainFrame.WIDTH,
+				(int) -(progress % CodeRunner.WIDTH) + CodeRunner.WIDTH,
 				0, this);
 
 		if (started) {

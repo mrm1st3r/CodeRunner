@@ -1,5 +1,6 @@
 package net.selfip.mrmister.codeRunner;
 
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.logging.Logger;
@@ -15,20 +16,29 @@ import net.selfip.mrmister.codeRunner.frame.MainFrame;
  */
 public final class CodeRunner {
 
-	// ---------------- general application infos -----------------------------
+	// ---------------- general application informations ----------------------
 	public static final String APP_NAME = "Code Runner";
-	public static final String VERSION = "0.3.2";
+	public static final String VERSION = "0.3.3";
 	public static final String AUTHOR = "Lukas Taake, Steffen Schiffel";
 	public static final String YEAR = "2013";
 
 	public static final String KEYCONFIG_FILE = "keyboard.ini";
 
 	// ---------------- global application settings ---------------------------
-	
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 600;
+	public static final int FPS_LIMIT = 60;
+
+	public static final int KEY_START = KeyEvent.VK_ENTER;
+	public static final int KEY_PAUSE = 'p';
+	public static final int KEY_LEFT = KeyEvent.VK_LEFT;
+	public static final int KEY_RIGHT = KeyEvent.VK_RIGHT;
+	public static final int KEY_JUMP = KeyEvent.VK_SPACE;
+
 	public static final int SPAWN_TIMEOUT = 300;
 	public static final int SPAWN_POS = 20;
 	public static final int SPAWN_DIST = 110;
-	
+
 	// ---------------- other -------------------------------------------------
 	private static Logger log;
 

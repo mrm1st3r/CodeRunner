@@ -26,7 +26,12 @@ public class Coffee extends AbstractEntity {
 	public Coffee(Point2D pos, RunnerPanel p) {
 		super(Coffee.pics, pos, ANIMATION_TIMEOUT, p);
 	}
-	
+
+	/**
+	 * check for collisions. If collides with the player, add one energy.
+	 * @param e entity to check collision with.
+	 * @return return if a collision is detected
+	 */
 	@Override
 	public boolean collidedWith(AbstractEntity e) {
 		if (this.intersects(e)) {
