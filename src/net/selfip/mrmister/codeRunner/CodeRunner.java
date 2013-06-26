@@ -15,11 +15,21 @@ import net.selfip.mrmister.codeRunner.frame.MainFrame;
  */
 public final class CodeRunner {
 
+	// ---------------- general application infos -----------------------------
 	public static final String APP_NAME = "Code Runner";
-	public static final double VERSION = 0.3;
+	public static final String VERSION = "0.3.2";
 	public static final String AUTHOR = "Lukas Taake, Steffen Schiffel";
 	public static final String YEAR = "2013";
 
+	public static final String KEYCONFIG_FILE = "keyboard.ini";
+
+	// ---------------- global application settings ---------------------------
+	
+	public static final int SPAWN_TIMEOUT = 300;
+	public static final int SPAWN_POS = 20;
+	public static final int SPAWN_DIST = 110;
+	
+	// ---------------- other -------------------------------------------------
 	private static Logger log;
 
 	private CodeRunner() { }
@@ -30,7 +40,7 @@ public final class CodeRunner {
 	 */
 	public static void main(String[] args) {
 		new MainFrame();
-		
+
 		log = Logger.getLogger(CodeRunner.class.getName());
 	}
 

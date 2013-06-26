@@ -2,23 +2,18 @@ package net.selfip.mrmister.codeRunner.frame;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.ListIterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import net.selfip.mrmister.codeRunner.CodeRunner;
 import net.selfip.mrmister.codeRunner.entities.AbstractEntity;
-import net.selfip.mrmister.codeRunner.entities.Bed;
 import net.selfip.mrmister.codeRunner.entities.Bug;
 import net.selfip.mrmister.codeRunner.entities.Coffee;
 import net.selfip.mrmister.codeRunner.entities.Player;
+import net.selfip.mrmister.codeRunner.entities.SpawnManager;
 import net.selfip.mrmister.codeRunner.event.MouseHandler;
 import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 import net.selfip.mrmister.codeRunner.util.Time;
@@ -28,24 +23,14 @@ import net.selfip.mrmister.codeRunner.util.Time;
  * @author mrm1st3r
  *
  */
-public class RunnerPanel extends JPanel implements ActionListener, Runnable {
+public class RunnerPanel extends JPanel implements Runnable {
 
 	public static final int KEY_PAUSE = 'p';
 
-	static final long serialVersionUID = 0x1;
-	private static Logger log = Logger.getLogger(RunnerPanel.class.getName());
+	private static final long serialVersionUID = 0x1;
 
 	private static final int FPS_LIMIT = 60;
 
-	private static final int START_MSG_SIZE = 20;
-
-	private static final double COFFEE_CHANCE = 0.1;
-	private static final double BED_CHANCE = 0.2;
-	private static final double BUG_CHANCE = 0.02;
-
-	private static final int SPAWN_TIMEOUT = 300;
-	private static final int SPAWN_POS = 20;
-	private static final int SPAWN_DIST = 100;
 
 	private double progress = 0;
 	private boolean paused = false;
@@ -55,13 +40,14 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	private long delta = 0;
 	private long last = 0;
 	private long fps = 0;
-	private int lastSpawn = 0;
 
-	private Timer timer;
-	private AbstractEntity player;
+	private Logger log;
 	private BufferedImage bg;
-	private Vector<AbstractEntity> entities;
 	private String msg = "press ENTER to start";
+
+	private Player player;
+	private Vector<AbstractEntity> entities;
+	private SpawnManager spawner;
 
 	/**
 	 * @param main parent frame
@@ -69,81 +55,11 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	public RunnerPanel(MainFrame main) {
 		super();
 		mainFrame = main;
-	}
-	
-	@Override
-	public void run() {
-		log.info("Main Loop starting");
-		while (mainFrame.isVisible() && started) {
+		log = Logger.getLogger(getClass().getName());
 
-			calculateDelta();
-
-			if (entities != null) {
-				for (ListIterator<AbstractEntity> it = entities.listIterator();
-						it.hasNext();) {
-
-					AbstractEntity s = it.next();
-					s.doLogic(delta);
-					s.move(delta);
-
-					if (s.outOfSight()) {
-						it.remove();
-					}
-				}	
-			}
-
-			calculateCollisions();
-
-			repaint();
-
-			try {
-				Thread.sleep((Time.MILLIS_PER_SEC / FPS_LIMIT));
-			} catch (InterruptedException e) {
-				log.info("interrupted during sleep!");
-			}
-		}
-
-		log.info("Main-Loop is over!");
-	}
-	
-	private void calculateCollisions() {
-		for (int i = 0; i < entities.size(); i++) {
-			if (!(entities.elementAt(i) instanceof Player)
-					&& entities.elementAt(i).collidedWith(player)) {
-				entities.remove(i);
-			}
-		}
-	}
-	
-	private void spawn() {
-		if (progress - lastSpawn < SPAWN_DIST) {
-			return;
-		}
-		AbstractEntity e = null;
-		// spawn a new Coffee
-		if (Math.random() <= BUG_CHANCE) {
-			log.info("spawning new bug");
-			e = new Bug(
-					new Point2D.Double(getWidth() + progress + SPAWN_POS, 0),
-					this);
-		} else if (Math.random() <= COFFEE_CHANCE) {
-			log.info("spawing new coffee");
-			e = new Coffee(
-					new Point2D.Double(getWidth() + progress + SPAWN_POS, 0),
-					this);
-
-		} else if (Math.random() < BED_CHANCE) {
-			log.info("spawning new bed");
-			e = new Bed(
-					new Point2D.Double(getWidth() + progress + SPAWN_POS, 0),
-					this);
-		}
-
-		if (e != null) {
-			ListIterator<AbstractEntity> it = entities.listIterator();
-			it.add(e);
-			lastSpawn = (int) progress;
-		}
+		bg = CodeRunner.loadImages("background.png", 1)[0];
+		Coffee.init();
+		Bug.init();
 	}
 
 	/**
@@ -156,27 +72,77 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 
 		msg = null;
 		progress = 0;
-		lastSpawn = 0;
 		addMouseListener(new MouseHandler(this));
-
-		bg = CodeRunner.loadImages("background.png", 1)[0];
-		Coffee.setPics(CodeRunner.loadImages("coffee.png", 1));
-		Bug.setPics(CodeRunner.loadImages("bug.png", 4));
 
 		entities = new Vector<AbstractEntity>();
 		player = new Player(this);
-		((Player) player).registerKeyHandler(mainFrame);
+		player.registerKeyHandler(mainFrame);
 		entities.add(player);
 
 		log.info("starting a new game");
 		last = System.nanoTime();
 
-		timer = new Timer(SPAWN_TIMEOUT, this);
-		timer.start();
+		spawner = new SpawnManager(this);
 
 		started = true;
 		Thread th = new Thread(this);
 		th.start();
+		spawner.start();
+	}
+
+	@Override
+	public void run() {
+		log.info("Main Loop starting");
+		while (mainFrame.isVisible() && started) {
+
+			calculateDelta();
+
+			doLogic();
+
+			repaint();
+
+			try {
+				Thread.sleep((Time.MILLIS_PER_SEC / FPS_LIMIT));
+			} catch (InterruptedException e) {
+				log.info("interrupted during sleep!");
+			}
+		}
+
+		log.info("Main-Loop is over!");
+	}
+
+	private void doLogic() {
+		if (entities != null && !paused) {
+			for (int i = 0; i < entities.size(); i++) {
+
+				AbstractEntity s = entities.elementAt(i);
+				s.doLogic(delta);
+				s.move(delta);
+
+				if (s.outOfSight()) {
+					entities.remove(i);
+				}
+			}
+
+			calculateCollisions();
+		}
+	}
+
+	private void calculateCollisions() {
+		for (int i = 0; i < entities.size(); i++) {
+			if (!(entities.elementAt(i) instanceof Player)
+					&& entities.elementAt(i).collidedWith(player)) {
+				entities.remove(i);
+			}
+		}
+	}
+
+	/**
+	 * add a new entity to the game.
+	 * @param e new entity
+	 */
+	public void addEntity(AbstractEntity e) {
+		entities.add(e);
 	}
 
 	/**
@@ -190,7 +156,7 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 
 		msg = newMsg;
 		started = false;
-		timer.stop();
+		spawner.stop();
 	}
 
 	/**
@@ -200,7 +166,7 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 		if (paused || !started) {
 			return;
 		}
-		
+
 		log.info("paused the running game");
 		paused = true;
 	}
@@ -212,17 +178,23 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 		if (!paused || !started) {
 			return;
 		}
-		
+
 		log.info("resumed the game");
 		paused = false;
 	}
-	
+
 	/**
-	 * 
 	 * @return whether or not the game is paused
 	 */
 	public boolean isPaused() {
 		return paused;
+	}
+	
+	/**
+	 * @return whether or not the game is paused
+	 */
+	public boolean isStarted() {
+		return started;
 	}
 
 	/**
@@ -232,7 +204,7 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	public double getProgress() {
 		return progress;
 	}
-	
+
 	/**
 	 * increment game progress.
 	 * @param p increment value
@@ -240,7 +212,7 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	public void progress(int p) {
 		progress += p;
 	}
-	
+
 	private void calculateDelta() {
 		delta = System.nanoTime() - last;
 		last = System.nanoTime();
@@ -255,39 +227,31 @@ public class RunnerPanel extends JPanel implements ActionListener, Runnable {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(timer)) {
-			spawn();
-		}
-	}
-	
-	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		DisplayWriter out = new DisplayWriter(g);
 		out.setColor(Color.BLACK);
 
+		// draw background
+		g.drawImage(bg, (int) -(progress % MainFrame.WIDTH), 0, this);
+		g.drawImage(bg,
+				(int) -(progress % MainFrame.WIDTH) + MainFrame.WIDTH,
+				0, this);
+
 		if (started) {
-			// draw background
-			g.drawImage(bg, (int) -(progress % MainFrame.WIDTH), 0, this);
-			g.drawImage(bg,
-					(int) -(progress % MainFrame.WIDTH) + MainFrame.WIDTH,
-					0, this);
-	
 			// write FPS-count to the upperleft corner
-	
+
 			out.println("FPS: " + fps);
 			out.println(entities.size() + " entities");
-			
+
 			for (AbstractEntity e : entities) {
 				e.draw(g, out);
 			}
 		}
 
 		if (msg != null) {
-			g.drawString(msg, MainFrame.WIDTH / 3,
-					(MainFrame.HEIGHT - START_MSG_SIZE) / 2);
+			out.printCentered(msg);
 		}
 	}
 }

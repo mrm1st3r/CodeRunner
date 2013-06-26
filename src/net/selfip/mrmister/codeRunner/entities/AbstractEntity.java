@@ -16,8 +16,8 @@ import net.selfip.mrmister.codeRunner.util.Time;
  *
  */
 public abstract class AbstractEntity
-	extends Rectangle2D.Double
-	implements Movable, Drawable {
+extends Rectangle2D.Double
+implements Movable, Drawable {
 
 	public static final int SIGHT_OFFSET = 5;
 
@@ -27,7 +27,7 @@ public abstract class AbstractEntity
 	protected int deltaX = 0;
 	protected int deltaY = 0;
 
-	BufferedImage[] pics;
+	private BufferedImage[] pics;
 	protected int currPic = 0;
 	private long delay;
 	private long anim = 0;
@@ -35,7 +35,6 @@ public abstract class AbstractEntity
 	private RunnerPanel env;
 
 	/**
-	 * 
 	 * @param i images representing the sprite
 	 * @param pos absolute position inside the Panel
 	 * @param d delay between animation images in millisecs
@@ -55,24 +54,47 @@ public abstract class AbstractEntity
 		setRelativeY((int) pos.getY());
 	}
 
+	/**
+	 * check whether a collision with another entity happened
+	 * and perform the relevant action.
+	 * @param e the other entity
+	 * @return whether the collision happened
+	 */
 	public abstract boolean collidedWith(AbstractEntity e);
 
+	/**
+	 * @return y-axis position relative to the ground
+	 */
 	public int getRelativeY() {
 		return (int) (getEnv().getHeight() - y - height);
 	}
-	
+
+	/**
+	 * set a new y-axis position relative to the ground.
+	 * @param pos new position
+	 */
 	public void setRelativeY(int pos) {
 		y = (getEnv().getHeight() - pos - height);
 	}
-	
+
+	/**
+	 * @return x-axis position relative to the left display border
+	 */
 	public int getRelativeX() {
 		return (int) (x - getEnv().getProgress());
 	}
-	
+
+	/**
+	 * set a new x-axis position relative to the left display border.
+	 * @param pos new position
+	 */
 	public void setRelativeX(int pos) {
 		x = pos + getEnv().getProgress();
 	}
 
+	/**
+	 * @return whether the entity is touching the ground
+	 */
 	public boolean onGround() {
 		return getRelativeY() == 0;
 	}
@@ -101,7 +123,7 @@ public abstract class AbstractEntity
 		if (deltaX != 0) {
 			x += deltaX * (1.0 * delta / Time.NANOS_PER_SEC);
 		}
-	
+
 		if (deltaY != 0) {
 			y += deltaY * (1.0 * delta / Time.NANOS_PER_SEC);
 		}
@@ -112,8 +134,8 @@ public abstract class AbstractEntity
 	 * @return true if not visible
 	 */
 	public boolean outOfSight() {
-		
-		return getRelativeX() + AbstractEntity.SIGHT_OFFSET < 0;
+
+		return getRelativeX() + AbstractEntity.SIGHT_OFFSET + width < 0;
 	}
 
 	/**

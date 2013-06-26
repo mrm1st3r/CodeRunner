@@ -3,6 +3,7 @@ package net.selfip.mrmister.codeRunner.entities;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+import net.selfip.mrmister.codeRunner.CodeRunner;
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 
 /**
@@ -14,13 +15,16 @@ public class Coffee extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 	private static BufferedImage[] pics = null;
+	
+	private static final int ANIMATION_STEPS = 1;
+	private static final int ANIMATION_TIMEOUT = 0;
 
 	/**
 	 * @param p belonging panel
 	 * @param pos where the coffee should spawn
 	 */
 	public Coffee(Point2D pos, RunnerPanel p) {
-		super(Coffee.pics, pos, 0, p);
+		super(Coffee.pics, pos, ANIMATION_TIMEOUT, p);
 	}
 	
 	@Override
@@ -38,9 +42,8 @@ public class Coffee extends AbstractEntity {
 
 	/**
 	 * register animation for Coffee entities.
-	 * @param p animation
 	 */
-	public static void setPics(BufferedImage[] p) {
-		pics = p;
+	public static void init() {
+		pics = CodeRunner.loadImages("coffee.png", ANIMATION_STEPS);
 	}
 }

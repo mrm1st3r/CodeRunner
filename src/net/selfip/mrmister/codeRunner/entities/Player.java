@@ -3,6 +3,7 @@ package net.selfip.mrmister.codeRunner.entities;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
@@ -34,7 +35,8 @@ public class Player extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 	private static final String PLAYER_SPRITE = "player.png";
 	private static final int ANIMATION_TIMEOUT = 300;
-	private static final int ENERGY_POS_X = 720;
+	private static final int ANIMATION_STEPS = 2;
+	private static final int START_POS = 100;
 
 	private long jump = 0;
 	private int energy = 0;
@@ -44,11 +46,9 @@ public class Player extends AbstractEntity {
 	 * @param p containing panel
 	 */
 	public Player(RunnerPanel p) {
-		super(CodeRunner.loadImages(PLAYER_SPRITE, 2),
-				new Point2D.Double(0, 0),
+		super(CodeRunner.loadImages(PLAYER_SPRITE, ANIMATION_STEPS),
+				new Point2D.Double(START_POS, 0),
 				ANIMATION_TIMEOUT, p);
-
-		x = (p.getWidth() - pics[0].getWidth()) / 2;
 	}
 
 	@Override
@@ -155,8 +155,7 @@ public class Player extends AbstractEntity {
 		d.println("pos: " + (int) x + " / " + (int) getRelativeY());
 		d.println("speed: " + deltaX + " / " + deltaY);
 
-		d.printToPos("energy: " + energy, ENERGY_POS_X,
-				DisplayWriter.FIRST_LINE);
+		d.printlnRight("energy: " + energy);
 
 		super.draw(g, d);
 	}
@@ -166,6 +165,14 @@ public class Player extends AbstractEntity {
 	 * @param p related frame
 	 */
 	public void registerKeyHandler(JFrame p) {
+		KeyListener[] l = p.getKeyListeners();
+
+		for (KeyListener k : l) {
+			if (k instanceof Keyboard) {
+				p.removeKeyListener(k);
+			}
+		}
+
 		p.addKeyListener(new Keyboard());
 	}
 

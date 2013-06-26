@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 
 /**
- * 
+ * object which should be drawn to the screen.
  * @author mrm1st3r
  *
  */

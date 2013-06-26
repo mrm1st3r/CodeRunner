@@ -3,10 +3,11 @@ package net.selfip.mrmister.codeRunner.entities;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+import net.selfip.mrmister.codeRunner.CodeRunner;
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 
 /**
- * a software-bug, which drepressed the player.
+ * a software-bug, which depresses the player.
  * @author mrm1st3r
  *
  */
@@ -15,6 +16,8 @@ public class Bug extends AbstractEntity {
 	private static BufferedImage[] pics;
 	private static final long serialVersionUID = 1L;
 	private static final int ANIMATION_TIMEOUT = 200;
+	private static final int ANIMATION_STEPS = 4;
+
 	private static final int JUMP_HEIGHT = 120;
 	private static final int JUMP_SPEED = 100;
 
@@ -24,7 +27,6 @@ public class Bug extends AbstractEntity {
 	 */
 	public Bug(Point2D pos, RunnerPanel p) {
 		super(pics, pos, ANIMATION_TIMEOUT, p);
-		
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class Bug extends AbstractEntity {
 
 		return false;
 	}
-	
+
 	@Override
 	public void move(long delta) {
 		if (getRelativeY() >= JUMP_HEIGHT) {
@@ -53,10 +55,9 @@ public class Bug extends AbstractEntity {
 	}
 
 	/**
-	 * register animation for Bug entities.
-	 * @param p animation
+	 * load animation for Bug entities.
 	 */
-	public static void setPics(BufferedImage[] p) {
-		pics = p;
+	public static void init() {
+		pics = CodeRunner.loadImages("bug.png", ANIMATION_STEPS);
 	}
 }
