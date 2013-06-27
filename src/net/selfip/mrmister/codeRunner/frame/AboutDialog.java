@@ -10,13 +10,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.lang.I18n;
+import net.selfip.mrmister.codeRunner.lang.Translatable;
 
 /**
  * Basic about-dialog.
  * @author mrm1st3r
  *
  */
-public class AboutDialog extends JDialog {
+public class AboutDialog extends JDialog implements Translatable {
 
 	private static final long serialVersionUID = 0x2;
 	private static final int MARGIN = 20;
@@ -33,11 +35,11 @@ public class AboutDialog extends JDialog {
 		heading.setText(CodeRunner.getWindowTitle(true));
 		heading.setMargin(new Insets(MARGIN, MARGIN, 0, MARGIN));
 
-		JTextArea text = new JTextArea("Code \u00A9 " + CodeRunner.YEAR
+		JTextArea text = new JTextArea(t("Code") + " \u00A9 " + CodeRunner.YEAR
 				+ " " + CodeRunner.CODE_AUTHOR
-				+ "\nGraphics \u00A9 " + CodeRunner.YEAR
+				+ "\n" + t("Graphics") + " \u00A9 " + CodeRunner.YEAR
 				+ " " + CodeRunner.GRAPHICS_AUTHOR + "\n\n"
-				+ "The Java-logo is a trademark of Oracle Corporation");
+				+ t("java_trademark"));
 		text.setMargin(new Insets(0, MARGIN, MARGIN, MARGIN));
 
 		JPanel p = new JPanel(new GridLayout(2, 1));
@@ -50,5 +52,10 @@ public class AboutDialog extends JDialog {
 		pack();
 		setLocationRelativeTo(getParent());
 		setVisible(true);
+	}
+
+	@Override
+	public String t(String t) {
+		return I18n.getTranslationFor(t);
 	}
 }

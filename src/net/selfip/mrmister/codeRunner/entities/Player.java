@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import net.selfip.mrmister.codeRunner.CodeRunner;
 import net.selfip.mrmister.codeRunner.event.KeyConfig;
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
+import net.selfip.mrmister.codeRunner.lang.I18n;
+import net.selfip.mrmister.codeRunner.lang.Translatable;
 import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 import net.selfip.mrmister.codeRunner.util.Time;
 
@@ -19,7 +21,7 @@ import net.selfip.mrmister.codeRunner.util.Time;
  * @author mrm1st3r
  *
  */
-public class Player extends AbstractEntity {
+public class Player extends AbstractEntity implements Translatable {
 
 	public static final int MOVE_SPEED = 180;
 	public static final int MIN_SIGHT = 250;
@@ -63,7 +65,7 @@ public class Player extends AbstractEntity {
 		energy++;
 
 		if (energy >= COFFEE_SHOCK) {
-			getEnv().stop("You died of a Coffeine shock! Score: " + (int) x);
+			getEnv().stop(t("coffee_shock"));
 		}
 	}
 
@@ -74,7 +76,7 @@ public class Player extends AbstractEntity {
 		energy--;
 
 		if (energy < 0) {
-			getEnv().stop("You fell asleep! Score: " + (int) x);
+			getEnv().stop(t("sleeping"));
 		}
 	}
 
@@ -82,8 +84,7 @@ public class Player extends AbstractEntity {
 	 * depress the player.
 	 */
 	public void depress() {
-		getEnv().stop("You got a depression and can't continue! Score: "
-				+ (int) x);
+		getEnv().stop(t("depression"));
 	}
 
 	/**
@@ -145,10 +146,11 @@ public class Player extends AbstractEntity {
 
 	@Override
 	public void draw(Graphics g, DisplayWriter d) {
-		d.println("pos: " + (int) x + " / " + (int) getRelativeY());
-		d.println("speed: " + deltaX + " / " + deltaY);
-
-		d.printlnRight("energy: " + energy);
+		if (CodeRunner.devMode()) {
+			d.println("pos: " + (int) x + " / " + (int) getRelativeY());
+			d.println("speed: " + deltaX + " / " + deltaY);
+		}
+		d.printlnRight(t("energy") + ": " + energy);
 
 		super.draw(g, d);
 	}
@@ -200,6 +202,8 @@ public class Player extends AbstractEntity {
 				startJump();
 			} else if (key == conf.get("pause")) {
 				getEnv().pause();
+			} else if (key == CodeRunner.KEY_TOGGLE_DEV) {
+				CodeRunner.toggleDevMode();
 			}
 		}
 
@@ -217,5 +221,10 @@ public class Player extends AbstractEntity {
 				endJump();
 			}
 		}
+	}
+
+	@Override
+	public String t(String t) {
+		return I18n.getTranslationFor(t);
 	}
 }

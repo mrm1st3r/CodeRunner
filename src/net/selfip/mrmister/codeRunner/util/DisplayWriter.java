@@ -19,6 +19,7 @@ public class DisplayWriter {
 	public static final int SIDE_MARGIN = 10;
 
 	public static final int BIG_FONT_SIZE = 20;
+	public static final int BIG_FONT_LINE_HEIGHT = 25;
 
 	private static final Color DEFAULT_COLOR = Color.BLACK;
 
@@ -72,12 +73,18 @@ public class DisplayWriter {
 		g.setColor(c);
 		g.setFont(bigFont);
 
+		String[] text = msg.split("\n");
+
 		// calculate position
 		FontMetrics fm = g.getFontMetrics();
-		int x = (env.getWidth() - fm.stringWidth(msg)) / 2;
-		int y = (env.getHeight() - fm.getHeight()) / 2;
+		int y = (env.getHeight() - BIG_FONT_LINE_HEIGHT * text.length) / 2;
 
-		g.drawString(msg, x, y);
+		for (int i = 0; i < text.length; i++) {
+			int x = (env.getWidth() - fm.stringWidth(text[i])) / 2;
+			y += BIG_FONT_LINE_HEIGHT;
+
+			g.drawString(text[i], x, y);
+		}
 	}
 
 	/**

@@ -16,6 +16,8 @@ import net.selfip.mrmister.codeRunner.entities.Player;
 import net.selfip.mrmister.codeRunner.entities.SpawnManager;
 import net.selfip.mrmister.codeRunner.event.KeyConfig;
 import net.selfip.mrmister.codeRunner.event.MouseHandler;
+import net.selfip.mrmister.codeRunner.lang.I18n;
+import net.selfip.mrmister.codeRunner.lang.Translatable;
 import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 import net.selfip.mrmister.codeRunner.util.Time;
 
@@ -24,7 +26,7 @@ import net.selfip.mrmister.codeRunner.util.Time;
  * @author mrm1st3r
  *
  */
-public class RunnerPanel extends JPanel implements Runnable {
+public class RunnerPanel extends JPanel implements Runnable, Translatable {
 
 	private static final long serialVersionUID = 0x1;
 
@@ -39,7 +41,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 
 	private Logger log;
 	private BufferedImage bg;
-	private String msg = "press ENTER to start";
+	private String msg;
 
 	private Player player;
 	private KeyConfig keyConf;
@@ -64,6 +66,8 @@ public class RunnerPanel extends JPanel implements Runnable {
 		bg = CodeRunner.loadImages("background.png", 1)[0];
 		Coffee.init();
 		Bug.init();
+
+		msg = t("start_msg");
 	}
 
 	/**
@@ -158,7 +162,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 			return;
 		}
 
-		msg = newMsg;
+		msg = newMsg + "\n" + t("score") + ": " + (int) getProgress();
 		started = false;
 		spawner.stop();
 	}
@@ -260,8 +264,10 @@ public class RunnerPanel extends JPanel implements Runnable {
 		if (started) {
 			// write FPS-count to the upperleft corner
 
-			out.println("FPS: " + fps);
-			out.println(entities.size() + " entities");
+			if (CodeRunner.devMode()) {
+				out.println("FPS: " + fps);
+				out.println(entities.size() + " entities");
+			}
 
 			for (AbstractEntity e : entities) {
 				e.draw(g, out);
@@ -271,5 +277,10 @@ public class RunnerPanel extends JPanel implements Runnable {
 		if (msg != null) {
 			out.printCentered(msg);
 		}
+	}
+
+	@Override
+	public String t(String t) {
+		return I18n.getTranslationFor(t);
 	}
 }

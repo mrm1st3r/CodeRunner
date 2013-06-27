@@ -3,11 +3,13 @@ package net.selfip.mrmister.codeRunner;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 import net.selfip.mrmister.codeRunner.frame.MainFrame;
+import net.selfip.mrmister.codeRunner.lang.I18n;
 
 /**
  * Launcher for CodeRunner.
@@ -18,12 +20,14 @@ public final class CodeRunner {
 
 	// ---------------- general application informations ----------------------
 	public static final String APP_NAME = "Code Runner";
-	public static final String VERSION = "0.3.3";
+	public static final String VERSION = "0.3.4";
 	public static final String CODE_AUTHOR = "Lukas Taake, Steffen Schiffel";
 	public static final String GRAPHICS_AUTHOR = "Lukas Taake";
 	public static final String YEAR = "2013";
 
 	// ---------------- global application settings ---------------------------
+	public static final String LANG = "de";
+
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	public static final int FPS_LIMIT = 60;
@@ -33,6 +37,7 @@ public final class CodeRunner {
 	public static final int KEY_LEFT = KeyEvent.VK_LEFT;
 	public static final int KEY_RIGHT = KeyEvent.VK_RIGHT;
 	public static final int KEY_JUMP = KeyEvent.VK_SPACE;
+	public static final int KEY_TOGGLE_DEV = KeyEvent.VK_F11;
 
 	public static final String KEYCONFIG_FILE = "keyboard.ini";
 
@@ -42,6 +47,7 @@ public final class CodeRunner {
 
 	// ---------------- other -------------------------------------------------
 	private static Logger log;
+	private static boolean devMode = false;
 
 	private CodeRunner() { }
 
@@ -50,6 +56,9 @@ public final class CodeRunner {
 	 * @param args no parameters available yet
 	 */
 	public static void main(String[] args) {
+		I18n.init(LANG);
+		Locale.setDefault(new Locale(LANG));
+
 		new MainFrame();
 
 		log = Logger.getLogger(CodeRunner.class.getName());
@@ -68,6 +77,20 @@ public final class CodeRunner {
 		}
 
 		return ret;
+	}
+
+	/**
+	 * @return whether developer mode is activated or not
+	 */
+	public static boolean devMode() {
+		return devMode;
+	}
+
+	/**
+	 * toggle developer mode.
+	 */
+	public static void toggleDevMode() {
+		devMode = !devMode;
 	}
 
 	/**

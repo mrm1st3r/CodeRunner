@@ -10,13 +10,15 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.lang.I18n;
+import net.selfip.mrmister.codeRunner.lang.Translatable;
 
 /**
  * manage the keyboard configuration.
  * @author mrm1st3r
  *
  */
-public class KeyConfig {
+public class KeyConfig implements Translatable {
 
 	private static final int LIST_COLS = 3;
 
@@ -87,7 +89,7 @@ public class KeyConfig {
 		String[][] ret = new String[s.length][LIST_COLS];
 
 		for (int i = 0; i < s.length; i++) {
-			ret[i][0] = s[i];
+			ret[i][0] = t(s[i]);
 			ret[i][1] = KeyEvent.getKeyText(get(s[i]));
 			ret[i][2] = KeyEvent.getKeyText(getDefaultValue(s[i]));
 		}
@@ -142,5 +144,10 @@ public class KeyConfig {
 		} catch (IOException e) {
 			log.info("couldn't save KeyConfig to '" + file + "'");
 		}
+	}
+
+	@Override
+	public String t(String t) {
+		return I18n.getTranslationFor(t);
 	}
 }

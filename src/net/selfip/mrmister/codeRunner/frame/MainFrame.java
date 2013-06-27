@@ -11,13 +11,15 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.lang.I18n;
+import net.selfip.mrmister.codeRunner.lang.Translatable;
 
 /**
  * the main frame.
  * @author mrm1st3r
  *
  */
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements Translatable {
 
 	static final long serialVersionUID = 0x1;
 
@@ -45,9 +47,9 @@ public class MainFrame extends JFrame {
 
 	private void buildMenu() {
 		JMenuBar mb = new JMenuBar();
-		JMenu menu = new JMenu("Game");
+		JMenu menu = new JMenu(t("Game"));
 		mb.add(menu);
-		JMenuItem mi = new JMenuItem("New");
+		JMenuItem mi = new JMenuItem(t("New"));
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (game.isStarted()) {
@@ -59,7 +61,7 @@ public class MainFrame extends JFrame {
 		mi.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
 		menu.add(mi);
 
-		mi = new JMenuItem("Quit");
+		mi = new JMenuItem(t("Quit"));
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.saveKeyConfig();
@@ -68,10 +70,10 @@ public class MainFrame extends JFrame {
 		});
 		menu.add(mi);
 
-		menu = new JMenu("Help");
+		menu = new JMenu(t("Help"));
 		mb.add(menu);
 
-		mi = new JMenuItem("About");
+		mi = new JMenuItem(t("About"));
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				new AboutDialog(MainFrame.this);
@@ -79,7 +81,7 @@ public class MainFrame extends JFrame {
 		});
 		menu.add(mi);
 
-		mi = new JMenuItem("Key configuration");
+		mi = new JMenuItem(t("Key configuration"));
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				new KeyConfigDialog(MainFrame.this);
@@ -102,5 +104,10 @@ public class MainFrame extends JFrame {
 	 */
 	public RunnerPanel getRunnerPanel() {
 		return game;
+	}
+
+	@Override
+	public String t(String t) {
+		return I18n.getTranslationFor(t);
 	}
 }
