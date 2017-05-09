@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
+import net.selfip.mrmister.codeRunner.ApplicationInfo;
 import net.selfip.mrmister.codeRunner.CodeRunner;
 import net.selfip.mrmister.codeRunner.entities.AbstractEntity;
 import net.selfip.mrmister.codeRunner.entities.Bug;
@@ -49,13 +50,14 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 
 	/**
 	 * @param main parent frame
+	 * @param applicationInfo
 	 */
-	public RunnerPanel(MainFrame main) {
+	public RunnerPanel(MainFrame main, ApplicationInfo applicationInfo) {
 		super();
 		mainFrame = main;
 		log = Logger.getLogger(getClass().getName());
 
-		keyConf = new KeyConfig(CodeRunner.KEYCONFIG_FILE);
+		keyConf = new KeyConfig(CodeRunner.KEYCONFIG_FILE, applicationInfo);
 		keyConf.setDefaultValue("start", CodeRunner.KEY_START);
 		keyConf.setDefaultValue("pause", CodeRunner.KEY_PAUSE);
 		keyConf.setDefaultValue("move_left", CodeRunner.KEY_LEFT);

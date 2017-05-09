@@ -10,6 +10,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import net.selfip.mrmister.codeRunner.ApplicationInfo;
 import net.selfip.mrmister.codeRunner.CodeRunner;
 import net.selfip.mrmister.codeRunner.lang.I18n;
 import net.selfip.mrmister.codeRunner.lang.Translatable;
@@ -23,12 +24,15 @@ public class MainFrame extends JFrame implements Translatable {
 	static final long serialVersionUID = 0x1;
 
 	private RunnerPanel game;
+	private ApplicationInfo applicationInfo;
 
 	/**
 	 * Initialize the main window.
-	 */
-	public MainFrame() {
-		super(CodeRunner.getWindowTitle(true));
+     * @param applicationInfo
+     */
+	public MainFrame(ApplicationInfo applicationInfo) {
+		super(applicationInfo.getSignature());
+		this.applicationInfo = applicationInfo;
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// fixed window-size
@@ -75,7 +79,7 @@ public class MainFrame extends JFrame implements Translatable {
 		mi = new JMenuItem(t("About"));
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				new AboutDialog(MainFrame.this);
+				new AboutDialog(MainFrame.this, applicationInfo);
 			}
 		});
 		menu.add(mi);
@@ -92,7 +96,7 @@ public class MainFrame extends JFrame implements Translatable {
 	}
 
 	private void buildGameComponent() {
-		game = new RunnerPanel(this);
+		game = new RunnerPanel(this, applicationInfo);
 		game.setSize(CodeRunner.HEIGHT, CodeRunner.WIDTH);
 
 		add(game, BorderLayout.CENTER);

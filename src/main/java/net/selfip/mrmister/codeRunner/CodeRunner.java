@@ -17,13 +17,6 @@ import net.selfip.mrmister.codeRunner.lang.I18n;
  */
 public final class CodeRunner {
 
-	// ---------------- general application informations ----------------------
-	public static final String APP_NAME = "Code Runner";
-	public static final String VERSION = "0.3.4";
-	public static final String CODE_AUTHOR = "Lukas Taake, Steffen Schiffel";
-	public static final String GRAPHICS_AUTHOR = "Lukas Taake";
-	public static final String YEAR = "2013";
-
 	// ---------------- global application settings ---------------------------
 	public static final String LANG = "de";
 
@@ -59,23 +52,8 @@ public final class CodeRunner {
 		Locale.setDefault(new Locale(LANG));
 		log = Logger.getLogger(CodeRunner.class.getName());
 
-		new MainFrame();
+		new MainFrame(new ApplicationInfo());
 
-	}
-
-	/**
-	 * build the window title.
-	 * @param showVersion should the version be viewed
-	 * @return window title
-	 */
-	public static String getWindowTitle(boolean showVersion) {
-		String ret = APP_NAME;
-
-		if (showVersion) {
-			ret += " " + VERSION;
-		}
-
-		return ret;
 	}
 
 	/**

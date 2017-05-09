@@ -1,17 +1,11 @@
 package net.selfip.mrmister.codeRunner.frame;
 
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Insets;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-
-import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.ApplicationInfo;
 import net.selfip.mrmister.codeRunner.lang.I18n;
 import net.selfip.mrmister.codeRunner.lang.Translatable;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Basic about-dialog.
@@ -25,19 +19,20 @@ public class AboutDialog extends JDialog implements Translatable {
 
 	/**
 	 * @param f owner
+	 * @param applicationInfo
 	 */
-	public AboutDialog(JFrame f) {
-		super(f, "About " + CodeRunner.getWindowTitle(false), true);
+	public AboutDialog(JFrame f, ApplicationInfo applicationInfo) {
+		super(f, "About " + applicationInfo.getName(), true);
 
 		JTextArea heading = new JTextArea();
 		heading.setFont(new Font("Arial", Font.BOLD, FONT_SIZE));
-		heading.setText(CodeRunner.getWindowTitle(true));
+		heading.setText(applicationInfo.getSignature());
 		heading.setMargin(new Insets(MARGIN, MARGIN, 0, MARGIN));
 
-		JTextArea text = new JTextArea(t("Code") + " \u00A9 " + CodeRunner.YEAR
-				+ " " + CodeRunner.CODE_AUTHOR
-				+ "\n" + t("Graphics") + " \u00A9 " + CodeRunner.YEAR
-				+ " " + CodeRunner.GRAPHICS_AUTHOR + "\n\n"
+		JTextArea text = new JTextArea(t("Code") + " \u00A9 " + ApplicationInfo.YEAR
+				+ " " + ApplicationInfo.CODE_AUTHOR
+				+ "\n" + t("Graphics") + " \u00A9 " + ApplicationInfo.YEAR
+				+ " " + ApplicationInfo.GRAPHICS_AUTHOR + "\n\n"
 				+ t("java_trademark"));
 		text.setMargin(new Insets(0, MARGIN, MARGIN, MARGIN));
 

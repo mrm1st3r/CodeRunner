@@ -9,7 +9,7 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.ApplicationInfo;
 import net.selfip.mrmister.codeRunner.lang.I18n;
 import net.selfip.mrmister.codeRunner.lang.Translatable;
 
@@ -22,25 +22,21 @@ public class KeyConfig implements Translatable {
 	private static final int LIST_COLS = 3;
 
 	private String configFile;
+	private ApplicationInfo applicationInfo;
 	private Properties prop;
 	private Logger log;
 	private Hashtable<String, String> defaults;
 
 	/**
-	 * create an empty key-configuration.
-	 */
-	public KeyConfig() {
-		log = Logger.getLogger(getClass().getName());
-		defaults = new Hashtable<>();
-	}
-
-	/**
 	 * create a key-configuration and load settings from a given file.
 	 * @param file stored key-configuration
+	 * @param applicationInfo
 	 */
-	public KeyConfig(String file) {
-		this();
+	public KeyConfig(String file, ApplicationInfo applicationInfo) {
+		log = Logger.getLogger(getClass().getName());
+		defaults = new Hashtable<>();
 		configFile = file;
+		this.applicationInfo = applicationInfo;
 		loadFrom(file);
 	}
 
@@ -137,8 +133,7 @@ public class KeyConfig implements Translatable {
 	 */
 	public void save(String file) {
 		try {
-			prop.store(new FileOutputStream(file),
-					CodeRunner.getWindowTitle(true));
+			prop.store(new FileOutputStream(file), applicationInfo.getSignature());
 			log.info("saved KeyConfig to '" + file + "'");
 		} catch (IOException e) {
 			log.info("couldn't save KeyConfig to '" + file + "'");
