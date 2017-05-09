@@ -1,23 +1,23 @@
-start_msg¦drücke Enter um das Spiel zu starten
-coffee_shock¦Du bist an einem Koffeinschock gestorben!
-sleeping¦Du bist eingeschlafen!
-depression¦Du bist deprimiert und gibst auf!
-energy¦Energie
-move_left¦Nach Links
-move_right¦Nach Rechts
-jump¦Springen
-pause¦Pausieren
-start¦Spiel starten
-function¦Funktion
-current_key¦Taste
-default_key¦Standard
-Game¦Spiel
-New¦Neu
-Quit¦Beenden
-Help¦Hilfe
-About¦Über
-Key configuration¦Tastenbelegung
-Code¦Programmierung
-Graphics¦Grafiken
-java_trademark¦Das Java Logo ist eine eingetragene Marke der Oracle Corporation
-score¦Erreichte Punkte
+start_msg=drücke Enter um das Spiel zu starten
+coffee_shock=Du bist an einem Koffeinschock gestorben!
+sleeping=Du bist eingeschlafen!
+depression=Du bist deprimiert und gibst auf!
+energy=Energie
+move_left=Nach Links
+move_right=Nach Rechts
+jump=Springen
+pause=Pausieren
+start=Spiel starten
+function=Funktion
+current_key=Taste
+default_key=Standard
+Game=Spiel
+New=Neu
+Quit=Beenden
+Help=Hilfe
+About=Über
+Key configuration=Tastenbelegung
+Code=Programmierung
+Graphics=Grafiken
+java_trademark=Das Java Logo ist eine eingetragene Marke der Oracle Corporation
+score=Erreichte Punkte

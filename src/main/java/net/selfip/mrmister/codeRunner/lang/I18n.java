@@ -14,9 +14,9 @@ import java.util.Hashtable;
 public final class I18n {
 
 	private static final String DEFAULT_LANG = "english";
-	private static final String DEFAULT_PATH = "lang";
+	private static final String DEFAULT_PATH = "/lang";
 	private static final String FILE_EXT = ".lng";
-	private static final String DELIMITER = "¦";
+	private static final String DELIMITER = "=";
 
 	private static String lang;
 	private static String langFilePath = DEFAULT_PATH;
@@ -44,7 +44,8 @@ public final class I18n {
 		lang = l;
 		langFile = langFilePath + "/" + l + FILE_EXT;
 
-		File f = new File(langFile);
+
+		File f = new File(I18n.class.getResource(langFile).getFile());
 		if (!f.exists()) {
 			try {
 				f.createNewFile();
