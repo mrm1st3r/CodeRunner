@@ -23,7 +23,6 @@ import net.selfip.mrmister.codeRunner.util.Time;
 
 /**
  * where all the action goes.
- * @author mrm1st3r
  *
  */
 public class RunnerPanel extends JPanel implements Runnable, Translatable {

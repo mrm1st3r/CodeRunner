@@ -2,7 +2,6 @@ package net.selfip.mrmister.codeRunner.lang;
 
 /**
  * Exception thrown by I18n classes.
- * @author mrm1st3r
  *
  */
 public class LanguageException extends RuntimeException {

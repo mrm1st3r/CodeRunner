@@ -18,7 +18,6 @@ import net.selfip.mrmister.codeRunner.util.Time;
 
 /**
  * the player object.
- * @author mrm1st3r
  *
  */
 public class Player extends AbstractEntity implements Translatable {

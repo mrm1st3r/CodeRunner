@@ -13,7 +13,6 @@ import net.selfip.mrmister.codeRunner.lang.I18n;
 
 /**
  * Launcher for CodeRunner.
- * @author mrm1st3r
  *
  */
 public final class CodeRunner {

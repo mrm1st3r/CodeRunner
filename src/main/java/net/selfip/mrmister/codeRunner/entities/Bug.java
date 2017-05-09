@@ -8,7 +8,6 @@ import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 
 /**
  * a software-bug, which depresses the player.
- * @author mrm1st3r
  *
  */
 public class Bug extends AbstractEntity {

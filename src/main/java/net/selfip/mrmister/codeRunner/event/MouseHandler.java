@@ -9,7 +9,6 @@ import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 
 /**
  * auto-pause on mouse leave and resume on entering.
- * @author mrm1st3r
  *
  */
 public class MouseHandler implements MouseListener {

@@ -15,7 +15,6 @@ import net.selfip.mrmister.codeRunner.lang.Translatable;
 
 /**
  * Basic about-dialog.
- * @author mrm1st3r
  *
  */
 public class AboutDialog extends JDialog implements Translatable {

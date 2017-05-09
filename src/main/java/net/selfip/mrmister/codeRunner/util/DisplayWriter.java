@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 /**
  * helper for drawing texts.
- * @author mrm1st3r
  *
  */
 public class DisplayWriter {

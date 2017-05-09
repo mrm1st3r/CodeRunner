@@ -12,7 +12,6 @@ import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 
 /**
  * spawn new entities periodically.
- * @author mrm1st3r
  *
  */
 public class SpawnManager implements ActionListener {

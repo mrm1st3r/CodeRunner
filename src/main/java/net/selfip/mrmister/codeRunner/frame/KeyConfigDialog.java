@@ -10,7 +10,6 @@ import net.selfip.mrmister.codeRunner.lang.Translatable;
 
 /**
  * view and modify the current KeyConfig.
- * @author mrm1st3r
  *
  */
 public class KeyConfigDialog extends JDialog implements Translatable {

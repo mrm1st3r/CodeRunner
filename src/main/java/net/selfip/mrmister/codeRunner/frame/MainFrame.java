@@ -16,7 +16,6 @@ import net.selfip.mrmister.codeRunner.lang.Translatable;
 
 /**
  * the main frame.
- * @author mrm1st3r
  *
  */
 public class MainFrame extends JFrame implements Translatable {

@@ -2,7 +2,6 @@ package net.selfip.mrmister.codeRunner.util;
 
 /**
  * 
- * @author mrm1st3r
  *
  */
 public final class Time {

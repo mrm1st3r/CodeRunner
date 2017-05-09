@@ -9,7 +9,6 @@ import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 
 /**
  * a bed makes the player tired and maybe fall to sleep.
- * @author mrm1st3r
  *
  */
 public class Bed extends AbstractEntity {

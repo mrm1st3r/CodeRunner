@@ -2,7 +2,6 @@ package net.selfip.mrmister.codeRunner.entities;
 
 /**
  * thrown if a entity can't be initialized.
- * @author mrm1st3r
  *
  */
 public class InitialisationException extends RuntimeException {

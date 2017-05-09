@@ -8,7 +8,6 @@ import java.util.Hashtable;
 
 /**
  * 
- * @author mrm1st3r
  *
  */
 public final class I18n {

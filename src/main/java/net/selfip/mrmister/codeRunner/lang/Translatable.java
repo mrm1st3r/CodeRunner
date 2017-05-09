@@ -2,7 +2,6 @@ package net.selfip.mrmister.codeRunner.lang;
 
 /**
  * 
- * @author mrm1st3r
  *
  */
 public interface Translatable {

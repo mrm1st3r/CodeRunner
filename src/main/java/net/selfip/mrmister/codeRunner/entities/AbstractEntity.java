@@ -11,7 +11,6 @@ import net.selfip.mrmister.codeRunner.util.Time;
 
 /**
  * base class for non player entities.
- * @author mrm1st3r
  *
  */
 public abstract class AbstractEntity

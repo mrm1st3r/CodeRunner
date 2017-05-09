@@ -8,7 +8,6 @@ import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 
 /**
  * a friendly entity, which gives +1 energy.
- * @author mrm1st3r
  *
  */
 public class Coffee extends AbstractEntity {

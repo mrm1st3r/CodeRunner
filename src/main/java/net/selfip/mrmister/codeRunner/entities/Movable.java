@@ -2,7 +2,6 @@ package net.selfip.mrmister.codeRunner.entities;
 
 /**
  * Specify an entity which acts FPS independent.
- * @author mrm1st3r
  *
  */
 public interface Movable {

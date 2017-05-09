@@ -15,7 +15,6 @@ import net.selfip.mrmister.codeRunner.lang.Translatable;
 
 /**
  * manage the keyboard configuration.
- * @author mrm1st3r
  *
  */
 public class KeyConfig implements Translatable {
