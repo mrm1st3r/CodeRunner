@@ -6,7 +6,7 @@
 
     <groupId>com.github.mrm1st3r</groupId>
     <artifactId>coderunner</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
