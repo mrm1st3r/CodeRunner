@@ -104,9 +104,11 @@ public final class CodeRunner {
 		BufferedImage src = null;
 
 		try {
-			src = ImageIO.read(new File(CodeRunner.class.getResource(path).getFile()));
+			File file = new File(CodeRunner.class.getResource("/" + path).getFile());
+			src = ImageIO.read(file);
 		} catch (Exception e) {
-			log.severe("Failed loading image '" + path + "'");
+			log.severe(e.getMessage());
+			//log.severe("Failed loading image '" + path + "'");
 			return null;
 		}
 
