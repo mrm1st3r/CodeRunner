@@ -62,8 +62,11 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 		keyConf.setDefaultValue("move_left", CodeRunner.KEY_LEFT);
 		keyConf.setDefaultValue("move_right", CodeRunner.KEY_RIGHT);
 		keyConf.setDefaultValue("jump", CodeRunner.KEY_JUMP);
-		
-		bg = CodeRunner.loadImages("background.png", 1)[0];
+
+		BufferedImage[] bufferedImages = CodeRunner.loadImages("background.png", 1);
+		if (bufferedImages != null && bufferedImages.length > 0) {
+			bg = bufferedImages[0];
+		}
 		Coffee.init();
 		Bug.init();
 

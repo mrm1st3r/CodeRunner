@@ -58,10 +58,10 @@ public final class CodeRunner {
 	public static void main(String[] args) {
 		I18n.init(LANG);
 		Locale.setDefault(new Locale(LANG));
+		log = Logger.getLogger(CodeRunner.class.getName());
 
 		new MainFrame();
 
-		log = Logger.getLogger(CodeRunner.class.getName());
 	}
 
 	/**
@@ -104,7 +104,7 @@ public final class CodeRunner {
 		BufferedImage src = null;
 
 		try {
-			src = ImageIO.read(new File(path));
+			src = ImageIO.read(new File(CodeRunner.class.getResource(path).getFile()));
 		} catch (Exception e) {
 			log.severe("Failed loading image '" + path + "'");
 			return null;
