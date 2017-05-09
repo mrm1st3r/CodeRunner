@@ -31,7 +31,7 @@ public class KeyConfig implements Translatable {
 	 */
 	public KeyConfig() {
 		log = Logger.getLogger(getClass().getName());
-		defaults = new Hashtable<String, String>();
+		defaults = new Hashtable<>();
 	}
 
 	/**

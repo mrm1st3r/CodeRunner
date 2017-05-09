@@ -86,13 +86,6 @@ public class Player extends AbstractEntity implements Translatable {
 		getEnv().stop(t("depression"));
 	}
 
-	/**
-	 * @return the current amount of energy
-	 */
-	public int getEnergy() {
-		return energy;
-	}
-
 	@Override
 	public void move(long delta) {
 		calculateJump();
@@ -146,7 +139,7 @@ public class Player extends AbstractEntity implements Translatable {
 	@Override
 	public void draw(Graphics g, DisplayWriter d) {
 		if (CodeRunner.devMode()) {
-			d.println("pos: " + (int) x + " / " + (int) getRelativeY());
+			d.println("pos: " + (int) x + " / " + getRelativeY());
 			d.println("speed: " + deltaX + " / " + deltaY);
 		}
 		d.printlnRight(t("energy") + ": " + energy);

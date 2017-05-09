@@ -9,11 +9,6 @@ public class LanguageException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * create new Exception.
-	 */
-	public LanguageException() { }
-
-	/**
 	 * create new Exception with message.
 	 * @param msg message-text
 	 */

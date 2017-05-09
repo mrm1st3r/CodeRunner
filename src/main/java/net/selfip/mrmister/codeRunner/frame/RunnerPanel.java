@@ -84,7 +84,7 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 		progress = 0;
 		addMouseListener(new MouseHandler(this));
 
-		entities = new Vector<AbstractEntity>();
+		entities = new Vector<>();
 		player = new Player(this);
 		player.registerKeyHandler(mainFrame, keyConf);
 		entities.add(player);
@@ -227,13 +227,6 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 		delta = System.nanoTime() - last;
 		last = System.nanoTime();
 		fps = Time.NANOS_PER_SEC / delta;
-	}
-
-	/**
-	 * @return time needed for the last frame
-	 */
-	public long getDelta() {
-		return delta;
 	}
 
 	/**

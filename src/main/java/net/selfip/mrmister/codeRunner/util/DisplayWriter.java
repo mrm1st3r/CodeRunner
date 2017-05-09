@@ -53,18 +53,6 @@ public class DisplayWriter {
 	}
 
 	/**
-	 * print a text line to a specified position.
-	 * @param msg text to print
-	 * @param x x-axis position
-	 * @param y y-axis position
-	 */
-	public void printToPos(String msg, int x, int y) {
-		g.setColor(c);
-		g.setFont(defFont);
-		g.drawString(msg, x, y);
-	}
-
-	/**
 	 * print a text line centered on both axis.
 	 * @param msg text to print
 	 */

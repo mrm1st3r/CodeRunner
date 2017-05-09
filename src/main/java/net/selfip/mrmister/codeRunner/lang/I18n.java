@@ -12,7 +12,6 @@ import java.util.Hashtable;
  */
 public final class I18n {
 
-	private static final String DEFAULT_LANG = "english";
 	private static final String DEFAULT_PATH = "/lang";
 	private static final String FILE_EXT = ".lng";
 	private static final String DELIMITER = "=";
@@ -23,13 +22,6 @@ public final class I18n {
 	private static Hashtable<String, String> translations;
 
 	private I18n() { }
-
-	/**
-	 * initialize with default language.
-	 */
-	public static void init() {
-		init(DEFAULT_LANG);
-	}
 
 	/**
 	 * initialize with a specified language.
@@ -54,7 +46,7 @@ public final class I18n {
 			}
 		}
 
-		translations = new Hashtable<String, String>();
+		translations = new Hashtable<>();
 		BufferedReader in = null;
 
 		try {
@@ -73,21 +65,6 @@ public final class I18n {
 		} finally {
 			try { in.close(); } catch (IOException e) { }
 		}
-	}
-
-	/**
-	 * @param p new path for language files
-	 * @throws IOException failed to create the given directory
-	 */
-	public static void setPath(String p) throws IOException {
-		langFilePath = p;
-	}
-
-	/**
-	 * @return current language
-	 */
-	public static String getLang() {
-		return lang;
 	}
 
 	/**
