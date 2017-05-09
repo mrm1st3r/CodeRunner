@@ -48,12 +48,10 @@ public final class CodeRunner {
 	 * @param args no parameters available yet
 	 */
 	public static void main(String[] args) {
-		I18n.init(LANG);
-		Locale.setDefault(new Locale(LANG));
+		I18n i18n = new I18n(LANG);
 		log = Logger.getLogger(CodeRunner.class.getName());
 
-		new MainFrame(new ApplicationInfo());
-
+		new MainFrame(new ApplicationInfo(), i18n);
 	}
 
 	/**
@@ -85,7 +83,6 @@ public final class CodeRunner {
 			src = ImageIO.read(file);
 		} catch (Exception e) {
 			log.severe(e.getMessage());
-			//log.severe("Failed loading image '" + path + "'");
 			return null;
 		}
 

@@ -1,5 +1,8 @@
 package net.selfip.mrmister.codeRunner.event;
 
+import net.selfip.mrmister.codeRunner.ApplicationInfo;
+import net.selfip.mrmister.codeRunner.lang.I18n;
+
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,17 +12,14 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import net.selfip.mrmister.codeRunner.ApplicationInfo;
-import net.selfip.mrmister.codeRunner.lang.I18n;
-import net.selfip.mrmister.codeRunner.lang.Translatable;
-
 /**
  * manage the keyboard configuration.
  *
  */
-public class KeyConfig implements Translatable {
+public class KeyConfig {
 
 	private static final int LIST_COLS = 3;
+	private final I18n i18n;
 
 	private String configFile;
 	private ApplicationInfo applicationInfo;
@@ -31,8 +31,10 @@ public class KeyConfig implements Translatable {
 	 * create a key-configuration and load settings from a given file.
 	 * @param file stored key-configuration
 	 * @param applicationInfo
+	 * @param i18n
 	 */
-	public KeyConfig(String file, ApplicationInfo applicationInfo) {
+	public KeyConfig(String file, ApplicationInfo applicationInfo, I18n i18n) {
+		this.i18n = i18n;
 		log = Logger.getLogger(getClass().getName());
 		defaults = new Hashtable<>();
 		configFile = file;
@@ -84,7 +86,7 @@ public class KeyConfig implements Translatable {
 		String[][] ret = new String[s.length][LIST_COLS];
 
 		for (int i = 0; i < s.length; i++) {
-			ret[i][0] = t(s[i]);
+			ret[i][0] = i18n.t(s[i]);
 			ret[i][1] = KeyEvent.getKeyText(get(s[i]));
 			ret[i][2] = KeyEvent.getKeyText(getDefaultValue(s[i]));
 		}
@@ -140,8 +142,4 @@ public class KeyConfig implements Translatable {
 		}
 	}
 
-	@Override
-	public String t(String t) {
-		return I18n.getTranslationFor(t);
-	}
 }

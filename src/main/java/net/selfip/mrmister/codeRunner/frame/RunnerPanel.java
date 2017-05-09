@@ -1,32 +1,25 @@
 package net.selfip.mrmister.codeRunner.frame;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.Vector;
-import java.util.logging.Logger;
-
-import javax.swing.JPanel;
-
 import net.selfip.mrmister.codeRunner.ApplicationInfo;
 import net.selfip.mrmister.codeRunner.CodeRunner;
-import net.selfip.mrmister.codeRunner.entities.AbstractEntity;
-import net.selfip.mrmister.codeRunner.entities.Bug;
-import net.selfip.mrmister.codeRunner.entities.Coffee;
-import net.selfip.mrmister.codeRunner.entities.Player;
-import net.selfip.mrmister.codeRunner.entities.SpawnManager;
+import net.selfip.mrmister.codeRunner.entities.*;
 import net.selfip.mrmister.codeRunner.event.KeyConfig;
 import net.selfip.mrmister.codeRunner.event.MouseHandler;
 import net.selfip.mrmister.codeRunner.lang.I18n;
-import net.selfip.mrmister.codeRunner.lang.Translatable;
 import net.selfip.mrmister.codeRunner.util.DisplayWriter;
 import net.selfip.mrmister.codeRunner.util.Time;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Vector;
+import java.util.logging.Logger;
 
 /**
  * where all the action goes.
  *
  */
-public class RunnerPanel extends JPanel implements Runnable, Translatable {
+public class RunnerPanel extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = 0x1;
 
@@ -34,6 +27,7 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 	private boolean paused = false;
 	private boolean started = false;
 	private MainFrame mainFrame;
+	private final I18n i18n;
 
 	private long delta = 0;
 	private long last = 0;
@@ -51,13 +45,15 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 	/**
 	 * @param main parent frame
 	 * @param applicationInfo
+	 * @param i18n
 	 */
-	public RunnerPanel(MainFrame main, ApplicationInfo applicationInfo) {
+	public RunnerPanel(MainFrame main, ApplicationInfo applicationInfo, I18n i18n) {
 		super();
 		mainFrame = main;
+		this.i18n = i18n;
 		log = Logger.getLogger(getClass().getName());
 
-		keyConf = new KeyConfig(CodeRunner.KEYCONFIG_FILE, applicationInfo);
+		keyConf = new KeyConfig(CodeRunner.KEYCONFIG_FILE, applicationInfo, i18n);
 		keyConf.setDefaultValue("start", CodeRunner.KEY_START);
 		keyConf.setDefaultValue("pause", CodeRunner.KEY_PAUSE);
 		keyConf.setDefaultValue("move_left", CodeRunner.KEY_LEFT);
@@ -71,7 +67,7 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 		Coffee.init();
 		Bug.init();
 
-		msg = t("start_msg");
+		msg = i18n.t("start_msg");
 	}
 
 	/**
@@ -87,7 +83,7 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 		addMouseListener(new MouseHandler(this));
 
 		entities = new Vector<>();
-		player = new Player(this);
+		player = new Player(this, i18n);
 		player.registerKeyHandler(mainFrame, keyConf);
 		entities.add(player);
 
@@ -166,7 +162,7 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 			return;
 		}
 
-		msg = newMsg + "\n" + t("score") + ": " + (int) getProgress();
+		msg = newMsg + "\n" + i18n.t("score") + ": " + (int) getProgress();
 		started = false;
 		spawner.stop();
 	}
@@ -276,8 +272,4 @@ public class RunnerPanel extends JPanel implements Runnable, Translatable {
 		}
 	}
 
-	@Override
-	public String t(String t) {
-		return I18n.getTranslationFor(t);
-	}
 }

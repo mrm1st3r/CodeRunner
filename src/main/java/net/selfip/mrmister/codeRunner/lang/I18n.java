@@ -1,84 +1,46 @@
 package net.selfip.mrmister.codeRunner.lang;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Hashtable;
 
 /**
- * 
- *
+ * Main class for Internationalization.
  */
 public final class I18n {
 
-	private static final String DEFAULT_PATH = "/lang";
-	private static final String FILE_EXT = ".lng";
+	private static final String FILE_PATH = "/lang/";
+	private static final String FILE_SUFFIX = ".lng";
 	private static final String DELIMITER = "=";
 
-	private static String lang;
-	private static String langFilePath = DEFAULT_PATH;
-	private static String langFile;
-	private static Hashtable<String, String> translations;
-
-	private I18n() { }
+	private final Hashtable<String, String> translations = new Hashtable<>();
 
 	/**
-	 * initialize with a specified language.
-	 * @param l new language
+	 * Create a new Internationalization.
+	 * @param lang language to use
 	 */
-	public static void init(String l) {
-		if (lang != null) {
-			throw new LanguageException("I18n has already been initialized!");
-		}
-
-		lang = l;
-		langFile = langFilePath + "/" + l + FILE_EXT;
-
-
-		File f = new File(I18n.class.getResource(langFile).getFile());
-		if (!f.exists()) {
-			try {
-				f.createNewFile();
-			} catch (IOException e) {
-				throw new LanguageException("couldn't create language-file '"
-						+ langFile + "': " + e.getMessage());
-			}
-		}
-
-		translations = new Hashtable<>();
-		BufferedReader in = null;
-
-		try {
-			in = new BufferedReader(new FileReader(f));
-
-			String line = in.readLine();
-			while (line != null) {
-				String[] t = line.split(DELIMITER);
-				translations.put(t[0], t[1]);
-
-				line = in.readLine();
-			}
-
-		} catch (Exception e) {
-			lang = null;
-		} finally {
-			try { in.close(); } catch (IOException e) { }
+	public I18n(String lang) {
+		InputStream input = I18n.class.getResourceAsStream(FILE_PATH + lang + FILE_SUFFIX);
+		try(BufferedReader in = new BufferedReader(new InputStreamReader(input))) {
+			readTranslations(in);
+		} catch (IOException e) {
+			throw new LanguageException("Could not read translations", e);
 		}
 	}
 
-	/**
-	 * get the translation for a text.
-	 * @param s source text
-	 * @return translated text
-	 */
-	public static String getTranslationFor(String s) {
-		if (lang == null) {
-			throw new LanguageException("I18n must be initialized before use!");
+	private void readTranslations(BufferedReader in) throws IOException {
+		in.lines().forEach(line -> {
+            String[] t = line.split(DELIMITER);
+            translations.put(t[0], t[1]);
+        });
+	}
+
+	public String t(String source) {
+		if (translations.containsKey(source)) {
+			return translations.get(source);
 		}
-		if (translations.containsKey(s)) {
-			return translations.get(s);
-		}
-		return s;
+		return source;
 	}
 }

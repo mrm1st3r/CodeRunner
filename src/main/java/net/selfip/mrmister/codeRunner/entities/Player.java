@@ -1,26 +1,24 @@
 package net.selfip.mrmister.codeRunner.entities;
 
-import java.awt.Graphics;
+import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.event.KeyConfig;
+import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
+import net.selfip.mrmister.codeRunner.lang.I18n;
+import net.selfip.mrmister.codeRunner.util.DisplayWriter;
+import net.selfip.mrmister.codeRunner.util.Time;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 
-import javax.swing.JFrame;
-
-import net.selfip.mrmister.codeRunner.CodeRunner;
-import net.selfip.mrmister.codeRunner.event.KeyConfig;
-import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
-import net.selfip.mrmister.codeRunner.lang.I18n;
-import net.selfip.mrmister.codeRunner.lang.Translatable;
-import net.selfip.mrmister.codeRunner.util.DisplayWriter;
-import net.selfip.mrmister.codeRunner.util.Time;
-
 /**
  * the player object.
  *
  */
-public class Player extends AbstractEntity implements Translatable {
+public class Player extends AbstractEntity {
 
 	public static final int MOVE_SPEED = 180;
 	public static final int MIN_SIGHT = 250;
@@ -34,6 +32,7 @@ public class Player extends AbstractEntity implements Translatable {
 	private static final int ANIMATION_TIMEOUT = 300;
 	private static final int ANIMATION_STEPS = 2;
 	private static final int START_POS = 100;
+	private final I18n i18n;
 
 	private long jump = 0;
 	private int energy = 0;
@@ -41,11 +40,13 @@ public class Player extends AbstractEntity implements Translatable {
 	/**
 	 * create a new player.
 	 * @param p containing panel
+	 * @param i18n
 	 */
-	public Player(RunnerPanel p) {
+	public Player(RunnerPanel p, I18n i18n) {
 		super(CodeRunner.loadImages(PLAYER_SPRITE, ANIMATION_STEPS),
 				new Point2D.Double(START_POS, 0),
 				ANIMATION_TIMEOUT, p);
+		this.i18n = i18n;
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class Player extends AbstractEntity implements Translatable {
 		energy++;
 
 		if (energy >= COFFEE_SHOCK) {
-			getEnv().stop(t("coffee_shock"));
+			getEnv().stop(i18n.t("coffee_shock"));
 		}
 	}
 
@@ -75,7 +76,7 @@ public class Player extends AbstractEntity implements Translatable {
 		energy--;
 
 		if (energy < 0) {
-			getEnv().stop(t("sleeping"));
+			getEnv().stop(i18n.t("sleeping"));
 		}
 	}
 
@@ -83,7 +84,7 @@ public class Player extends AbstractEntity implements Translatable {
 	 * depress the player.
 	 */
 	public void depress() {
-		getEnv().stop(t("depression"));
+		getEnv().stop(i18n.t("depression"));
 	}
 
 	@Override
@@ -142,7 +143,7 @@ public class Player extends AbstractEntity implements Translatable {
 			d.println("pos: " + (int) x + " / " + getRelativeY());
 			d.println("speed: " + deltaX + " / " + deltaY);
 		}
-		d.printlnRight(t("energy") + ": " + energy);
+		d.printlnRight(i18n.t("energy") + ": " + energy);
 
 		super.draw(g, d);
 	}
@@ -215,8 +216,4 @@ public class Player extends AbstractEntity implements Translatable {
 		}
 	}
 
-	@Override
-	public String t(String t) {
-		return I18n.getTranslationFor(t);
-	}
 }
