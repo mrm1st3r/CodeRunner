@@ -9,3 +9,8 @@
 .classpath
 .project
 .checkstyle
+
+# IntelliJ and Maven
+.idea
+**/*.iml
+target
