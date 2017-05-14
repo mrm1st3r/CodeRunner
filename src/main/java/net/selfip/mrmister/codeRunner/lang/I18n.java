@@ -30,7 +30,7 @@ public final class I18n {
 		}
 	}
 
-	private void readTranslations(BufferedReader in) throws IOException {
+	private void readTranslations(BufferedReader in) {
 		in.lines().forEach(line -> {
             String[] t = line.split(DELIMITER);
             translations.put(t[0], t[1]);

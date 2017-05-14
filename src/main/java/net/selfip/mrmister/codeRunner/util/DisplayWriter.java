@@ -22,7 +22,7 @@ public class DisplayWriter {
 
 	private static final Color DEFAULT_COLOR = Color.BLACK;
 
-	private static Font bigFont = new Font("Lucida Console", 0, BIG_FONT_SIZE);
+	private static Font bigFont = new Font("Lucida Console", Font.PLAIN, BIG_FONT_SIZE);
 	private Font defFont;
 	private int currentLineHeight = FIRST_LINE;
 	private int rightLineHeight = FIRST_LINE;
@@ -81,7 +81,7 @@ public class DisplayWriter {
 	public void printlnRight(String msg) {
 		g.setColor(c);
 		g.setFont(defFont);
-		g.drawString(msg, 
+		g.drawString(msg,
 				env.getWidth() - g.getFontMetrics().stringWidth(msg)
 				- SIDE_MARGIN,
 				rightLineHeight);

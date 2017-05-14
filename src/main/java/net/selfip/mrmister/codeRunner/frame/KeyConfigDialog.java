@@ -7,7 +7,6 @@ import javax.swing.*;
 
 /**
  * view and modify the current KeyConfig.
- *
  */
 public class KeyConfigDialog extends JDialog {
 
@@ -15,7 +14,6 @@ public class KeyConfigDialog extends JDialog {
 
 	private KeyConfig conf;
 	private final I18n i18n;
-	private JTable table;
 
 	/**
 	 * @param f parent frame
@@ -39,8 +37,8 @@ public class KeyConfigDialog extends JDialog {
 			i18n.t("current_key"),
 			i18n.t("default_key")
 		};
-		
-		table = new JTable(conf.list(), headings);
+
+		JTable table = new JTable(conf.list(), headings);
 
 		add(new JScrollPane(table));
 	}

@@ -6,8 +6,6 @@ import net.selfip.mrmister.codeRunner.lang.I18n;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * the main frame.
@@ -30,7 +28,7 @@ public class MainFrame extends JFrame {
 		super(applicationInfo.getSignature());
 		this.applicationInfo = applicationInfo;
 		this.i18n = i18n;
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		// fixed window-size
 		setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
@@ -50,43 +48,31 @@ public class MainFrame extends JFrame {
 		JMenu menu = new JMenu(i18n.t("Game"));
 		mb.add(menu);
 		JMenuItem mi = new JMenuItem(i18n.t("New"));
-		mi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (game.isStarted()) {
-					game.stop("");
-				}
-				game.start();
-			}
-		});
+		mi.addActionListener(e -> {
+            if (game.isStarted()) {
+                game.stop("");
+            }
+            game.start();
+        });
 		mi.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
 		menu.add(mi);
 
 		mi = new JMenuItem(i18n.t("Quit"));
-		mi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				game.saveKeyConfig();
-				System.exit(0);
-			}
-		});
+		mi.addActionListener(e -> {
+            game.saveKeyConfig();
+            System.exit(0);
+        });
 		menu.add(mi);
 
 		menu = new JMenu(i18n.t("Help"));
 		mb.add(menu);
 
 		mi = new JMenuItem(i18n.t("About"));
-		mi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent a) {
-				new AboutDialog(MainFrame.this, applicationInfo, i18n);
-			}
-		});
+		mi.addActionListener(a -> new AboutDialog(MainFrame.this, applicationInfo, i18n));
 		menu.add(mi);
 
 		mi = new JMenuItem(i18n.t("Key configuration"));
-		mi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent a) {
-				new KeyConfigDialog(MainFrame.this, i18n);
-			}
-		});
+		mi.addActionListener(a -> new KeyConfigDialog(MainFrame.this, i18n));
 		menu.add(mi);
 
 		setJMenuBar(mb);
@@ -94,7 +80,7 @@ public class MainFrame extends JFrame {
 
 	private void buildGameComponent() {
 		game = new RunnerPanel(this, applicationInfo, i18n);
-		game.setSize(CodeRunner.HEIGHT, CodeRunner.WIDTH);
+		game.setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
 
 		add(game, BorderLayout.CENTER);
 	}

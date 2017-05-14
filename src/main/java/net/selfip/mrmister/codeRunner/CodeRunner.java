@@ -1,15 +1,13 @@
 package net.selfip.mrmister.codeRunner;
 
+import net.selfip.mrmister.codeRunner.frame.MainFrame;
+import net.selfip.mrmister.codeRunner.lang.I18n;
+
+import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Locale;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
-
-import net.selfip.mrmister.codeRunner.frame.MainFrame;
-import net.selfip.mrmister.codeRunner.lang.I18n;
 
 /**
  * Launcher for CodeRunner.
@@ -76,7 +74,7 @@ public final class CodeRunner {
 	 */
 	public static BufferedImage[] loadImages(String path, int num) {
 		BufferedImage[] anim = new BufferedImage[num];
-		BufferedImage src = null;
+		BufferedImage src;
 
 		try {
 			File file = new File(CodeRunner.class.getResource("/" + path).getFile());
