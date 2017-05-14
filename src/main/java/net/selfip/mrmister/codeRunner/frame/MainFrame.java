@@ -52,8 +52,12 @@ public class MainFrame extends JFrame {
             if (game.isStarted()) {
                 game.stop("");
             }
-            game.start();
-        });
+			try {
+				game.start();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
 		mi.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
 		menu.add(mi);
 

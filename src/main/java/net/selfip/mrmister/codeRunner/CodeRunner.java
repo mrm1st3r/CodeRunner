@@ -3,20 +3,14 @@ package net.selfip.mrmister.codeRunner;
 import net.selfip.mrmister.codeRunner.frame.MainFrame;
 import net.selfip.mrmister.codeRunner.lang.I18n;
 
-import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.logging.Logger;
 
 /**
  * Launcher for CodeRunner.
- *
  */
 public final class CodeRunner {
 
-	// ---------------- global application settings ---------------------------
-	public static final String LANG = "de";
+	private static final String LANG = "de";
 
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
@@ -35,21 +29,14 @@ public final class CodeRunner {
 	public static final int SPAWN_POS = 20;
 	public static final int SPAWN_DIST = 110;
 
-	// ---------------- other -------------------------------------------------
-	private static Logger log;
 	private static boolean devMode = false;
 
-	private CodeRunner() { }
-
-	/**
-	 * 
-	 * @param args no parameters available yet
-	 */
 	public static void main(String[] args) {
-		I18n i18n = new I18n(LANG);
-		log = Logger.getLogger(CodeRunner.class.getName());
+		new CodeRunner();
+	}
 
-		new MainFrame(new ApplicationInfo(), i18n);
+	private CodeRunner() {
+		new MainFrame(new ApplicationInfo(), new I18n(LANG));
 	}
 
 	/**
@@ -66,32 +53,4 @@ public final class CodeRunner {
 		devMode = !devMode;
 	}
 
-	/**
-	 * load an image.
-	 * @param path image location
-	 * @param num number of single images (side by side)
-	 * @return array of all images
-	 */
-	public static BufferedImage[] loadImages(String path, int num) {
-		BufferedImage[] anim = new BufferedImage[num];
-		BufferedImage src;
-
-		try {
-			File file = new File(CodeRunner.class.getResource("/" + path).getFile());
-			src = ImageIO.read(file);
-		} catch (Exception e) {
-			log.severe(e.getMessage());
-			return null;
-		}
-
-		for (int i = 0; i < num; i++) {
-			anim[i] = src.getSubimage(
-					i * src.getWidth() / num,
-					0,
-					src.getWidth() / num,
-					src.getHeight());
-		}
-
-		return anim;
-	}
 }

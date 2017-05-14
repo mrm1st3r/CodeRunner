@@ -3,7 +3,7 @@ package net.selfip.mrmister.codeRunner.entities;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.util.Images;
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 
 /**
@@ -57,6 +57,10 @@ public class Bug extends AbstractEntity {
 	 * load animation for Bug entities.
 	 */
 	public static void init() {
-		pics = CodeRunner.loadImages("bug.png", ANIMATION_STEPS);
+		try {
+			pics = Images.loadAnimation("bug.png", ANIMATION_STEPS);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

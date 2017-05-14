@@ -2,6 +2,7 @@ package net.selfip.mrmister.codeRunner.frame;
 
 import net.selfip.mrmister.codeRunner.ApplicationInfo;
 import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.util.Images;
 import net.selfip.mrmister.codeRunner.entities.*;
 import net.selfip.mrmister.codeRunner.event.KeyConfig;
 import net.selfip.mrmister.codeRunner.event.MouseHandler;
@@ -60,9 +61,10 @@ public class RunnerPanel extends JPanel implements Runnable {
 		keyConf.setDefaultValue("move_right", CodeRunner.KEY_RIGHT);
 		keyConf.setDefaultValue("jump", CodeRunner.KEY_JUMP);
 
-		BufferedImage[] bufferedImages = CodeRunner.loadImages("background.png", 1);
-		if (bufferedImages != null && bufferedImages.length > 0) {
-			bg = bufferedImages[0];
+		try {
+			bg = Images.loadImage("background.png");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		Coffee.init();
 		Bug.init();
@@ -73,7 +75,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 	/**
 	 * start a new game.
 	 */
-	public void start() {
+	public void start() throws Exception {
 		if (started) {
 			return;
 		}

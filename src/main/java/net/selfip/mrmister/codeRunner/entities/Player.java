@@ -1,6 +1,7 @@
 package net.selfip.mrmister.codeRunner.entities;
 
 import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.codeRunner.util.Images;
 import net.selfip.mrmister.codeRunner.event.KeyConfig;
 import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
 import net.selfip.mrmister.codeRunner.lang.I18n;
@@ -42,8 +43,8 @@ public class Player extends AbstractEntity {
 	 * @param p containing panel
 	 * @param i18n
 	 */
-	public Player(RunnerPanel p, I18n i18n) {
-		super(CodeRunner.loadImages(PLAYER_SPRITE, ANIMATION_STEPS),
+	public Player(RunnerPanel p, I18n i18n) throws Exception {
+		super(Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
 				new Point2D.Double(START_POS, 0),
 				ANIMATION_TIMEOUT, p);
 		this.i18n = i18n;
