@@ -9,90 +9,87 @@ import java.awt.*;
 
 /**
  * the main frame.
- *
  */
 public class MainFrame extends JFrame {
 
-	static final long serialVersionUID = 0x1;
-
 	private RunnerPanel game;
-	private ApplicationInfo applicationInfo;
+	private final ApplicationInfo applicationInfo;
 	private final I18n i18n;
 
-	/**
-	 * Initialize the main window.
-	 * @param applicationInfo
-	 * @param i18n
-	 */
 	public MainFrame(ApplicationInfo applicationInfo, I18n i18n) {
 		super(applicationInfo.getSignature());
 		this.applicationInfo = applicationInfo;
 		this.i18n = i18n;
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		// fixed window-size
+		setupFrameParameters();
+		buildGameComponent();
+	}
+
+	private void setupFrameParameters() {
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
 		this.setResizable(false);
-
 		setLocationRelativeTo(null);
-		buildMenu();
-
+		setJMenuBar(buildMenuBar());
 		setLayout(new BorderLayout());
-		buildGameComponent();
-
 		setVisible(true);
 	}
 
-	private void buildMenu() {
-		JMenuBar mb = new JMenuBar();
-		JMenu menu = new JMenu(i18n.t("Game"));
-		mb.add(menu);
-		JMenuItem mi = new JMenuItem(i18n.t("New"));
-		mi.addActionListener(e -> {
-            if (game.isStarted()) {
-                game.stop("");
-            }
+	private JMenuBar buildMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu gameMenu = createMenu(menuBar, i18n.t("Game"));
+
+		JMenuItem menuItem = createMenuItem(gameMenu, i18n.t("New"));
+		menuItem.addActionListener(e -> {
+			if (game.isStarted()) {
+				game.stop("");
+			}
 			try {
 				game.start();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		});
-		mi.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
-		menu.add(mi);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
 
-		mi = new JMenuItem(i18n.t("Quit"));
-		mi.addActionListener(e -> {
-            game.saveKeyConfig();
-            System.exit(0);
-        });
-		menu.add(mi);
+		createMenuItem(gameMenu, i18n.t("Quit"))
+				.addActionListener(e -> {
+					game.saveKeyConfig();
+					System.exit(0);
+				});
 
-		menu = new JMenu(i18n.t("Help"));
-		mb.add(menu);
+		JMenu helpMenu = createMenu(menuBar, i18n.t("Help"));
 
-		mi = new JMenuItem(i18n.t("About"));
-		mi.addActionListener(a -> new AboutDialog(MainFrame.this, applicationInfo, i18n));
-		menu.add(mi);
+		createMenuItem(helpMenu, i18n.t("About"))
+				.addActionListener(a -> new AboutDialog(MainFrame.this, applicationInfo, i18n));
 
-		mi = new JMenuItem(i18n.t("Key configuration"));
-		mi.addActionListener(a -> new KeyConfigDialog(MainFrame.this, i18n));
-		menu.add(mi);
+		createMenuItem(helpMenu, i18n.t("Key configuration"))
+			.addActionListener(a -> new KeyConfigDialog(MainFrame.this, i18n));
 
-		setJMenuBar(mb);
+		setJMenuBar(menuBar);
+
+		return menuBar;
+	}
+
+	private JMenuItem createMenuItem(JMenu menu, String name) {
+		JMenuItem menuItem = new JMenuItem(name);
+		menu.add(menuItem);
+		return menuItem;
+	}
+
+	private JMenu createMenu(JMenuBar menuBar, String name) {
+		JMenu gameMenu = new JMenu(name);
+		menuBar.add(gameMenu);
+		return gameMenu;
 	}
 
 	private void buildGameComponent() {
 		game = new RunnerPanel(this, applicationInfo, i18n);
 		game.setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
-
 		add(game, BorderLayout.CENTER);
 	}
 
-	/**
-	 * @return the game panel
-	 */
-	public RunnerPanel getRunnerPanel() {
+	RunnerPanel getRunnerPanel() {
 		return game;
 	}
 }
