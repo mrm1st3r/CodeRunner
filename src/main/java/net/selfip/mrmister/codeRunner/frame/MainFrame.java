@@ -21,8 +21,8 @@ public class MainFrame extends JFrame {
 		this.applicationInfo = applicationInfo;
 		this.i18n = i18n;
 
-		setupFrameParameters();
 		buildGameComponent();
+		setupFrameParameters();
 	}
 
 	private void setupFrameParameters() {
@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
 				.addActionListener(a -> new AboutDialog(MainFrame.this, applicationInfo, i18n));
 
 		createMenuItem(helpMenu, i18n.t("Key configuration"))
-			.addActionListener(a -> new KeyConfigDialog(MainFrame.this, i18n));
+			.addActionListener(a -> new KeyConfigDialog(MainFrame.this, i18n, game.getKeyConfig()));
 
 		setJMenuBar(menuBar);
 
@@ -87,9 +87,5 @@ public class MainFrame extends JFrame {
 		game = new RunnerPanel(this, applicationInfo, i18n);
 		game.setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
 		add(game, BorderLayout.CENTER);
-	}
-
-	RunnerPanel getRunnerPanel() {
-		return game;
 	}
 }

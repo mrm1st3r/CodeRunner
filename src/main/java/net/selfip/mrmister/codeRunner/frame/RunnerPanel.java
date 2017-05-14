@@ -18,51 +18,39 @@ import java.util.logging.Logger;
 
 /**
  * where all the action goes.
- *
  */
 public class RunnerPanel extends JPanel implements Runnable {
 
-	private static final long serialVersionUID = 0x1;
+	private static final Logger LOG = Logger.getLogger(RunnerPanel.class.getName());
+
+	private final MainFrame mainFrame;
+	private final I18n i18n;
+	private final KeyConfig keyConfig;
 
 	private double progress = 0;
 	private boolean paused = false;
 	private boolean started = false;
-	private MainFrame mainFrame;
-	private final I18n i18n;
 
 	private long delta = 0;
 	private long last = 0;
 	private long fps = 0;
 
-	private Logger log;
-	private BufferedImage bg;
+	private BufferedImage backgroundImages;
 	private String msg;
 
 	private Player player;
-	private KeyConfig keyConf;
 	private Vector<AbstractEntity> entities;
 	private SpawnManager spawner;
 
-	/**
-	 * @param main parent frame
-	 * @param applicationInfo
-	 * @param i18n
-	 */
-	public RunnerPanel(MainFrame main, ApplicationInfo applicationInfo, I18n i18n) {
+	RunnerPanel(MainFrame main, ApplicationInfo applicationInfo, I18n i18n) {
 		super();
 		mainFrame = main;
 		this.i18n = i18n;
-		log = Logger.getLogger(getClass().getName());
 
-		keyConf = new KeyConfig(CodeRunner.KEYCONFIG_FILE, applicationInfo, i18n);
-		keyConf.setDefaultValue("start", CodeRunner.KEY_START);
-		keyConf.setDefaultValue("pause", CodeRunner.KEY_PAUSE);
-		keyConf.setDefaultValue("move_left", CodeRunner.KEY_LEFT);
-		keyConf.setDefaultValue("move_right", CodeRunner.KEY_RIGHT);
-		keyConf.setDefaultValue("jump", CodeRunner.KEY_JUMP);
+		keyConfig = new KeyConfig(CodeRunner.KEYCONFIG_FILE, applicationInfo.getSignature());
 
 		try {
-			bg = Images.loadImage("background.png");
+			backgroundImages = Images.loadImage("background.png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,7 +63,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 	/**
 	 * start a new game.
 	 */
-	public void start() throws Exception {
+	void start() throws Exception {
 		if (started) {
 			return;
 		}
@@ -86,10 +74,10 @@ public class RunnerPanel extends JPanel implements Runnable {
 
 		entities = new Vector<>();
 		player = new Player(this, i18n);
-		player.registerKeyHandler(mainFrame, keyConf);
+		player.registerKeyHandler(mainFrame, keyConfig);
 		entities.add(player);
 
-		log.info("starting a new game");
+		LOG.info("starting a new game");
 		last = System.nanoTime();
 
 		spawner = new SpawnManager(this);
@@ -102,7 +90,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		log.info("Main Loop starting");
+		LOG.info("Main Loop starting");
 		while (mainFrame.isVisible() && started) {
 
 			calculateDelta();
@@ -114,11 +102,11 @@ public class RunnerPanel extends JPanel implements Runnable {
 			try {
 				Thread.sleep((Time.MILLIS_PER_SEC / CodeRunner.FPS_LIMIT));
 			} catch (InterruptedException e) {
-				log.info("interrupted during sleep!");
+				LOG.info("interrupted during sleep!");
 			}
 		}
 
-		log.info("Main-Loop is over!");
+		LOG.info("Main-Loop is over!");
 	}
 
 	private void doLogic() {
@@ -177,7 +165,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 			return;
 		}
 
-		log.info("paused the running game");
+		LOG.info("paused the running game");
 		paused = true;
 	}
 
@@ -189,7 +177,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 			return;
 		}
 
-		log.info("resumed the game");
+		LOG.info("resumed the game");
 		paused = false;
 	}
 
@@ -233,14 +221,14 @@ public class RunnerPanel extends JPanel implements Runnable {
 	 * save the key-configuration.
 	 */
 	public void saveKeyConfig() {
-		keyConf.save();
+		keyConfig.save();
 	}
 
 	/**
 	 * @return the current key-configuration
 	 */
 	public KeyConfig getKeyConfig() {
-		return keyConf;
+		return keyConfig;
 	}
 
 	@Override
@@ -251,8 +239,8 @@ public class RunnerPanel extends JPanel implements Runnable {
 		out.setColor(Color.BLACK);
 
 		// draw background
-		g.drawImage(bg, (int) -(progress % CodeRunner.WIDTH), 0, this);
-		g.drawImage(bg,
+		g.drawImage(backgroundImages, (int) -(progress % CodeRunner.WIDTH), 0, this);
+		g.drawImage(backgroundImages,
 				(int) -(progress % CodeRunner.WIDTH) + CodeRunner.WIDTH,
 				0, this);
 

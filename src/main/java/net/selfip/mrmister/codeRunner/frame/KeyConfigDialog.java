@@ -4,26 +4,22 @@ import net.selfip.mrmister.codeRunner.event.KeyConfig;
 import net.selfip.mrmister.codeRunner.lang.I18n;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
 
 /**
- * view and modify the current KeyConfig.
+ * Dialog for viewing and modifying the current KeyConfig.
  */
-public class KeyConfigDialog extends JDialog {
+class KeyConfigDialog extends JDialog {
 
-	private static final long serialVersionUID = 1L;
-
-	private KeyConfig conf;
 	private final I18n i18n;
+	private final KeyConfig keyConfig;
 
-	/**
-	 * @param f parent frame
-	 * @param i18n
-	 */
-	public KeyConfigDialog(MainFrame f, I18n i18n) {
+	KeyConfigDialog(MainFrame f, I18n i18n, KeyConfig keyConfig) {
 		super(f, "Key configuration");
 
-		conf = f.getRunnerPanel().getKeyConfig();
 		this.i18n = i18n;
+		this.keyConfig = keyConfig;
 		buildKeyTable();
 
 		pack();
@@ -38,8 +34,22 @@ public class KeyConfigDialog extends JDialog {
 			i18n.t("default_key")
 		};
 
-		JTable table = new JTable(conf.list(), headings);
+		JTable table = new JTable(buildTable(), headings);
 
 		add(new JScrollPane(table));
+	}
+
+	private String[][] buildTable() {
+		Enumeration<Object> keys = keyConfig.keys();
+		String[][] rows = new String[keyConfig.keyCount()][3];
+
+		for (int i = 0; keys.hasMoreElements(); i++) {
+			String key = (String) keys.nextElement();
+			rows[i][0] = i18n.t(key);
+			rows[i][1] = KeyEvent.getKeyText(keyConfig.get(key));
+			rows[i][2] = KeyEvent.getKeyText(keyConfig.getDefaultValue(key));
+		}
+
+		return rows;
 	}
 }
