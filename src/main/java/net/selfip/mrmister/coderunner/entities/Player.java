@@ -18,13 +18,12 @@ import java.io.IOException;
 
 /**
  * the player object.
- *
  */
 public class Player extends AbstractEntity {
 
-	public static final int MOVE_SPEED = 180;
-	public static final int MIN_SIGHT = 250;
-	public static final int COFFEE_SHOCK = 10;
+	private static final int MOVE_SPEED = 180;
+	private static final int MIN_SIGHT = 250;
+	private static final int COFFEE_SHOCK = 10;
 
 	private static final int JUMP_TIME = 500;
 	private static final int JUMP_SPEED = 200;
@@ -34,20 +33,20 @@ public class Player extends AbstractEntity {
 	private static final int ANIMATION_TIMEOUT = 300;
 	private static final int ANIMATION_STEPS = 2;
 	private static final int START_POS = 100;
+	private final RunnerPanel game;
 	private final I18n i18n;
 
 	private long jump = 0;
 	private int energy = 0;
 
-	/**
-	 * create a new player.
-	 * @param p containing panel
-	 * @param i18n
-	 */
-	public Player(RunnerPanel p, I18n i18n) throws IOException {
-		super(Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
+	public Player(RunnerPanel game, I18n i18n) throws IOException {
+		super(
+				Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
 				new Point2D.Double(START_POS, 0),
-				ANIMATION_TIMEOUT, p);
+				ANIMATION_TIMEOUT,
+				game
+		);
+		this.game = game;
 		this.i18n = i18n;
 	}
 
@@ -60,33 +59,24 @@ public class Player extends AbstractEntity {
 		}
 	}
 
-	/**
-	 * add one energy (e.g. after drinking a coffee).
-	 */
-	public void addEnergy() {
+	void addEnergy() {
 		energy++;
 
 		if (energy >= COFFEE_SHOCK) {
-			getEnv().stop(i18n.t("coffee_shock"));
+			game.stop(i18n.t("coffee_shock"));
 		}
 	}
 
-	/**
-	 * reduce energy (e.g. after laying into a bed). 
-	 */
-	public void reduceEnergy() {
+	void reduceEnergy() {
 		energy--;
 
 		if (energy < 0) {
-			getEnv().stop(i18n.t("sleeping"));
+			game.stop(i18n.t("sleeping"));
 		}
 	}
 
-	/**
-	 * depress the player.
-	 */
-	public void depress() {
-		getEnv().stop(i18n.t("depression"));
+	void depress() {
+		game.stop(i18n.t("depression"));
 	}
 
 	@Override
@@ -95,13 +85,12 @@ public class Player extends AbstractEntity {
 
 		super.move(delta);
 
-		// Level weiterscrollen
 		if (getRelativeX() >= (CodeRunner.WIDTH - MIN_SIGHT)) {
-			getEnv().progress(getRelativeX() - (CodeRunner.WIDTH - MIN_SIGHT));
+			game.progress(getRelativeX() - (CodeRunner.WIDTH - MIN_SIGHT));
 		}
 
 		if (getRelativeX() < 0) {
-			setRelativeX(0);
+			resetRelativeX();
 		}
 		if (getRelativeY() < 0) {
 			setRelativeY(0);
@@ -150,11 +139,6 @@ public class Player extends AbstractEntity {
 		super.draw(g, d);
 	}
 
-	/**
-	 * register the player input.
-	 * @param p related frame
-	 * @param c key-configuration to use
-	 */
 	public void registerKeyHandler(JFrame p, KeyConfig c) {
 		KeyListener[] l = p.getKeyListeners();
 
@@ -171,7 +155,7 @@ public class Player extends AbstractEntity {
 
 		private KeyConfig conf;
 
-		public Keyboard(KeyConfig c) {
+		Keyboard(KeyConfig c) {
 			conf = c;
 		}
 
@@ -179,24 +163,21 @@ public class Player extends AbstractEntity {
 		public void keyPressed(KeyEvent e) {
 			int key = Character.toLowerCase((char) e.getKeyCode());
 
-			if (getEnv().isPaused()) {
+			if (game.isPaused()) {
 				if (key == conf.get("pause")) {
-					getEnv().resume();
+					game.resume();
 				}
-
 				return;
 			}
 
 			if (key == conf.get("move_left")) {
-				//AbstractEntity.log.info("moving left");
 				deltaX = -1 * MOVE_SPEED;
 			} else if (key == conf.get("move_right")) {
-				//AbstractEntity.log.info("moving right");
 				deltaX = MOVE_SPEED;
 			} else if (key == conf.get("jump")) {
 				startJump();
 			} else if (key == conf.get("pause")) {
-				getEnv().pause();
+				game.pause();
 			} else if (key == conf.get("dev_mode")) {
 				CodeRunner.toggleDevMode();
 			}
@@ -207,15 +188,12 @@ public class Player extends AbstractEntity {
 			int key = Character.toLowerCase((char) e.getKeyCode());
 
 			if (key == conf.get("move_left")) {
-				//AbstractEntity.log.info("moving left");
 				deltaX = 0;
 			} else if (key == conf.get("move_right")) {
-				//AbstractEntity.log.info("moving right");
 				deltaX = 0;
 			} else if (key == conf.get("jump")) {
 				endJump();
 			}
 		}
 	}
-
 }

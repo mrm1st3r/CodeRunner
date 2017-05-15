@@ -13,35 +13,24 @@ import net.selfip.mrmister.coderunner.util.Time;
  * base class for non player entities.
  *
  */
-public abstract class AbstractEntity
-extends Rectangle2D.Double
-implements Movable, Drawable {
+public abstract class AbstractEntity extends Rectangle2D.Double implements Movable, Drawable {
 
-	public static final int SIGHT_OFFSET = 5;
+	private static final int SIGHT_OFFSET = 5;
 
-	private static final long serialVersionUID = 1L;
+	int deltaX = 0;
+	int deltaY = 0;
+	int currPic = 0;
 
-	protected int deltaX = 0;
-	protected int deltaY = 0;
+	private final RunnerPanel game;
+	private final BufferedImage[] pics;
+	private final long delay;
 
-	private BufferedImage[] pics;
-	protected int currPic = 0;
-	private long delay;
 	private long anim = 0;
 
-	private RunnerPanel env;
-
-	/**
-	 * @param i images representing the sprite
-	 * @param pos absolute position inside the Panel
-	 * @param d delay between animation images in millisecs
-	 * @param p environment
-	 */
-	public AbstractEntity(BufferedImage[] i,
-			Point2D pos, long d, RunnerPanel p) {
+	AbstractEntity(BufferedImage[] i, Point2D pos, long d, RunnerPanel p) {
 
 		pics = i;
-		setEnv(p);
+		game = p;
 		this.delay = d;
 		if (i != null) {
 			height = pics[0].getHeight();
@@ -62,37 +51,36 @@ implements Movable, Drawable {
 	/**
 	 * @return y-axis position relative to the ground
 	 */
-	public int getRelativeY() {
-		return (int) (getEnv().getHeight() - y - height);
+	int getRelativeY() {
+		return (int) (game.getHeight() - y - height);
 	}
 
 	/**
 	 * set a new y-axis position relative to the ground.
 	 * @param pos new position
 	 */
-	public void setRelativeY(int pos) {
-		y = (getEnv().getHeight() - pos - height);
+	void setRelativeY(int pos) {
+		y = (game.getHeight() - pos - height);
 	}
 
 	/**
 	 * @return x-axis position relative to the left display border
 	 */
-	public int getRelativeX() {
-		return (int) (x - getEnv().getProgress());
+	int getRelativeX() {
+		return (int) (x - game.getProgress());
 	}
 
 	/**
 	 * set a new x-axis position relative to the left display border.
-	 * @param pos new position
 	 */
-	public void setRelativeX(int pos) {
-		x = pos + getEnv().getProgress();
+	void resetRelativeX() {
+		x = game.getProgress();
 	}
 
 	/**
 	 * @return whether the entity is touching the ground
 	 */
-	public boolean onGround() {
+	boolean onGround() {
 		return getRelativeY() == 0;
 	}
 
@@ -134,19 +122,4 @@ implements Movable, Drawable {
 		return getRelativeX() + AbstractEntity.SIGHT_OFFSET + width < 0;
 	}
 
-	/**
-	 * get the environment panel.
-	 * @return current environment
-	 */
-	protected RunnerPanel getEnv() {
-		return env;
-	}
-
-	/**
-	 * set a new environment panel.
-	 * @param rp new panel
-	 */
-	protected void setEnv(RunnerPanel rp) {
-		env = rp;
-	}
 }
