@@ -13,6 +13,7 @@ import net.selfip.mrmister.codeRunner.util.Time;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -63,7 +64,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 	/**
 	 * start a new game.
 	 */
-	void start() throws Exception {
+	void start() throws IOException {
 		if (started) {
 			return;
 		}

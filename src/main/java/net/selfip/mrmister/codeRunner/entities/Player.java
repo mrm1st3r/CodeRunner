@@ -14,6 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 
 /**
  * the player object.
@@ -43,7 +44,7 @@ public class Player extends AbstractEntity {
 	 * @param p containing panel
 	 * @param i18n
 	 */
-	public Player(RunnerPanel p, I18n i18n) throws Exception {
+	public Player(RunnerPanel p, I18n i18n) throws IOException {
 		super(Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
 				new Point2D.Double(START_POS, 0),
 				ANIMATION_TIMEOUT, p);

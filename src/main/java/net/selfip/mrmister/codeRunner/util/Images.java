@@ -5,18 +5,21 @@ import net.selfip.mrmister.codeRunner.CodeRunner;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Utility class for loading images.
  */
 public final class Images {
 
+    private static final String IMAGE_PATH = "/";
+
     private Images() throws InstantiationException {
         throw new InstantiationException("You shall not construct");
     }
 
-    public static BufferedImage loadImage(String path) throws Exception {
-        File file = new File(CodeRunner.class.getResource("/" + path).getFile());
+    public static BufferedImage loadImage(String fileName) throws IOException {
+        File file = new File(CodeRunner.class.getResource(IMAGE_PATH + fileName).getFile());
         return ImageIO.read(file);
     }
 
@@ -26,7 +29,7 @@ public final class Images {
      * @param num number of single images (side by side)
      * @return array of all images
      */
-    public static BufferedImage[] loadAnimation(String path, int num) throws Exception {
+    public static BufferedImage[] loadAnimation(String path, int num) throws IOException {
         BufferedImage[] anim = new BufferedImage[num];
         BufferedImage src = loadImage(path);
         for (int i = 0; i < num; i++) {

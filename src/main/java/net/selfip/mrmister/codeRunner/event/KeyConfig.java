@@ -35,6 +35,18 @@ public class KeyConfig {
 		loadDefaults();
 	}
 
+	private void loadFile(String f) {
+		File file = new File(f);
+		if (file.exists()) {
+			try {
+				prop.load(new FileInputStream(file));
+				LOG.info("read KeyConfig from '" + f + "'");
+			} catch (Exception e) {
+				LOG.info("failed loading KeyConfig: " + e);
+			}
+		}
+	}
+
 	private void loadDefaults() {
 		setDefaultValue("start", CodeRunner.KEY_START);
 		setDefaultValue("pause", CodeRunner.KEY_PAUSE);
@@ -44,7 +56,7 @@ public class KeyConfig {
 	}
 
 	private void setDefaultValue(String key, int value) {
-		if (prop != null && !prop.contains(key)) {
+		if (!prop.contains(key)) {
 			prop.setProperty(key, Integer.toString(value));
 		}
 		defaults.put(key, Integer.toString(value));
@@ -74,18 +86,6 @@ public class KeyConfig {
 
 	public int keyCount() {
 		return defaults.size();
-	}
-
-	private void loadFile(String f) {
-		File file = new File(f);
-		if (file.exists()) {
-			try {
-				prop.load(new FileInputStream(file));
-				LOG.info("read KeyConfig from '" + f + "'");
-			} catch (Exception e) {
-				LOG.info("failed loading KeyConfig: " + e);
-			}
-		}
 	}
 
 	/**
