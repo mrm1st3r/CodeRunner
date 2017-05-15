@@ -24,7 +24,7 @@ public final class CodeRunner {
 	public static final int KEY_JUMP = KeyEvent.VK_SPACE;
 	public static final int KEY_TOGGLE_DEV = KeyEvent.VK_F11;
 
-	public static final String KEYCONFIG_FILE = "keyboard.ini";
+	private static final String KEY_CONFIGURATION_FILE = "keyboard.ini";
 
 	public static final int SPAWN_POS = 20;
 	public static final int SPAWN_DIST = 110;
@@ -40,7 +40,7 @@ public final class CodeRunner {
 		new MainFrame(
 				applicationInfo,
 				new I18n(LANG),
-				new KeyConfig(KEYCONFIG_FILE, applicationInfo.getSignature())
+				new KeyConfig(KEY_CONFIGURATION_FILE, applicationInfo.getSignature())
 		);
 	}
 

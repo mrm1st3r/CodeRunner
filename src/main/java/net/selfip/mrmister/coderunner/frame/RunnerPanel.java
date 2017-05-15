@@ -3,7 +3,6 @@ package net.selfip.mrmister.coderunner.frame;
 import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.entities.*;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
-import net.selfip.mrmister.coderunner.event.MouseHandler;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.DisplayWriter;
 import net.selfip.mrmister.coderunner.util.Images;
@@ -70,7 +69,6 @@ public class RunnerPanel extends JPanel implements Runnable {
 
 		msg = null;
 		progress = 0;
-		addMouseListener(new MouseHandler(this));
 
 		entities = new Vector<>();
 		player = new Player(this, i18n);

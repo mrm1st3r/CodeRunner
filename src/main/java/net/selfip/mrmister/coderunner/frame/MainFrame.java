@@ -56,9 +56,7 @@ public class MainFrame extends JFrame {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
 
 		createMenuItem(gameMenu, i18n.t("Quit"))
-				.addActionListener(e -> {
-					System.exit(0);
-				});
+				.addActionListener(e -> System.exit(0));
 
 		JMenu helpMenu = createMenu(menuBar, i18n.t("Help"));
 
