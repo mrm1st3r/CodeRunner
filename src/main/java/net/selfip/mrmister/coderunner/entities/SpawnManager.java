@@ -2,6 +2,7 @@ package net.selfip.mrmister.coderunner.entities;
 
 import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.frame.RunnerPanel;
+import net.selfip.mrmister.coderunner.game.GameLoop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,14 +25,17 @@ public class SpawnManager implements ActionListener {
 	private static final double BUG_CHANCE = 0.02;
 
 	private final RunnerPanel env;
+	private final GameLoop game;
 	private final Timer timer;
 	private long lastSpawn;
 
 	/**
 	 * @param rp panel to spawn entities at
+	 * @param game
 	 */
-	public SpawnManager(RunnerPanel rp) {
+	public SpawnManager(RunnerPanel rp, GameLoop game) {
 		env = rp;
+		this.game = game;
 		timer = new Timer(SPAWN_TIMEOUT_MILLIS, this);
 	}
 
@@ -50,7 +54,7 @@ public class SpawnManager implements ActionListener {
 	}
 
 	private void spawn() {
-		if (env.getProgress() - lastSpawn < CodeRunner.SPAWN_DIST) {
+		if (game.getProgress() - lastSpawn < CodeRunner.SPAWN_DIST) {
 			return;
 		}
 		AbstractEntity e = null;
@@ -58,24 +62,24 @@ public class SpawnManager implements ActionListener {
 		if (Math.random() <= BUG_CHANCE) {
 			LOG.info("spawning new bug");
 			e = new Bug(
-					new Point2D.Double(env.getWidth() + env.getProgress()
-							+ CodeRunner.SPAWN_POS, 0), env);
+					new Point2D.Double(env.getWidth() + game.getProgress()
+							+ CodeRunner.SPAWN_POS, 0), env, game);
 		} else if (Math.random() <= COFFEE_CHANCE) {
 			LOG.info("spawning new coffee");
 			e = new Coffee(
-					new Point2D.Double(env.getWidth() + env.getProgress()
-							+ CodeRunner.SPAWN_POS, 0), env);
+					new Point2D.Double(env.getWidth() + game.getProgress()
+							+ CodeRunner.SPAWN_POS, 0), game, env);
 
 		} else if (Math.random() < BED_CHANCE) {
 			LOG.info("spawning new bed");
 			e = new Bed(
-					new Point2D.Double(env.getWidth() + env.getProgress()
-							+ CodeRunner.SPAWN_POS, 0),	env);
+					new Point2D.Double(env.getWidth() + game.getProgress()
+							+ CodeRunner.SPAWN_POS, 0), game, env);
 		}
 
 		if (e != null) {
-			env.addEntity(e);
-			lastSpawn = (int) env.getProgress();
+			game.addEntity(e);
+			lastSpawn = (int) game.getProgress();
 		}
 	}
 

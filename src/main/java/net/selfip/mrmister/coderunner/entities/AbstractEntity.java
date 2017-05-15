@@ -6,12 +6,12 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import net.selfip.mrmister.coderunner.frame.RunnerPanel;
+import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.util.DisplayWriter;
 import net.selfip.mrmister.coderunner.util.Time;
 
 /**
  * base class for non player entities.
- *
  */
 public abstract class AbstractEntity extends Rectangle2D.Double implements Movable, Drawable {
 
@@ -21,17 +21,19 @@ public abstract class AbstractEntity extends Rectangle2D.Double implements Movab
 	int deltaY = 0;
 	int currPic = 0;
 
-	private final RunnerPanel game;
+	private final GameLoop game;
 	private final BufferedImage[] pics;
 	private final long delay;
+	private final RunnerPanel panel;
 
 	private long anim = 0;
 
-	AbstractEntity(BufferedImage[] i, Point2D pos, long d, RunnerPanel p) {
+	AbstractEntity(BufferedImage[] i, Point2D pos, long d, GameLoop game, RunnerPanel panel) {
 
 		pics = i;
-		game = p;
+		this.game = game;
 		this.delay = d;
+		this.panel = panel;
 		if (i != null) {
 			height = pics[0].getHeight();
 			width = pics[0].getWidth();
@@ -52,7 +54,7 @@ public abstract class AbstractEntity extends Rectangle2D.Double implements Movab
 	 * @return y-axis position relative to the ground
 	 */
 	int getRelativeY() {
-		return (int) (game.getHeight() - y - height);
+		return (int) (panel.getHeight() - y - height);
 	}
 
 	/**
@@ -60,7 +62,7 @@ public abstract class AbstractEntity extends Rectangle2D.Double implements Movab
 	 * @param pos new position
 	 */
 	void setRelativeY(int pos) {
-		y = (game.getHeight() - pos - height);
+		y = (panel.getHeight() - pos - height);
 	}
 
 	/**

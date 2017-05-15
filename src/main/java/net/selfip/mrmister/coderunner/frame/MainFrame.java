@@ -3,6 +3,7 @@ package net.selfip.mrmister.coderunner.frame;
 import net.selfip.mrmister.coderunner.ApplicationInfo;
 import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
+import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
 
 import javax.swing.*;
@@ -13,18 +14,20 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 
-	private final RunnerPanel game;
 	private final ApplicationInfo applicationInfo;
 	private final I18n i18n;
 	private final KeyConfig keyConfig;
+	private final GameLoop game;
 
-	public MainFrame(ApplicationInfo applicationInfo, I18n i18n, KeyConfig keyConfig) {
+	public MainFrame(ApplicationInfo applicationInfo, I18n i18n, KeyConfig keyConfig, GameLoop game) {
 		super(applicationInfo.getSignature());
 		this.applicationInfo = applicationInfo;
 		this.i18n = i18n;
 		this.keyConfig = keyConfig;
+		this.game = game;
 		setupFrameParameters();
-		this.game = buildGameComponent();
+		RunnerPanel runnerPanel = buildGameComponent();
+		game.setFrame(this, runnerPanel);
 		setVisible(true);
 	}
 
@@ -83,7 +86,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private RunnerPanel buildGameComponent() {
-		RunnerPanel game = new RunnerPanel(this, i18n, keyConfig);
+		RunnerPanel game = new RunnerPanel(i18n, this.game);
 		game.setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
 		add(game, BorderLayout.CENTER);
 		return game;

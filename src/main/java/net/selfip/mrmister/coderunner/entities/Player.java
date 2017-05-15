@@ -1,6 +1,7 @@
 package net.selfip.mrmister.coderunner.entities;
 
 import net.selfip.mrmister.coderunner.CodeRunner;
+import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.frame.RunnerPanel;
@@ -33,21 +34,22 @@ public class Player extends AbstractEntity {
 	private static final int ANIMATION_TIMEOUT = 300;
 	private static final int ANIMATION_STEPS = 2;
 	private static final int START_POS = 100;
-	private final RunnerPanel game;
 	private final I18n i18n;
+	private final GameLoop game;
 
 	private long jump = 0;
 	private int energy = 0;
 
-	public Player(RunnerPanel game, I18n i18n) throws IOException {
+	public Player(RunnerPanel panel, I18n i18n, GameLoop game) throws IOException {
 		super(
 				Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
 				new Point2D.Double(START_POS, 0),
 				ANIMATION_TIMEOUT,
-				game
+				game,
+				panel
 		);
-		this.game = game;
 		this.i18n = i18n;
+		this.game = game;
 	}
 
 	@Override

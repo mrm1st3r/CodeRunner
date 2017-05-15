@@ -3,6 +3,7 @@ package net.selfip.mrmister.coderunner.entities;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 
@@ -23,9 +24,10 @@ public class Bug extends AbstractEntity {
 	/**
 	 * @param pos spawn position
 	 * @param p parent panel
+	 * @param game
 	 */
-	public Bug(Point2D pos, RunnerPanel p) {
-		super(pics, pos, ANIMATION_TIMEOUT, p);
+	public Bug(Point2D pos, RunnerPanel p, GameLoop game) {
+		super(pics, pos, ANIMATION_TIMEOUT, game, p);
 	}
 
 	@Override

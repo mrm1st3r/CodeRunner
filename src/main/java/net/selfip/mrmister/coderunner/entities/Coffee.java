@@ -3,6 +3,7 @@ package net.selfip.mrmister.coderunner.entities;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 
@@ -19,11 +20,12 @@ public class Coffee extends AbstractEntity {
 	private static final int ANIMATION_TIMEOUT = 0;
 
 	/**
-	 * @param p belonging panel
 	 * @param pos where the coffee should spawn
+	 * @param game
+	 * @param p belonging panel
 	 */
-	public Coffee(Point2D pos, RunnerPanel p) {
-		super(Coffee.pics, pos, ANIMATION_TIMEOUT, p);
+	public Coffee(Point2D pos, GameLoop game, RunnerPanel p) {
+		super(Coffee.pics, pos, ANIMATION_TIMEOUT, game, p);
 	}
 
 	/**

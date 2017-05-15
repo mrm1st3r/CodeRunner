@@ -2,6 +2,7 @@ package net.selfip.mrmister.coderunner;
 
 import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.frame.MainFrame;
+import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
 
 /**
@@ -28,11 +29,13 @@ public final class CodeRunner {
 
 	private CodeRunner() {
 		ApplicationInfo applicationInfo = new ApplicationInfo();
+		I18n i18n = new I18n(LANG);
+		KeyConfig keyConfig = new KeyConfig(KEY_CONFIGURATION_FILE, applicationInfo.getSignature());
 		new MainFrame(
 				applicationInfo,
-				new I18n(LANG),
-				new KeyConfig(KEY_CONFIGURATION_FILE, applicationInfo.getSignature())
-		);
+				i18n,
+				keyConfig,
+                new GameLoop(i18n, keyConfig));
 	}
 
 	/**
