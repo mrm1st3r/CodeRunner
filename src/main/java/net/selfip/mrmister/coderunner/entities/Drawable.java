@@ -1,8 +1,8 @@
-package net.selfip.mrmister.codeRunner.entities;
+package net.selfip.mrmister.coderunner.entities;
 
 import java.awt.Graphics;
 
-import net.selfip.mrmister.codeRunner.util.DisplayWriter;
+import net.selfip.mrmister.coderunner.util.DisplayWriter;
 
 /**
  * object which should be drawn to the screen.

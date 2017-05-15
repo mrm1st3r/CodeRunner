@@ -1,7 +1,7 @@
-package net.selfip.mrmister.codeRunner;
+package net.selfip.mrmister.coderunner;
 
-import net.selfip.mrmister.codeRunner.frame.MainFrame;
-import net.selfip.mrmister.codeRunner.lang.I18n;
+import net.selfip.mrmister.coderunner.frame.MainFrame;
+import net.selfip.mrmister.coderunner.lang.I18n;
 
 import java.awt.event.KeyEvent;
 

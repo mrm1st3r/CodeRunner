@@ -1,4 +1,4 @@
-package net.selfip.mrmister.codeRunner;
+package net.selfip.mrmister.coderunner;
 
 /**
  * General information about the application.

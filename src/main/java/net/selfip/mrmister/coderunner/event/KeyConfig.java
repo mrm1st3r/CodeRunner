@@ -1,6 +1,6 @@
-package net.selfip.mrmister.codeRunner.event;
+package net.selfip.mrmister.coderunner.event;
 
-import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.coderunner.CodeRunner;
 
 import java.io.File;
 import java.io.FileInputStream;

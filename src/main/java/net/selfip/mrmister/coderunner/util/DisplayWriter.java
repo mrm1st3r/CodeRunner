@@ -1,4 +1,4 @@
-package net.selfip.mrmister.codeRunner.util;
+package net.selfip.mrmister.coderunner.util;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -1,10 +1,10 @@
-package net.selfip.mrmister.codeRunner.entities;
+package net.selfip.mrmister.coderunner.entities;
 
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import net.selfip.mrmister.codeRunner.util.Images;
-import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
+import net.selfip.mrmister.coderunner.util.Images;
+import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 
 /**
  * a software-bug, which depresses the player.

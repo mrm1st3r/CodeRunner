@@ -1,6 +1,6 @@
-package net.selfip.mrmister.codeRunner.util;
+package net.selfip.mrmister.coderunner.util;
 
-import net.selfip.mrmister.codeRunner.CodeRunner;
+import net.selfip.mrmister.coderunner.CodeRunner;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

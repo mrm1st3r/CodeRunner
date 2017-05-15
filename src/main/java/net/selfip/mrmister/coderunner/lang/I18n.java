@@ -1,4 +1,4 @@
-package net.selfip.mrmister.codeRunner.lang;
+package net.selfip.mrmister.coderunner.lang;
 
 import java.io.BufferedReader;
 import java.io.IOException;

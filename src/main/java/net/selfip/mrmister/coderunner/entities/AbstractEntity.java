@@ -1,13 +1,13 @@
-package net.selfip.mrmister.codeRunner.entities;
+package net.selfip.mrmister.coderunner.entities;
 
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
-import net.selfip.mrmister.codeRunner.util.DisplayWriter;
-import net.selfip.mrmister.codeRunner.util.Time;
+import net.selfip.mrmister.coderunner.frame.RunnerPanel;
+import net.selfip.mrmister.coderunner.util.DisplayWriter;
+import net.selfip.mrmister.coderunner.util.Time;
 
 /**
  * base class for non player entities.

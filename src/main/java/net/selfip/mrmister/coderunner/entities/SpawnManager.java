@@ -1,4 +1,4 @@
-package net.selfip.mrmister.codeRunner.entities;
+package net.selfip.mrmister.coderunner.entities;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 import javax.swing.Timer;
 
-import net.selfip.mrmister.codeRunner.CodeRunner;
-import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
+import net.selfip.mrmister.coderunner.CodeRunner;
+import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 
 /**
  * spawn new entities periodically.

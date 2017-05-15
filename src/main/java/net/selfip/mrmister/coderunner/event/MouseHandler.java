@@ -1,11 +1,11 @@
-package net.selfip.mrmister.codeRunner.event;
+package net.selfip.mrmister.coderunner.event;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
-import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
+import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 
 /**
  * auto-pause on mouse leave and resume on entering.

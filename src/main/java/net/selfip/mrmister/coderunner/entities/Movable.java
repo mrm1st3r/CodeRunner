@@ -1,4 +1,4 @@
-package net.selfip.mrmister.codeRunner.entities;
+package net.selfip.mrmister.coderunner.entities;
 
 /**
  * Specify an entity which acts FPS independent.

@@ -1,4 +1,4 @@
-package net.selfip.mrmister.codeRunner.lang;
+package net.selfip.mrmister.coderunner.lang;
 
 /**
  * Exception thrown by I18n classes.

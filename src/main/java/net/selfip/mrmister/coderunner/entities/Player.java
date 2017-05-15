@@ -1,12 +1,12 @@
-package net.selfip.mrmister.codeRunner.entities;
+package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.codeRunner.CodeRunner;
-import net.selfip.mrmister.codeRunner.util.Images;
-import net.selfip.mrmister.codeRunner.event.KeyConfig;
-import net.selfip.mrmister.codeRunner.frame.RunnerPanel;
-import net.selfip.mrmister.codeRunner.lang.I18n;
-import net.selfip.mrmister.codeRunner.util.DisplayWriter;
-import net.selfip.mrmister.codeRunner.util.Time;
+import net.selfip.mrmister.coderunner.CodeRunner;
+import net.selfip.mrmister.coderunner.util.Images;
+import net.selfip.mrmister.coderunner.event.KeyConfig;
+import net.selfip.mrmister.coderunner.frame.RunnerPanel;
+import net.selfip.mrmister.coderunner.lang.I18n;
+import net.selfip.mrmister.coderunner.util.DisplayWriter;
+import net.selfip.mrmister.coderunner.util.Time;
 
 import javax.swing.*;
 import java.awt.*;
