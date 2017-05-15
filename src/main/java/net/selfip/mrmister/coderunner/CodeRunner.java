@@ -1,5 +1,6 @@
 package net.selfip.mrmister.coderunner;
 
+import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.frame.MainFrame;
 import net.selfip.mrmister.coderunner.lang.I18n;
 
@@ -25,7 +26,6 @@ public final class CodeRunner {
 
 	public static final String KEYCONFIG_FILE = "keyboard.ini";
 
-	public static final int SPAWN_TIMEOUT = 300;
 	public static final int SPAWN_POS = 20;
 	public static final int SPAWN_DIST = 110;
 
@@ -36,7 +36,12 @@ public final class CodeRunner {
 	}
 
 	private CodeRunner() {
-		new MainFrame(new ApplicationInfo(), new I18n(LANG));
+		ApplicationInfo applicationInfo = new ApplicationInfo();
+		new MainFrame(
+				applicationInfo,
+				new I18n(LANG),
+				new KeyConfig(KEYCONFIG_FILE, applicationInfo.getSignature())
+		);
 	}
 
 	/**

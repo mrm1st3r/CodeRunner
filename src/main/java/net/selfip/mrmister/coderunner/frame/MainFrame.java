@@ -2,6 +2,7 @@ package net.selfip.mrmister.coderunner.frame;
 
 import net.selfip.mrmister.coderunner.ApplicationInfo;
 import net.selfip.mrmister.coderunner.CodeRunner;
+import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.lang.I18n;
 
 import javax.swing.*;
@@ -15,11 +16,13 @@ public class MainFrame extends JFrame {
 	private RunnerPanel game;
 	private final ApplicationInfo applicationInfo;
 	private final I18n i18n;
+	private final KeyConfig keyConfig;
 
-	public MainFrame(ApplicationInfo applicationInfo, I18n i18n) {
+	public MainFrame(ApplicationInfo applicationInfo, I18n i18n, KeyConfig keyConfig) {
 		super(applicationInfo.getSignature());
 		this.applicationInfo = applicationInfo;
 		this.i18n = i18n;
+		this.keyConfig = keyConfig;
 
 		buildGameComponent();
 		setupFrameParameters();
@@ -54,7 +57,6 @@ public class MainFrame extends JFrame {
 
 		createMenuItem(gameMenu, i18n.t("Quit"))
 				.addActionListener(e -> {
-					game.saveKeyConfig();
 					System.exit(0);
 				});
 
@@ -64,7 +66,7 @@ public class MainFrame extends JFrame {
 				.addActionListener(a -> new AboutDialog(MainFrame.this, applicationInfo, i18n));
 
 		createMenuItem(helpMenu, i18n.t("Key configuration"))
-			.addActionListener(a -> new KeyConfigDialog(MainFrame.this, i18n, game.getKeyConfig()));
+			.addActionListener(a -> new KeyConfigDialog(MainFrame.this, i18n, keyConfig));
 
 		setJMenuBar(menuBar);
 
@@ -84,7 +86,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void buildGameComponent() {
-		game = new RunnerPanel(this, applicationInfo, i18n);
+		game = new RunnerPanel(this, i18n, keyConfig);
 		game.setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
 		add(game, BorderLayout.CENTER);
 	}

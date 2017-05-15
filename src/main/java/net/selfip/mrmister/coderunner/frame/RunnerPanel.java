@@ -1,6 +1,5 @@
 package net.selfip.mrmister.coderunner.frame;
 
-import net.selfip.mrmister.coderunner.ApplicationInfo;
 import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.entities.*;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
@@ -44,12 +43,11 @@ public class RunnerPanel extends JPanel implements Runnable {
 	private Vector<AbstractEntity> entities;
 	private SpawnManager spawner;
 
-	RunnerPanel(MainFrame main, ApplicationInfo applicationInfo, I18n i18n) {
+	RunnerPanel(MainFrame main, I18n i18n, KeyConfig keyConfig) {
 		super();
 		mainFrame = main;
 		this.i18n = i18n;
-
-		keyConfig = new KeyConfig(CodeRunner.KEYCONFIG_FILE, applicationInfo.getSignature());
+		this.keyConfig = keyConfig;
 
 		try {
 			backgroundImages = Images.loadImage("background.png");
@@ -217,20 +215,6 @@ public class RunnerPanel extends JPanel implements Runnable {
 		delta = System.nanoTime() - last;
 		last = System.nanoTime();
 		fps = Time.NANOS_PER_SEC / delta;
-	}
-
-	/**
-	 * save the key-configuration.
-	 */
-	public void saveKeyConfig() {
-		keyConfig.save();
-	}
-
-	/**
-	 * @return the current key-configuration
-	 */
-	public KeyConfig getKeyConfig() {
-		return keyConfig;
 	}
 
 	@Override

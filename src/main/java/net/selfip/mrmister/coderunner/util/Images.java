@@ -33,13 +33,8 @@ public final class Images {
         BufferedImage[] anim = new BufferedImage[num];
         BufferedImage src = loadImage(path);
         for (int i = 0; i < num; i++) {
-            anim[i] = src.getSubimage(
-                    i * src.getWidth() / num,
-                    0,
-                    src.getWidth() / num,
-                    src.getHeight());
+            anim[i] = src.getSubimage(i * src.getWidth() / num, 0, src.getWidth() / num, src.getHeight());
         }
-
         return anim;
     }
 }
