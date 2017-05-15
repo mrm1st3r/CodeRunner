@@ -1,6 +1,8 @@
 package net.selfip.mrmister.coderunner.event;
 
 import net.selfip.mrmister.coderunner.CodeRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,14 +11,13 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 /**
  * Keyboard configuration file.
  */
 public class KeyConfig {
 
-	private static final Logger LOG = Logger.getLogger(KeyConfig.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(KeyConfig.class);
 
 	private final String configFile;
 	private final Hashtable<String, String> defaults = new Hashtable<>();
@@ -40,9 +41,9 @@ public class KeyConfig {
 		if (file.exists()) {
 			try {
 				prop.load(new FileInputStream(file));
-				LOG.info("read KeyConfig from '" + f + "'");
+				LOG.info("Read KeyConfig from: " + f);
 			} catch (Exception e) {
-				LOG.info("failed loading KeyConfig: " + e);
+				LOG.warn("Failed to load KeyConfig", e);
 			}
 		}
 	}
@@ -97,7 +98,7 @@ public class KeyConfig {
 			prop.store(new FileOutputStream(configFile), getFileComment());
 			LOG.info("Saved configuration to: " + configFile);
 		} catch (IOException e) {
-			LOG.warning("Failed to save configuration:" + e);
+			LOG.warn("Failed to save configuration", e);
 		}
 	}
 

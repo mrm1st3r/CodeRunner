@@ -1,20 +1,22 @@
 package net.selfip.mrmister.coderunner.entities;
 
+import net.selfip.mrmister.coderunner.CodeRunner;
+import net.selfip.mrmister.coderunner.frame.RunnerPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
-import java.util.logging.Logger;
-
-import javax.swing.Timer;
-
-import net.selfip.mrmister.coderunner.CodeRunner;
-import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 
 /**
  * spawn new entities periodically.
  *
  */
 public class SpawnManager implements ActionListener {
+
+	private static final Logger LOG = LoggerFactory.getLogger(RunnerPanel.class);
 
 	private static final double COFFEE_CHANCE = 0.1;
 	private static final double BED_CHANCE = 0.2;
@@ -23,7 +25,6 @@ public class SpawnManager implements ActionListener {
 	private RunnerPanel env;
 	private Timer timer;
 	private long lastSpawn;
-	private Logger log;
 
 	/**
 	 * @param rp panel to spawn entities at
@@ -31,7 +32,6 @@ public class SpawnManager implements ActionListener {
 	public SpawnManager(RunnerPanel rp) {
 		env = rp;
 		timer = new Timer(CodeRunner.SPAWN_TIMEOUT, this);
-		log = Logger.getLogger(getClass().getName());
 	}
 	
 	/**
@@ -55,18 +55,18 @@ public class SpawnManager implements ActionListener {
 		AbstractEntity e = null;
 
 		if (Math.random() <= BUG_CHANCE) {
-			log.info("spawning new bug");
+			LOG.info("spawning new bug");
 			e = new Bug(
 					new Point2D.Double(env.getWidth() + env.getProgress()
 							+ CodeRunner.SPAWN_POS, 0), env);
 		} else if (Math.random() <= COFFEE_CHANCE) {
-			log.info("spawing new coffee");
+			LOG.info("spawing new coffee");
 			e = new Coffee(
 					new Point2D.Double(env.getWidth() + env.getProgress()
 							+ CodeRunner.SPAWN_POS, 0), env);
 
 		} else if (Math.random() < BED_CHANCE) {
-			log.info("spawning new bed");
+			LOG.info("spawning new bed");
 			e = new Bed(
 					new Point2D.Double(env.getWidth() + env.getProgress()
 							+ CodeRunner.SPAWN_POS, 0),	env);

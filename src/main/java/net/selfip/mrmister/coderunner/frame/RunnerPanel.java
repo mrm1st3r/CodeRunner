@@ -2,27 +2,28 @@ package net.selfip.mrmister.coderunner.frame;
 
 import net.selfip.mrmister.coderunner.ApplicationInfo;
 import net.selfip.mrmister.coderunner.CodeRunner;
-import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.entities.*;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.event.MouseHandler;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.DisplayWriter;
+import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.util.Time;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Vector;
-import java.util.logging.Logger;
 
 /**
  * where all the action goes.
  */
 public class RunnerPanel extends JPanel implements Runnable {
 
-	private static final Logger LOG = Logger.getLogger(RunnerPanel.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(RunnerPanel.class);
 
 	private final MainFrame mainFrame;
 	private final I18n i18n;
