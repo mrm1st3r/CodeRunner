@@ -23,8 +23,9 @@ public class MainFrame extends JFrame {
 		this.applicationInfo = applicationInfo;
 		this.i18n = i18n;
 		this.keyConfig = keyConfig;
-		this.game = buildGameComponent();
 		setupFrameParameters();
+		this.game = buildGameComponent();
+		setVisible(true);
 	}
 
 	private void setupFrameParameters() {
@@ -34,7 +35,6 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setJMenuBar(buildMenuBar());
 		setLayout(new BorderLayout());
-		setVisible(true);
 	}
 
 	private JMenuBar buildMenuBar() {
