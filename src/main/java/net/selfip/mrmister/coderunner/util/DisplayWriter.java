@@ -8,36 +8,35 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
- * helper for drawing texts.
- *
+ * Helper class for drawing texts.
  */
 public class DisplayWriter {
 
-	public static final int LINE_HEIGHT = 15;
-	public static final int FIRST_LINE = 20;
-	public static final int SIDE_MARGIN = 10;
-
-	public static final int BIG_FONT_SIZE = 20;
-	public static final int BIG_FONT_LINE_HEIGHT = 25;
-
+	private static final int LINE_HEIGHT = 15;
+	private static final int FIRST_LINE = 20;
+	private static final int SIDE_MARGIN = 10;
 	private static final Color DEFAULT_COLOR = Color.BLACK;
 
-	private static Font bigFont = new Font("Lucida Console", Font.PLAIN, BIG_FONT_SIZE);
-	private Font defFont;
+	private static final int BIG_FONT_SIZE = 20;
+	private static final int BIG_FONT_LINE_HEIGHT = 25;
+	private static final Font BIG_FONT = new Font("Lucida Console", Font.PLAIN, BIG_FONT_SIZE);
+
+	private final Font defaultFont;
+	private final Graphics graphics;
+	private final JPanel panel;
+
 	private int currentLineHeight = FIRST_LINE;
 	private int rightLineHeight = FIRST_LINE;
-	private Graphics g;
-	private JPanel env;
-	private Color c;
+	private Color c = DEFAULT_COLOR;
 
 	/**
-	 * @param gra graphics to draw with
-	 * @param p panel to draw in
+	 * @param graphics graphics to draw with
+	 * @param panel panel to draw in
 	 */
-	public DisplayWriter(Graphics gra, JPanel p) {
-		g = gra;
-		env = p;
-		defFont = g.getFont();
+	public DisplayWriter(Graphics graphics, JPanel panel) {
+		this.graphics = graphics;
+		this.panel = panel;
+		defaultFont = graphics.getFont();
 	}
 
 	/**
@@ -45,10 +44,9 @@ public class DisplayWriter {
 	 * @param msg text to print
 	 */
 	public void println(String msg) {
-		g.setColor(DEFAULT_COLOR);
-		g.setFont(defFont);
-		g.drawString(msg, SIDE_MARGIN, currentLineHeight);
-
+		graphics.setColor(c);
+		graphics.setFont(defaultFont);
+		graphics.drawString(msg, SIDE_MARGIN, currentLineHeight);
 		currentLineHeight += LINE_HEIGHT;
 	}
 
@@ -57,20 +55,19 @@ public class DisplayWriter {
 	 * @param msg text to print
 	 */
 	public void printCentered(String msg) {
-		g.setColor(c);
-		g.setFont(bigFont);
+		graphics.setColor(c);
+		graphics.setFont(BIG_FONT);
 
 		String[] text = msg.split("\n");
 
 		// calculate position
-		FontMetrics fm = g.getFontMetrics();
-		int y = (env.getHeight() - BIG_FONT_LINE_HEIGHT * text.length) / 2;
+		FontMetrics fm = graphics.getFontMetrics();
+		int y = (panel.getHeight() - BIG_FONT_LINE_HEIGHT * text.length) / 2;
 
-		for (int i = 0; i < text.length; i++) {
-			int x = (env.getWidth() - fm.stringWidth(text[i])) / 2;
+		for (String line : text) {
+			int x = (panel.getWidth() - fm.stringWidth(line)) / 2;
 			y += BIG_FONT_LINE_HEIGHT;
-
-			g.drawString(text[i], x, y);
+			graphics.drawString(line, x, y);
 		}
 	}
 
@@ -79,12 +76,13 @@ public class DisplayWriter {
 	 * @param msg text to print
 	 */
 	public void printlnRight(String msg) {
-		g.setColor(c);
-		g.setFont(defFont);
-		g.drawString(msg,
-				env.getWidth() - g.getFontMetrics().stringWidth(msg)
+		graphics.setColor(c);
+		graphics.setFont(defaultFont);
+		graphics.drawString(msg,
+				panel.getWidth() - graphics.getFontMetrics().stringWidth(msg)
 				- SIDE_MARGIN,
 				rightLineHeight);
+		rightLineHeight += LINE_HEIGHT;
 	}
 
 	/**

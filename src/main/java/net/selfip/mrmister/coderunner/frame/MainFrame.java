@@ -13,7 +13,7 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 
-	private RunnerPanel game;
+	private final RunnerPanel game;
 	private final ApplicationInfo applicationInfo;
 	private final I18n i18n;
 	private final KeyConfig keyConfig;
@@ -23,8 +23,7 @@ public class MainFrame extends JFrame {
 		this.applicationInfo = applicationInfo;
 		this.i18n = i18n;
 		this.keyConfig = keyConfig;
-
-		buildGameComponent();
+		this.game = buildGameComponent();
 		setupFrameParameters();
 	}
 
@@ -53,7 +52,7 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		menuItem.setAccelerator(KeyStroke.getKeyStroke((char) CodeRunner.KEY_START));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke((char) keyConfig.get("start")));
 
 		createMenuItem(gameMenu, i18n.t("Quit"))
 				.addActionListener(e -> System.exit(0));
@@ -83,9 +82,10 @@ public class MainFrame extends JFrame {
 		return gameMenu;
 	}
 
-	private void buildGameComponent() {
-		game = new RunnerPanel(this, i18n, keyConfig);
+	private RunnerPanel buildGameComponent() {
+		RunnerPanel game = new RunnerPanel(this, i18n, keyConfig);
 		game.setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
 		add(game, BorderLayout.CENTER);
+		return game;
 	}
 }

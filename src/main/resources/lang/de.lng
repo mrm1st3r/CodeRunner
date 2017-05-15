@@ -1,4 +1,4 @@
-start_msg=drücke Enter um das Spiel zu starten
+start_msg=drÃ¼cke Enter um das Spiel zu starten
 coffee_shock=Du bist an einem Koffeinschock gestorben!
 sleeping=Du bist eingeschlafen!
 depression=Du bist deprimiert und gibst auf!
@@ -15,7 +15,7 @@ Game=Spiel
 New=Neu
 Quit=Beenden
 Help=Hilfe
-About=Über
+About=Ãœber
 Key configuration=Tastenbelegung
 Code=Programmierung
 Graphics=Grafiken

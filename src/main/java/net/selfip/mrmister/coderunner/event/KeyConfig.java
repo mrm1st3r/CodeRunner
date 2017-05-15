@@ -1,9 +1,9 @@
 package net.selfip.mrmister.coderunner.event;
 
-import net.selfip.mrmister.coderunner.CodeRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,6 +18,13 @@ import java.util.Properties;
 public class KeyConfig {
 
 	private static final Logger LOG = LoggerFactory.getLogger(KeyConfig.class);
+
+	private static final int DEFAULT_KEY_START = KeyEvent.VK_ENTER;
+	private static final int DEFAULT_KEY_PAUSE = 'p';
+	private static final int DEFAULT_KEY_LEFT = KeyEvent.VK_LEFT;
+	private static final int DEFAULT_KEY_RIGHT = KeyEvent.VK_RIGHT;
+	private static final int DEFAULT_KEY_JUMP = KeyEvent.VK_SPACE;
+	private static final int DEFAULT_KEY_TOGGLE_DEV = KeyEvent.VK_F11;
 
 	private final String configFile;
 	private final Hashtable<String, String> defaults = new Hashtable<>();
@@ -49,11 +56,12 @@ public class KeyConfig {
 	}
 
 	private void loadDefaults() {
-		setDefaultValue("start", CodeRunner.KEY_START);
-		setDefaultValue("pause", CodeRunner.KEY_PAUSE);
-		setDefaultValue("move_left", CodeRunner.KEY_LEFT);
-		setDefaultValue("move_right", CodeRunner.KEY_RIGHT);
-		setDefaultValue("jump", CodeRunner.KEY_JUMP);
+		setDefaultValue("start", DEFAULT_KEY_START);
+		setDefaultValue("pause", DEFAULT_KEY_PAUSE);
+		setDefaultValue("move_left", DEFAULT_KEY_LEFT);
+		setDefaultValue("move_right", DEFAULT_KEY_RIGHT);
+		setDefaultValue("jump", DEFAULT_KEY_JUMP);
+		setDefaultValue("dev_mode", DEFAULT_KEY_TOGGLE_DEV);
 	}
 
 	private void setDefaultValue(String key, int value) {

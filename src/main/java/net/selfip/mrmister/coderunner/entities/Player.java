@@ -197,7 +197,7 @@ public class Player extends AbstractEntity {
 				startJump();
 			} else if (key == conf.get("pause")) {
 				getEnv().pause();
-			} else if (key == CodeRunner.KEY_TOGGLE_DEV) {
+			} else if (key == conf.get("dev_mode")) {
 				CodeRunner.toggleDevMode();
 			}
 		}

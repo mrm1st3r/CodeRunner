@@ -35,7 +35,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 	private long last = 0;
 	private long fps = 0;
 
-	private BufferedImage backgroundImages;
+	private BufferedImage backgroundImage;
 	private String msg;
 
 	private Player player;
@@ -49,7 +49,7 @@ public class RunnerPanel extends JPanel implements Runnable {
 		this.keyConfig = keyConfig;
 
 		try {
-			backgroundImages = Images.loadImage("background.png");
+			backgroundImage = Images.loadImage("background.png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -220,13 +220,8 @@ public class RunnerPanel extends JPanel implements Runnable {
 		super.paintComponent(g);
 
 		DisplayWriter out = new DisplayWriter(g, this);
-		out.setColor(Color.BLACK);
 
-		// draw background
-		g.drawImage(backgroundImages, (int) -(progress % CodeRunner.WIDTH), 0, this);
-		g.drawImage(backgroundImages,
-				(int) -(progress % CodeRunner.WIDTH) + CodeRunner.WIDTH,
-				0, this);
+		drawBackground(g);
 
 		if (started) {
 			// write FPS-count to the upperleft corner
@@ -246,4 +241,9 @@ public class RunnerPanel extends JPanel implements Runnable {
 		}
 	}
 
+	private void drawBackground(Graphics g) {
+		int splitPoint = (int) -(progress % CodeRunner.WIDTH);
+		g.drawImage(backgroundImage, splitPoint, 0, this);
+		g.drawImage(backgroundImage, splitPoint + CodeRunner.WIDTH, 0, this);
+	}
 }
