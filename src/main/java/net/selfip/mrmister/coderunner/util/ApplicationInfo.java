@@ -8,8 +8,7 @@ public class ApplicationInfo {
     private static final String APP_NAME = "Code Runner";
     private static final String VERSION = "0.4.0";
     public static final String CODE_AUTHOR = "Lukas Taake";
-    public static final String GRAPHICS_AUTHOR = "Lukas Taake";
-    public static final String YEAR = "2013";
+    public static final String YEAR = "2013, 2017";
 
     public String getName() {
         return APP_NAME;

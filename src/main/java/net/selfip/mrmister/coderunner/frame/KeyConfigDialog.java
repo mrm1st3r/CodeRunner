@@ -15,7 +15,7 @@ class KeyConfigDialog extends JDialog {
 	private final I18n i18n;
 	private final KeyConfig keyConfig;
 
-	KeyConfigDialog(MainFrame f, I18n i18n, KeyConfig keyConfig) {
+	KeyConfigDialog(JFrame f, I18n i18n, KeyConfig keyConfig) {
 		super(f, "Key configuration");
 
 		this.i18n = i18n;
