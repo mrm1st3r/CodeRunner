@@ -30,7 +30,6 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     private Vector<AbstractEntity> entities;
     private SpawnManager spawner;
 
-    private double progress = 0;
     private boolean paused = false;
     private boolean started = false;
 
@@ -74,8 +73,6 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         if (started) {
             return;
         }
-
-        progress = 0;
 
         entities = new Vector<>();
         player = new Player(gameBounds, i18n, this);
@@ -149,7 +146,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
             return;
         }
 
-        viewport.print(String.format("%s\n %s: %d", newMsg, i18n.t("score"), (int) getProgress()));
+        viewport.print(String.format("%s\n %s: %d", newMsg, i18n.t("score"), gameBounds.getOffset()));
         started = false;
         spawner.stop();
     }
@@ -193,19 +190,11 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     }
 
     /**
-     * get the current game progress.
-     * @return progress in length-units
-     */
-    public double getProgress() {
-        return progress;
-    }
-
-    /**
      * increment game progress.
      * @param p increment value
      */
     public void progress(int p) {
-        progress += p;
+        gameBounds.addToOffset(p);
     }
 
     private void calculateDelta() {

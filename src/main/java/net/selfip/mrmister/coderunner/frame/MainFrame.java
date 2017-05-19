@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
 		this.gameBounds = gameBounds;
 		this.game = game;
 		setupFrameParameters();
-		RunnerPanel runnerPanel = buildGameComponent();
+		buildGameComponent();
 		game.setFrame(this);
 		setVisible(true);
 	}
@@ -87,10 +87,9 @@ public class MainFrame extends JFrame {
 		return gameMenu;
 	}
 
-	private RunnerPanel buildGameComponent() {
-		RunnerPanel game = new RunnerPanel(i18n, this.game);
+	private void buildGameComponent() {
+		RunnerPanel game = new RunnerPanel(i18n, this.game, gameBounds);
 		game.setSize(gameBounds.getWidth(), gameBounds.getHeight());
 		add(game, BorderLayout.CENTER);
-		return game;
 	}
 }

@@ -1,9 +1,9 @@
 package net.selfip.mrmister.coderunner.frame;
 
-import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
 import net.selfip.mrmister.coderunner.entities.Bug;
 import net.selfip.mrmister.coderunner.entities.Coffee;
+import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.DisplayWriter;
@@ -19,12 +19,14 @@ import java.awt.image.BufferedImage;
 public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 
 	private final GameLoop game;
+	private final Bounds gameBounds;
 	private BufferedImage backgroundImage;
 	private String msg;
 
-	RunnerPanel(I18n i18n, GameLoop game) {
+	RunnerPanel(I18n i18n, GameLoop game, Bounds gameBounds) {
 		super();
 		this.game = game;
+		this.gameBounds = gameBounds;
 		game.setViewport(this);
 
 		try {
@@ -46,16 +48,13 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 
 		drawBackground(g);
 
-		if (game.isStarted()) {
+		if (GameLoop.devMode()) {
+			out.println("FPS: " + game.currentFps());
+			out.println(game.getEntities().size() + " entities");
+		}
 
-			if (GameLoop.devMode()) {
-				out.println("FPS: " + game.currentFps());
-				out.println(game.getEntities().size() + " entities");
-			}
-
-			for (AbstractEntity e : game.getEntities()) {
-				e.draw(g, out);
-			}
+		for (AbstractEntity e : game.getEntities()) {
+			e.draw(g, out);
 		}
 
 		if (msg != null) {
@@ -64,9 +63,9 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 	}
 
 	private void drawBackground(Graphics g) {
-		int splitPoint = (int) -(game.getProgress() % CodeRunner.WIDTH);
+		int splitPoint = -(gameBounds.getOffset() % gameBounds.getWidth());
 		g.drawImage(backgroundImage, splitPoint, 0, this);
-		g.drawImage(backgroundImage, splitPoint + CodeRunner.WIDTH, 0, this);
+		g.drawImage(backgroundImage, splitPoint + gameBounds.getWidth(), 0, this);
 	}
 
 	@Override

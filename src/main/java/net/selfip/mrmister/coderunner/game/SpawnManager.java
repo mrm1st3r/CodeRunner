@@ -15,7 +15,7 @@ import java.awt.geom.Point2D;
 /**
  * spawn new entities periodically.
  */
-public class SpawnManager implements ActionListener {
+class SpawnManager implements ActionListener {
 
 	private static final int SPAWN_POS = 20;
 	private static final int SPAWN_DIST = 110;
@@ -26,12 +26,12 @@ public class SpawnManager implements ActionListener {
 	private static final double BED_CHANCE = 0.2;
 	private static final double BUG_CHANCE = 0.02;
 
-	private final GameLoop game;
+	private final SpawnTarget game;
 	private final Bounds gameBounds;
 	private final Timer timer;
 	private long lastSpawn;
 
-	SpawnManager(GameLoop game, Bounds gameBounds) {
+	SpawnManager(SpawnTarget game, Bounds gameBounds) {
 		this.game = game;
 		this.gameBounds = gameBounds;
 		timer = new Timer(SPAWN_TIMEOUT_MILLIS, this);
@@ -51,24 +51,24 @@ public class SpawnManager implements ActionListener {
 		if (Math.random() <= BUG_CHANCE) {
 			LOG.info("spawning new bug");
 			e = new Bug(
-					new Point2D.Double(gameBounds.getWidth() + game.getProgress()
+					new Point2D.Double(gameBounds.getWidth() + gameBounds.getOffset()
 							+ SPAWN_POS, 0), gameBounds);
 		} else if (Math.random() <= COFFEE_CHANCE) {
 			LOG.info("spawning new coffee");
 			e = new Coffee(
-					new Point2D.Double(gameBounds.getWidth() + game.getProgress()
+					new Point2D.Double(gameBounds.getWidth() + gameBounds.getOffset()
 							+ SPAWN_POS, 0), gameBounds);
 
 		} else if (Math.random() < BED_CHANCE) {
 			LOG.info("spawning new bed");
 			e = new Bed(
-					new Point2D.Double(gameBounds.getWidth() + game.getProgress()
+					new Point2D.Double(gameBounds.getWidth() + gameBounds.getOffset()
 							+ SPAWN_POS, 0), gameBounds);
 		}
 
 		if (e != null) {
 			game.spawnEntity(e);
-			lastSpawn = (int) game.getProgress();
+			lastSpawn = gameBounds.getOffset();
 		}
 	}
 
@@ -79,7 +79,7 @@ public class SpawnManager implements ActionListener {
 		}
 	}
 
-	public interface SpawnTarget {
+	interface SpawnTarget {
 
 		void spawnEntity(AbstractEntity entity);
 	}
