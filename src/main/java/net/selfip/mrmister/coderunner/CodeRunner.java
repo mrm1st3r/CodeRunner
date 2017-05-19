@@ -4,6 +4,7 @@ import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.frame.MainFrame;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
+import net.selfip.mrmister.coderunner.util.ApplicationInfo;
 
 /**
  * Launcher for CodeRunner.
@@ -11,17 +12,7 @@ import net.selfip.mrmister.coderunner.lang.I18n;
 public final class CodeRunner {
 
 	private static final String LANG = "de";
-
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 600;
-	public static final int FPS_LIMIT = 60;
-
 	private static final String KEY_CONFIGURATION_FILE = "keyboard.ini";
-
-	public static final int SPAWN_POS = 20;
-	public static final int SPAWN_DIST = 110;
-
-	private static boolean devMode = false;
 
 	public static void main(String[] args) {
 		new CodeRunner();
@@ -37,19 +28,4 @@ public final class CodeRunner {
 				keyConfig,
                 new GameLoop(i18n, keyConfig));
 	}
-
-	/**
-	 * @return whether developer mode is activated or not
-	 */
-	public static boolean devMode() {
-		return devMode;
-	}
-
-	/**
-	 * toggle developer mode.
-	 */
-	public static void toggleDevMode() {
-		devMode = !devMode;
-	}
-
 }

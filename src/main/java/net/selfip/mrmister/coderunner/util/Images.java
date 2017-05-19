@@ -1,7 +1,5 @@
 package net.selfip.mrmister.coderunner.util;
 
-import net.selfip.mrmister.coderunner.CodeRunner;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,7 +17,7 @@ public final class Images {
     }
 
     public static BufferedImage loadImage(String fileName) throws IOException {
-        File file = new File(CodeRunner.class.getResource(IMAGE_PATH + fileName).getFile());
+        File file = new File(Images.class.getResource(IMAGE_PATH + fileName).getFile());
         return ImageIO.read(file);
     }
 

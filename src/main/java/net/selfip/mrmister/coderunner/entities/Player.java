@@ -1,6 +1,6 @@
 package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.coderunner.CodeRunner;
+import net.selfip.mrmister.coderunner.frame.MainFrame;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
@@ -87,8 +87,8 @@ public class Player extends AbstractEntity {
 
 		super.move(delta);
 
-		if (getRelativeX() >= (CodeRunner.WIDTH - MIN_SIGHT)) {
-			game.progress(getRelativeX() - (CodeRunner.WIDTH - MIN_SIGHT));
+		if (getRelativeX() >= (MainFrame.WIDTH - MIN_SIGHT)) {
+			game.progress(getRelativeX() - (MainFrame.WIDTH - MIN_SIGHT));
 		}
 
 		if (getRelativeX() < 0) {
@@ -132,7 +132,7 @@ public class Player extends AbstractEntity {
 
 	@Override
 	public void draw(Graphics g, DisplayWriter d) {
-		if (CodeRunner.devMode()) {
+		if (GameLoop.devMode()) {
 			d.println("pos: " + (int) x + " / " + getRelativeY());
 			d.println("speed: " + deltaX + " / " + deltaY);
 		}
@@ -181,7 +181,7 @@ public class Player extends AbstractEntity {
 			} else if (key == conf.get("pause")) {
 				game.pause();
 			} else if (key == conf.get("dev_mode")) {
-				CodeRunner.toggleDevMode();
+				GameLoop.toggleDevMode();
 			}
 		}
 

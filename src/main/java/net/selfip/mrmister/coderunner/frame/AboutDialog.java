@@ -1,6 +1,6 @@
 package net.selfip.mrmister.coderunner.frame;
 
-import net.selfip.mrmister.coderunner.ApplicationInfo;
+import net.selfip.mrmister.coderunner.util.ApplicationInfo;
 import net.selfip.mrmister.coderunner.lang.I18n;
 
 import javax.swing.*;

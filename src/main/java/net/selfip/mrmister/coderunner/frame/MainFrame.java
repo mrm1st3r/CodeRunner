@@ -1,7 +1,6 @@
 package net.selfip.mrmister.coderunner.frame;
 
-import net.selfip.mrmister.coderunner.ApplicationInfo;
-import net.selfip.mrmister.coderunner.CodeRunner;
+import net.selfip.mrmister.coderunner.util.ApplicationInfo;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
@@ -14,6 +13,8 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 600;
 	private final ApplicationInfo applicationInfo;
 	private final I18n i18n;
 	private final KeyConfig keyConfig;
@@ -33,7 +34,7 @@ public class MainFrame extends JFrame {
 
 	private void setupFrameParameters() {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
+		setSize(WIDTH, HEIGHT);
 		this.setResizable(false);
 		setLocationRelativeTo(null);
 		setJMenuBar(buildMenuBar());
@@ -87,7 +88,7 @@ public class MainFrame extends JFrame {
 
 	private RunnerPanel buildGameComponent() {
 		RunnerPanel game = new RunnerPanel(i18n, this.game);
-		game.setSize(CodeRunner.WIDTH, CodeRunner.HEIGHT);
+		game.setSize(WIDTH, HEIGHT);
 		add(game, BorderLayout.CENTER);
 		return game;
 	}

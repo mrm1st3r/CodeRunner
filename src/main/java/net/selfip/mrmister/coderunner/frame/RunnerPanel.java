@@ -1,6 +1,5 @@
 package net.selfip.mrmister.coderunner.frame;
 
-import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
 import net.selfip.mrmister.coderunner.entities.Bug;
 import net.selfip.mrmister.coderunner.entities.Coffee;
@@ -47,7 +46,7 @@ public class RunnerPanel extends JPanel {
 
 		if (game.isStarted()) {
 
-			if (CodeRunner.devMode()) {
+			if (GameLoop.devMode()) {
 				out.println("FPS: " + game.currentFps());
 				out.println(game.getEntities().size() + " entities");
 			}
@@ -63,8 +62,8 @@ public class RunnerPanel extends JPanel {
 	}
 
 	private void drawBackground(Graphics g) {
-		int splitPoint = (int) -(game.getProgress() % CodeRunner.WIDTH);
+		int splitPoint = (int) -(game.getProgress() % MainFrame.WIDTH);
 		g.drawImage(backgroundImage, splitPoint, 0, this);
-		g.drawImage(backgroundImage, splitPoint + CodeRunner.WIDTH, 0, this);
+		g.drawImage(backgroundImage, splitPoint + MainFrame.WIDTH, 0, this);
 	}
 }

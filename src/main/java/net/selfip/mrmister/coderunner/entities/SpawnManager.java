@@ -1,6 +1,5 @@
 package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import org.slf4j.Logger;
@@ -17,6 +16,8 @@ import java.awt.geom.Point2D;
  */
 public class SpawnManager implements ActionListener {
 
+	private static final int SPAWN_POS = 20;
+	private static final int SPAWN_DIST = 110;
 	private static final int SPAWN_TIMEOUT_MILLIS = 300;
 	private static final Logger LOG = LoggerFactory.getLogger(RunnerPanel.class);
 
@@ -54,7 +55,7 @@ public class SpawnManager implements ActionListener {
 	}
 
 	private void spawn() {
-		if (game.getProgress() - lastSpawn < CodeRunner.SPAWN_DIST) {
+		if (game.getProgress() - lastSpawn < SPAWN_DIST) {
 			return;
 		}
 		AbstractEntity e = null;
@@ -63,18 +64,18 @@ public class SpawnManager implements ActionListener {
 			LOG.info("spawning new bug");
 			e = new Bug(
 					new Point2D.Double(env.getWidth() + game.getProgress()
-							+ CodeRunner.SPAWN_POS, 0), env, game);
+							+ SPAWN_POS, 0), env, game);
 		} else if (Math.random() <= COFFEE_CHANCE) {
 			LOG.info("spawning new coffee");
 			e = new Coffee(
 					new Point2D.Double(env.getWidth() + game.getProgress()
-							+ CodeRunner.SPAWN_POS, 0), game, env);
+							+ SPAWN_POS, 0), game, env);
 
 		} else if (Math.random() < BED_CHANCE) {
 			LOG.info("spawning new bed");
 			e = new Bed(
 					new Point2D.Double(env.getWidth() + game.getProgress()
-							+ CodeRunner.SPAWN_POS, 0), game, env);
+							+ SPAWN_POS, 0), game, env);
 		}
 
 		if (e != null) {

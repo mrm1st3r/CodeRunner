@@ -1,6 +1,5 @@
 package net.selfip.mrmister.coderunner.game;
 
-import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
 import net.selfip.mrmister.coderunner.entities.Player;
 import net.selfip.mrmister.coderunner.entities.SpawnManager;
@@ -20,7 +19,9 @@ import java.util.Vector;
  */
 public class GameLoop implements Runnable {
 
+    private static final int FPS_LIMIT = 60;
     private static final Logger LOG = LoggerFactory.getLogger(GameLoop.class);
+    private static boolean devMode = false;
 
     private MainFrame mainFrame;
     private final I18n i18n;
@@ -43,6 +44,20 @@ public class GameLoop implements Runnable {
     public GameLoop(I18n i18n, KeyConfig keyConfig) {
         this.i18n = i18n;
         this.keyConfig = keyConfig;
+    }
+
+    /**
+     * @return whether developer mode is activated or not
+     */
+    public static boolean devMode() {
+        return devMode;
+    }
+
+    /**
+     * toggle developer mode.
+     */
+    public static void toggleDevMode() {
+        devMode = !devMode;
     }
 
     public void setFrame(MainFrame frame, RunnerPanel panel) {
@@ -80,7 +95,7 @@ public class GameLoop implements Runnable {
     @Override
     public void run() {
         LOG.info("Main Loop starting");
-        while (mainFrame.isVisible() && started) {
+        while (started) {
 
             calculateDelta();
 
@@ -89,7 +104,7 @@ public class GameLoop implements Runnable {
             panel.repaint();
 
             try {
-                Thread.sleep((Time.MILLIS_PER_SEC / CodeRunner.FPS_LIMIT));
+                Thread.sleep((Time.MILLIS_PER_SEC / FPS_LIMIT));
             } catch (InterruptedException e) {
                 LOG.info("interrupted during sleep!");
             }
