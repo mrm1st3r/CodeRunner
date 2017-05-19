@@ -1,9 +1,10 @@
 package net.selfip.mrmister.coderunner.frame;
 
-import net.selfip.mrmister.coderunner.util.ApplicationInfo;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
+import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
+import net.selfip.mrmister.coderunner.util.ApplicationInfo;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,28 +14,28 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 600;
 	private final ApplicationInfo applicationInfo;
 	private final I18n i18n;
 	private final KeyConfig keyConfig;
+	private final Bounds gameBounds;
 	private final GameLoop game;
 
-	public MainFrame(ApplicationInfo applicationInfo, I18n i18n, KeyConfig keyConfig, GameLoop game) {
+	public MainFrame(ApplicationInfo applicationInfo, I18n i18n, KeyConfig keyConfig, Bounds gameBounds, GameLoop game) {
 		super(applicationInfo.getSignature());
 		this.applicationInfo = applicationInfo;
 		this.i18n = i18n;
 		this.keyConfig = keyConfig;
+		this.gameBounds = gameBounds;
 		this.game = game;
 		setupFrameParameters();
 		RunnerPanel runnerPanel = buildGameComponent();
-		game.setFrame(this, runnerPanel);
+		game.setFrame(this);
 		setVisible(true);
 	}
 
 	private void setupFrameParameters() {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setSize(WIDTH, HEIGHT);
+		setSize(gameBounds.getWidth(), gameBounds.getHeight());
 		this.setResizable(false);
 		setLocationRelativeTo(null);
 		setJMenuBar(buildMenuBar());
@@ -88,7 +89,7 @@ public class MainFrame extends JFrame {
 
 	private RunnerPanel buildGameComponent() {
 		RunnerPanel game = new RunnerPanel(i18n, this.game);
-		game.setSize(WIDTH, HEIGHT);
+		game.setSize(gameBounds.getWidth(), gameBounds.getHeight());
 		add(game, BorderLayout.CENTER);
 		return game;
 	}

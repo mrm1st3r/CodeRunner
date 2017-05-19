@@ -2,31 +2,29 @@ package net.selfip.mrmister.coderunner.game;
 
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
 import net.selfip.mrmister.coderunner.entities.Player;
-import net.selfip.mrmister.coderunner.entities.SpawnManager;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
-import net.selfip.mrmister.coderunner.frame.MainFrame;
-import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Vector;
 
 /**
  * Main game loop.
  */
-public class GameLoop implements Runnable {
+public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
 
     private static final int FPS_LIMIT = 60;
     private static final Logger LOG = LoggerFactory.getLogger(GameLoop.class);
     private static boolean devMode = false;
 
-    private MainFrame mainFrame;
+    private JFrame mainFrame;
+    private final Bounds gameBounds;
     private final I18n i18n;
     private final KeyConfig keyConfig;
-    private RunnerPanel panel;
 
     private Player player;
     private Vector<AbstractEntity> entities;
@@ -35,13 +33,14 @@ public class GameLoop implements Runnable {
     private double progress = 0;
     private boolean paused = false;
     private boolean started = false;
-    private String msg;
 
     private long delta = 0;
     private long last = 0;
     private long fps = 0;
+    private Viewport viewport;
 
-    public GameLoop(I18n i18n, KeyConfig keyConfig) {
+    public GameLoop(Bounds gameBounds, I18n i18n, KeyConfig keyConfig) {
+        this.gameBounds = gameBounds;
         this.i18n = i18n;
         this.keyConfig = keyConfig;
     }
@@ -60,9 +59,12 @@ public class GameLoop implements Runnable {
         devMode = !devMode;
     }
 
-    public void setFrame(MainFrame frame, RunnerPanel panel) {
+    public void setFrame(JFrame frame) {
         mainFrame = frame;
-        this.panel = panel;
+    }
+
+    public void setViewport(Viewport viewport) {
+        this.viewport = viewport;
     }
 
     /**
@@ -73,18 +75,17 @@ public class GameLoop implements Runnable {
             return;
         }
 
-        msg = null;
         progress = 0;
 
         entities = new Vector<>();
-        player = new Player(panel, i18n, this);
+        player = new Player(gameBounds, i18n, this);
         player.registerKeyHandler(mainFrame, keyConfig);
         entities.add(player);
 
         LOG.info("starting a new game");
         last = System.nanoTime();
 
-        spawner = new SpawnManager(panel, this);
+        spawner = new SpawnManager(this, gameBounds);
 
         started = true;
         Thread th = new Thread(this);
@@ -101,7 +102,7 @@ public class GameLoop implements Runnable {
 
             doLogic();
 
-            panel.repaint();
+            viewport.update();
 
             try {
                 Thread.sleep((Time.MILLIS_PER_SEC / FPS_LIMIT));
@@ -140,14 +141,6 @@ public class GameLoop implements Runnable {
     }
 
     /**
-     * add a new entity to the game.
-     * @param e new entity
-     */
-    public void addEntity(AbstractEntity e) {
-        entities.add(e);
-    }
-
-    /**
      * end the current game.
      * @param newMsg message to be displayed
      */
@@ -156,7 +149,7 @@ public class GameLoop implements Runnable {
             return;
         }
 
-        msg = newMsg + "\n" + i18n.t("score") + ": " + (int) getProgress();
+        viewport.print(String.format("%s\n %s: %d", newMsg, i18n.t("score"), (int) getProgress()));
         started = false;
         spawner.stop();
     }
@@ -227,5 +220,16 @@ public class GameLoop implements Runnable {
 
     public Vector<AbstractEntity> getEntities() {
         return entities;
+    }
+
+    @Override
+    public void spawnEntity(AbstractEntity entity) {
+        entities.add(entity);
+    }
+
+    public interface Viewport {
+        void update();
+
+        void print(String info);
     }
 }

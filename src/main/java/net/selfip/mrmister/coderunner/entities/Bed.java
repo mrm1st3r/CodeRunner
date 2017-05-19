@@ -4,8 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
-import net.selfip.mrmister.coderunner.frame.RunnerPanel;
-import net.selfip.mrmister.coderunner.game.GameLoop;
+import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.util.DisplayWriter;
 
 /**
@@ -13,8 +12,6 @@ import net.selfip.mrmister.coderunner.util.DisplayWriter;
  *
  */
 public class Bed extends AbstractEntity {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final int HEIGHT = 25;
 	private static final int WIDTH = 60;
@@ -29,11 +26,10 @@ public class Bed extends AbstractEntity {
 
 	/**
 	 * @param pos spawn position
-	 * @param game
-	 * @param p parent panel
+	 * @param gameBounds
 	 */
-	public Bed(Point2D pos, GameLoop game, RunnerPanel p) {
-		super(null, pos, 0, game, p);
+	public Bed(Point2D pos, Bounds gameBounds) {
+		super(null, pos, 0, gameBounds);
 
 		width = WIDTH;
 		height = HEIGHT;
@@ -64,7 +60,7 @@ public class Bed extends AbstractEntity {
 
 	@Override
 	public void doLogic(long delta) {
-
+		// Bed has no logic to do
 	}
 
 	@Override

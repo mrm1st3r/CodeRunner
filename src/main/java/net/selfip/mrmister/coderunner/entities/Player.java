@@ -1,12 +1,11 @@
 package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.coderunner.frame.MainFrame;
-import net.selfip.mrmister.coderunner.game.GameLoop;
-import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
-import net.selfip.mrmister.coderunner.frame.RunnerPanel;
+import net.selfip.mrmister.coderunner.game.Bounds;
+import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.DisplayWriter;
+import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.util.Time;
 
 import javax.swing.*;
@@ -34,20 +33,21 @@ public class Player extends AbstractEntity {
 	private static final int ANIMATION_TIMEOUT = 300;
 	private static final int ANIMATION_STEPS = 2;
 	private static final int START_POS = 100;
+	private final Bounds gameBounds;
 	private final I18n i18n;
 	private final GameLoop game;
 
 	private long jump = 0;
 	private int energy = 0;
 
-	public Player(RunnerPanel panel, I18n i18n, GameLoop game) throws IOException {
+	public Player(Bounds gameBounds, I18n i18n, GameLoop game) throws IOException {
 		super(
 				Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
 				new Point2D.Double(START_POS, 0),
 				ANIMATION_TIMEOUT,
-				game,
-				panel
+				gameBounds
 		);
+		this.gameBounds = gameBounds;
 		this.i18n = i18n;
 		this.game = game;
 	}
@@ -87,8 +87,8 @@ public class Player extends AbstractEntity {
 
 		super.move(delta);
 
-		if (getRelativeX() >= (MainFrame.WIDTH - MIN_SIGHT)) {
-			game.progress(getRelativeX() - (MainFrame.WIDTH - MIN_SIGHT));
+		if (getRelativeX() >= (gameBounds.getWidth() - MIN_SIGHT)) {
+			game.progress(getRelativeX() - (gameBounds.getWidth() - MIN_SIGHT));
 		}
 
 		if (getRelativeX() < 0) {

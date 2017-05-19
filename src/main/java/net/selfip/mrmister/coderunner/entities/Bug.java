@@ -3,18 +3,15 @@ package net.selfip.mrmister.coderunner.entities;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import net.selfip.mrmister.coderunner.game.GameLoop;
+import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.util.Images;
-import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 
 /**
  * a software-bug, which depresses the player.
- *
  */
 public class Bug extends AbstractEntity {
 
 	private static BufferedImage[] pics;
-	private static final long serialVersionUID = 1L;
 	private static final int ANIMATION_TIMEOUT = 200;
 	private static final int ANIMATION_STEPS = 4;
 
@@ -23,11 +20,9 @@ public class Bug extends AbstractEntity {
 
 	/**
 	 * @param pos spawn position
-	 * @param p parent panel
-	 * @param game
 	 */
-	public Bug(Point2D pos, RunnerPanel p, GameLoop game) {
-		super(pics, pos, ANIMATION_TIMEOUT, game, p);
+	public Bug(Point2D pos, Bounds gameBounds) {
+		super(pics, pos, ANIMATION_TIMEOUT, gameBounds);
 	}
 
 	@Override

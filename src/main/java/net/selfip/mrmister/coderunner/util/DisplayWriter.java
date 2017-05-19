@@ -84,12 +84,4 @@ public class DisplayWriter {
 				rightLineHeight);
 		rightLineHeight += LINE_HEIGHT;
 	}
-
-	/**
-	 * set a new text-color.
-	 * @param newColor new color
-	 */
-	public void setColor(Color newColor) {
-		c = newColor;
-	}
 }

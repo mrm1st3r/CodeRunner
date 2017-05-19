@@ -1,5 +1,6 @@
 package net.selfip.mrmister.coderunner.frame;
 
+import net.selfip.mrmister.coderunner.CodeRunner;
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
 import net.selfip.mrmister.coderunner.entities.Bug;
 import net.selfip.mrmister.coderunner.entities.Coffee;
@@ -15,7 +16,7 @@ import java.awt.image.BufferedImage;
 /**
  * Panel showing the actual game.
  */
-public class RunnerPanel extends JPanel {
+public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 
 	private final GameLoop game;
 	private BufferedImage backgroundImage;
@@ -24,6 +25,7 @@ public class RunnerPanel extends JPanel {
 	RunnerPanel(I18n i18n, GameLoop game) {
 		super();
 		this.game = game;
+		game.setViewport(this);
 
 		try {
 			backgroundImage = Images.loadImage("background.png");
@@ -62,8 +64,18 @@ public class RunnerPanel extends JPanel {
 	}
 
 	private void drawBackground(Graphics g) {
-		int splitPoint = (int) -(game.getProgress() % MainFrame.WIDTH);
+		int splitPoint = (int) -(game.getProgress() % CodeRunner.WIDTH);
 		g.drawImage(backgroundImage, splitPoint, 0, this);
-		g.drawImage(backgroundImage, splitPoint + MainFrame.WIDTH, 0, this);
+		g.drawImage(backgroundImage, splitPoint + CodeRunner.WIDTH, 0, this);
+	}
+
+	@Override
+	public void update() {
+		repaint();
+	}
+
+	@Override
+	public void print(String info) {
+		msg = info;
 	}
 }

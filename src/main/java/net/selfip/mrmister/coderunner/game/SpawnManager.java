@@ -1,7 +1,9 @@
-package net.selfip.mrmister.coderunner.entities;
+package net.selfip.mrmister.coderunner.game;
 
-import net.selfip.mrmister.coderunner.frame.RunnerPanel;
-import net.selfip.mrmister.coderunner.game.GameLoop;
+import net.selfip.mrmister.coderunner.entities.AbstractEntity;
+import net.selfip.mrmister.coderunner.entities.Bed;
+import net.selfip.mrmister.coderunner.entities.Bug;
+import net.selfip.mrmister.coderunner.entities.Coffee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,74 +14,60 @@ import java.awt.geom.Point2D;
 
 /**
  * spawn new entities periodically.
- *
  */
 public class SpawnManager implements ActionListener {
 
 	private static final int SPAWN_POS = 20;
 	private static final int SPAWN_DIST = 110;
 	private static final int SPAWN_TIMEOUT_MILLIS = 300;
-	private static final Logger LOG = LoggerFactory.getLogger(RunnerPanel.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SpawnManager.class);
 
 	private static final double COFFEE_CHANCE = 0.1;
 	private static final double BED_CHANCE = 0.2;
 	private static final double BUG_CHANCE = 0.02;
 
-	private final RunnerPanel env;
 	private final GameLoop game;
+	private final Bounds gameBounds;
 	private final Timer timer;
 	private long lastSpawn;
 
-	/**
-	 * @param rp panel to spawn entities at
-	 * @param game
-	 */
-	public SpawnManager(RunnerPanel rp, GameLoop game) {
-		env = rp;
+	SpawnManager(GameLoop game, Bounds gameBounds) {
 		this.game = game;
+		this.gameBounds = gameBounds;
 		timer = new Timer(SPAWN_TIMEOUT_MILLIS, this);
 	}
 
-	/**
-	 * start to spawn new entities.
-	 */
-	public void start() {
+	void start() {
 		timer.start();
 	}
 
-	/**
-	 * stop to spawn new entities.
-	 */
-	public void stop() {
+	void stop() {
 		timer.stop();
 	}
 
 	private void spawn() {
-		if (game.getProgress() - lastSpawn < SPAWN_DIST) {
-			return;
-		}
 		AbstractEntity e = null;
 
 		if (Math.random() <= BUG_CHANCE) {
 			LOG.info("spawning new bug");
 			e = new Bug(
-					new Point2D.Double(env.getWidth() + game.getProgress()
-							+ SPAWN_POS, 0), env, game);
+					new Point2D.Double(gameBounds.getWidth() + game.getProgress()
+							+ SPAWN_POS, 0), gameBounds);
 		} else if (Math.random() <= COFFEE_CHANCE) {
 			LOG.info("spawning new coffee");
 			e = new Coffee(
-					new Point2D.Double(env.getWidth() + game.getProgress()
-							+ SPAWN_POS, 0), game, env);
+					new Point2D.Double(gameBounds.getWidth() + game.getProgress()
+							+ SPAWN_POS, 0), gameBounds);
 
 		} else if (Math.random() < BED_CHANCE) {
 			LOG.info("spawning new bed");
 			e = new Bed(
-					new Point2D.Double(env.getWidth() + game.getProgress()
-							+ SPAWN_POS, 0), game, env);
+					new Point2D.Double(gameBounds.getWidth() + game.getProgress()
+							+ SPAWN_POS, 0), gameBounds);
 		}
 
 		if (e != null) {
-			game.addEntity(e);
+			game.spawnEntity(e);
 			lastSpawn = (int) game.getProgress();
 		}
 	}
@@ -89,5 +77,10 @@ public class SpawnManager implements ActionListener {
 		if (e.getSource().equals(timer)) {
 			spawn();
 		}
+	}
+
+	public interface SpawnTarget {
+
+		void spawnEntity(AbstractEntity entity);
 	}
 }

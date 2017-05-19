@@ -1,11 +1,10 @@
 package net.selfip.mrmister.coderunner.entities;
 
+import net.selfip.mrmister.coderunner.game.Bounds;
+import net.selfip.mrmister.coderunner.util.Images;
+
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-
-import net.selfip.mrmister.coderunner.game.GameLoop;
-import net.selfip.mrmister.coderunner.util.Images;
-import net.selfip.mrmister.coderunner.frame.RunnerPanel;
 
 /**
  * a friendly entity, which gives +1 energy.
@@ -13,19 +12,13 @@ import net.selfip.mrmister.coderunner.frame.RunnerPanel;
  */
 public class Coffee extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
 	private static BufferedImage[] pics = null;
-	
+
 	private static final int ANIMATION_STEPS = 1;
 	private static final int ANIMATION_TIMEOUT = 0;
 
-	/**
-	 * @param pos where the coffee should spawn
-	 * @param game
-	 * @param p belonging panel
-	 */
-	public Coffee(Point2D pos, GameLoop game, RunnerPanel p) {
-		super(Coffee.pics, pos, ANIMATION_TIMEOUT, game, p);
+	public Coffee(Point2D pos, Bounds gameBounds) {
+		super(Coffee.pics, pos, ANIMATION_TIMEOUT, gameBounds);
 	}
 
 	/**
@@ -39,7 +32,6 @@ public class Coffee extends AbstractEntity {
 			if (e instanceof Player) {
 				((Player) e).addEnergy();
 			}
-			
 			return true;
 		}
 
