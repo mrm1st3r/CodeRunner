@@ -1,9 +1,7 @@
 package net.selfip.mrmister.coderunner.game;
 
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
-import net.selfip.mrmister.coderunner.entities.Bed;
-import net.selfip.mrmister.coderunner.entities.Bug;
-import net.selfip.mrmister.coderunner.entities.Coffee;
+import net.selfip.mrmister.coderunner.entities.EntityFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,12 +26,14 @@ class SpawnManager implements ActionListener {
 
 	private final SpawnTarget game;
 	private final Bounds gameBounds;
+	private final EntityFactory factory;
 	private final Timer timer;
-	private long lastSpawn;
+	private long lastSpawnPosition;
 
-	SpawnManager(SpawnTarget game, Bounds gameBounds) {
+	SpawnManager(SpawnTarget game, Bounds gameBounds, EntityFactory factory) {
 		this.game = game;
 		this.gameBounds = gameBounds;
+		this.factory = factory;
 		timer = new Timer(SPAWN_TIMEOUT_MILLIS, this);
 	}
 
@@ -46,29 +46,31 @@ class SpawnManager implements ActionListener {
 	}
 
 	private void spawn() {
+		if (gameBounds.getOffset() - lastSpawnPosition < SPAWN_DIST) {
+			return;
+		}
 		AbstractEntity e = null;
 
 		if (Math.random() <= BUG_CHANCE) {
 			LOG.info("spawning new bug");
-			e = new Bug(
-					new Point2D.Double(gameBounds.getWidth() + gameBounds.getOffset()
-							+ SPAWN_POS, 0), gameBounds);
+			e = factory.createBug(new Point2D.Double(
+					gameBounds.getWidth() + gameBounds.getOffset() + SPAWN_POS,
+					0));
 		} else if (Math.random() <= COFFEE_CHANCE) {
 			LOG.info("spawning new coffee");
-			e = new Coffee(
-					new Point2D.Double(gameBounds.getWidth() + gameBounds.getOffset()
-							+ SPAWN_POS, 0), gameBounds);
-
+			e = factory.createCoffee(new Point2D.Double(
+					gameBounds.getWidth() + gameBounds.getOffset() + SPAWN_POS,
+					0));
 		} else if (Math.random() < BED_CHANCE) {
 			LOG.info("spawning new bed");
-			e = new Bed(
-					new Point2D.Double(gameBounds.getWidth() + gameBounds.getOffset()
-							+ SPAWN_POS, 0), gameBounds);
+			e = factory.createBed(new Point2D.Double(
+					gameBounds.getWidth() + gameBounds.getOffset() + SPAWN_POS,
+					0));
 		}
 
 		if (e != null) {
 			game.spawnEntity(e);
-			lastSpawn = gameBounds.getOffset();
+			lastSpawnPosition = gameBounds.getOffset();
 		}
 	}
 

@@ -132,7 +132,7 @@ public class Player extends AbstractEntity {
 
 	@Override
 	public void draw(Graphics g, DisplayWriter d) {
-		if (GameLoop.devMode()) {
+		if (game.devMode()) {
 			d.println("pos: " + (int) x + " / " + getRelativeY());
 			d.println("speed: " + deltaX + " / " + deltaY);
 		}
@@ -181,7 +181,7 @@ public class Player extends AbstractEntity {
 			} else if (key == conf.get("pause")) {
 				game.pause();
 			} else if (key == conf.get("dev_mode")) {
-				GameLoop.toggleDevMode();
+				game.toggleDevMode();
 			}
 		}
 

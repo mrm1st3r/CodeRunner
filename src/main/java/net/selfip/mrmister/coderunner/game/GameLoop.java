@@ -1,6 +1,7 @@
 package net.selfip.mrmister.coderunner.game;
 
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
+import net.selfip.mrmister.coderunner.entities.EntityFactory;
 import net.selfip.mrmister.coderunner.entities.Player;
 import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.lang.I18n;
@@ -19,42 +20,52 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
 
     private static final int FPS_LIMIT = 60;
     private static final Logger LOG = LoggerFactory.getLogger(GameLoop.class);
-    private static boolean devMode = false;
 
     private JFrame mainFrame;
     private final Bounds gameBounds;
     private final I18n i18n;
     private final KeyConfig keyConfig;
+    private final SpawnManager spawner;
 
     private Player player;
     private Vector<AbstractEntity> entities;
-    private SpawnManager spawner;
+    private Viewport viewport;
 
     private boolean paused = false;
     private boolean started = false;
+    private boolean devMode = false;
 
     private long delta = 0;
     private long last = 0;
     private long fps = 0;
-    private Viewport viewport;
 
-    public GameLoop(Bounds gameBounds, I18n i18n, KeyConfig keyConfig) {
+    public GameLoop(Bounds gameBounds, I18n i18n, KeyConfig keyConfig, EntityFactory factory) {
         this.gameBounds = gameBounds;
         this.i18n = i18n;
         this.keyConfig = keyConfig;
+        spawner = new SpawnManager(this, gameBounds, factory);
+        createPlayerObject(factory);
+    }
+
+    private void createPlayerObject(EntityFactory factory) {
+        try {
+            this.player = factory.createPlayer(i18n, this);
+        } catch (IOException e) {
+            LOG.warn("Could not create player object", e);
+        }
     }
 
     /**
      * @return whether developer mode is activated or not
      */
-    public static boolean devMode() {
+    public boolean devMode() {
         return devMode;
     }
 
     /**
      * toggle developer mode.
      */
-    public static void toggleDevMode() {
+    public void toggleDevMode() {
         devMode = !devMode;
     }
 
@@ -81,8 +92,6 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
 
         LOG.info("starting a new game");
         last = System.nanoTime();
-
-        spawner = new SpawnManager(this, gameBounds);
 
         started = true;
         Thread th = new Thread(this);

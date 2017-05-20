@@ -48,7 +48,7 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 
 		drawBackground(g);
 
-		if (GameLoop.devMode()) {
+		if (game.devMode()) {
 			out.println("FPS: " + game.currentFps());
 			out.println(game.getEntities().size() + " entities");
 		}
