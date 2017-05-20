@@ -18,6 +18,7 @@ public class EntityFactory {
         this.bounds = bounds;
         Coffee.init();
         Bug.init();
+        Bed.init();
     }
 
     public static EntityFactory create(Bounds bounds) {
