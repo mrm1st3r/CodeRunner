@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static net.selfip.mrmister.coderunner.util.Time.NANOS_PER_MILLI;
+
 /**
  * Main game loop.
  */
@@ -21,7 +23,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     private static final int FPS_LIMIT = 60;
     private static final Logger LOG = LoggerFactory.getLogger(GameLoop.class);
 
-    private final GameKeyHandler keyHandler;
+    private final KeyHandler keyHandler;
     private final Bounds gameBounds;
     private final I18n i18n;
     private final SpawnManager spawner;
@@ -42,7 +44,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         this.i18n = i18n;
         spawner = new SpawnManager(this, gameBounds, factory);
         createPlayerObject(factory);
-        this.keyHandler = new GameKeyHandler(this, player);
+        this.keyHandler = new KeyHandler();
     }
 
     private void createPlayerObject(EntityFactory factory) {
@@ -64,13 +66,6 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         return devMode;
     }
 
-    /**
-     * toggle developer mode.
-     */
-    void toggleDevMode() {
-        devMode = !devMode;
-    }
-
     public void setViewport(Viewport viewport) {
         this.viewport = viewport;
     }
@@ -82,6 +77,8 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         if (state != State.STOPPED) {
             return;
         }
+        gameBounds.reset();
+        entities.clear();
         entities.add(player);
 
         LOG.info("starting a new game");
@@ -97,45 +94,34 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     public void run() {
         LOG.info("Main Loop starting");
         while (state != State.STOPPED) {
-
             calculateDelta();
-
             doLogic();
-
             viewport.update();
-
-            try {
-                Thread.sleep((Time.MILLIS_PER_SEC / FPS_LIMIT));
-            } catch (InterruptedException e) {
-                LOG.info("interrupted during sleep!");
-            }
+            sleep();
         }
-
         LOG.info("Main-Loop is over!");
     }
 
-    private void doLogic() {
-        if (entities != null && state != State.PAUSED) {
-            for (int i = 0; i < entities.size(); i++) {
-
-                Entity s = entities.get(i);
-                s.doLogic(delta);
-                s.move(delta);
-
-                if (s.outOfSight()) {
-                    entities.remove(i);
-                }
-            }
-
-            calculateCollisions();
+    private void sleep() {
+        try {
+            Thread.sleep(Math.max((Time.MILLIS_PER_SEC / FPS_LIMIT) - (delta / NANOS_PER_MILLI), 0));
+        } catch (InterruptedException e) {
+            LOG.info("interrupted during sleep!");
         }
     }
 
-    private void calculateCollisions() {
-        for (int i = 0; i < entities.size(); i++) {
-            if (!(entities.get(i) instanceof PlayableEntity)
-                    && entities.get(i).collidedWith(player)) {
-                entities.remove(i);
+    private void doLogic() {
+        if (state == State.PAUSED) {
+            return;
+        }
+        for (Entity entity : entities) {
+            entity.doLogic(delta);
+            entity.move(delta);
+            if (entity.outOfSight()) {
+                entities.remove(entity);
+            }
+            if (!(entity instanceof PlayableEntity) && entity.collidedWith(player)) {
+                entities.remove(entity);
             }
         }
     }
@@ -152,37 +138,6 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         viewport.print(String.format("%s\n %s: %d", newMsg, i18n.t("score"), gameBounds.getOffset()));
         state = State.STOPPED;
         spawner.stop();
-    }
-
-    /**
-     * pause the current game.
-     */
-    void pause() {
-        if (state != State.STARTED) {
-            return;
-        }
-
-        LOG.info("paused the running game");
-        state = State.PAUSED;
-    }
-
-    /**
-     * resume a paused game.
-     */
-    void resume() {
-        if (state != State.PAUSED) {
-            return;
-        }
-
-        LOG.info("resumed the game");
-        state = State.STARTED;
-    }
-
-    /**
-     * @return whether or not the game is paused
-     */
-    boolean isPaused() {
-        return state == State.PAUSED;
     }
 
     /**
@@ -225,7 +180,56 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         void print(String info);
     }
 
-    public enum State {
+    private enum State {
         STOPPED, STARTED, PAUSED
+    }
+
+    private class KeyHandler implements Keyboard.KeyEventHandler {
+
+        @Override
+        public void onPauseButtonPressed() {
+            if (state == State.PAUSED) {
+                LOG.info("resumed the game");
+                state = State.STARTED;
+            } else if (state == State.STARTED) {
+                LOG.info("paused the running game");
+                state = State.PAUSED;
+            }
+        }
+
+        @Override
+        public void onDevModeButtonPressed() {
+            devMode = !devMode;
+        }
+
+        @Override
+        public void onMoveLeftPressed() {
+            player.moveLeft();
+        }
+
+        @Override
+        public void onMoveRightPressed() {
+            player.moveRight();
+        }
+
+        @Override
+        public void onJumpPressed() {
+            player.startJump();
+        }
+
+        @Override
+        public void onMoveRightReleased() {
+            player.stop();
+        }
+
+        @Override
+        public void onMoveLeftReleased() {
+            player.stop();
+        }
+
+        @Override
+        public void onJumpReleased() {
+            player.stopJump();
+        }
     }
 }

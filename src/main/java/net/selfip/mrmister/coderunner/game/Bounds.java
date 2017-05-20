@@ -29,4 +29,8 @@ public class Bounds {
     public int getOffset() {
         return offset;
     }
+
+    void reset() {
+        offset = 0;
+    }
 }
