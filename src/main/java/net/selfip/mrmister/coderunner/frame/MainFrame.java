@@ -91,6 +91,8 @@ public class MainFrame extends JFrame {
 	private void buildGameComponent() {
 		RunnerPanel game = new RunnerPanel(i18n, this.game, gameBounds);
 		game.setSize(gameBounds.getWidth(), gameBounds.getHeight());
+		game.setPreferredSize(new Dimension(gameBounds.getWidth(), gameBounds.getHeight()));
 		add(game, BorderLayout.CENTER);
+		pack();
 	}
 }
