@@ -35,7 +35,7 @@ public class Player extends AbstractEntity {
 	private long jump = 0;
 	private int energy = 0;
 
-	public Player(Bounds gameBounds, I18n i18n, GameLoop game) throws IOException {
+	Player(Bounds gameBounds, I18n i18n, GameLoop game) throws IOException {
 		super(
 				Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
 				new Point2D.Double(START_POS, 0),

@@ -1,6 +1,6 @@
 package net.selfip.mrmister.coderunner.frame;
 
-import net.selfip.mrmister.coderunner.entities.AbstractEntity;
+import net.selfip.mrmister.coderunner.entities.Entity;
 import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
@@ -48,7 +48,7 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 			out.println(game.getEntities().size() + " entities");
 		}
 
-		for (AbstractEntity e : game.getEntities()) {
+		for (Entity e : game.getEntities()) {
 			e.draw(g, out);
 		}
 

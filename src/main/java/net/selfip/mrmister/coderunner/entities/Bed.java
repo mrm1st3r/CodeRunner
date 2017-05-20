@@ -28,7 +28,7 @@ public class Bed extends AbstractEntity {
 	 * @param pos spawn position
 	 * @param gameBounds
 	 */
-	public Bed(Point2D pos, Bounds gameBounds) {
+	Bed(Point2D pos, Bounds gameBounds) {
 		super(null, pos, 0, gameBounds);
 
 		width = WIDTH;

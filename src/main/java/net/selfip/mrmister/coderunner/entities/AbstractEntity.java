@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 /**
  * base class for non player entities.
  */
-public abstract class AbstractEntity extends Rectangle2D.Double {
+abstract class AbstractEntity extends Rectangle2D.Double implements Entity {
 
 	private static final int SIGHT_OFFSET = 5;
 
@@ -38,14 +38,6 @@ public abstract class AbstractEntity extends Rectangle2D.Double {
 		x = pos.getX();
 		setRelativeY((int) pos.getY());
 	}
-
-	/**
-	 * check whether a collision with another entity happened
-	 * and perform the relevant action.
-	 * @param e the other entity
-	 * @return whether the collision happened
-	 */
-	public abstract boolean collidedWith(AbstractEntity e);
 
 	/**
 	 * @return y-axis position relative to the ground
@@ -83,10 +75,12 @@ public abstract class AbstractEntity extends Rectangle2D.Double {
 		return getRelativeY() == 0;
 	}
 
+	@Override
 	public void draw(Graphics g, DisplayWriter d) {
 		g.drawImage(pics[currPic], getRelativeX(), (int) y, null);
 	}
 
+	@Override
 	public void doLogic(long delta) {
 		anim += delta / Time.NANOS_PER_MILLI;
 
@@ -100,6 +94,7 @@ public abstract class AbstractEntity extends Rectangle2D.Double {
 		}
 	}
 
+	@Override
 	public void move(long delta) {
 		if (deltaX != 0) {
 			x += deltaX * (1.0 * delta / Time.NANOS_PER_SEC);
@@ -110,10 +105,7 @@ public abstract class AbstractEntity extends Rectangle2D.Double {
 		}
 	}
 
-	/**
-	 * whether or not the entity is out of the currently displayed area.
-	 * @return true if not visible
-	 */
+	@Override
 	public boolean outOfSight() {
 		return getRelativeX() + AbstractEntity.SIGHT_OFFSET + width < 0;
 	}

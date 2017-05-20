@@ -24,15 +24,15 @@ public class EntityFactory {
         return new EntityFactory(bounds);
     }
 
-    public AbstractEntity createBed(Point2D position) {
+    public Entity createBed(Point2D position) {
         return new Bed(position, bounds);
     }
 
-    public AbstractEntity createCoffee(Point2D position) {
+    public Entity createCoffee(Point2D position) {
         return new Coffee(position, bounds);
     }
 
-    public AbstractEntity createBug(Point2D position) {
+    public Entity createBug(Point2D position) {
         return new Bug(position, bounds);
     }
 

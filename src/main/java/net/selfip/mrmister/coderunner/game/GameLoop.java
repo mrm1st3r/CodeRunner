@@ -1,6 +1,6 @@
 package net.selfip.mrmister.coderunner.game;
 
-import net.selfip.mrmister.coderunner.entities.AbstractEntity;
+import net.selfip.mrmister.coderunner.entities.Entity;
 import net.selfip.mrmister.coderunner.entities.EntityFactory;
 import net.selfip.mrmister.coderunner.entities.Player;
 import net.selfip.mrmister.coderunner.event.Keyboard;
@@ -27,7 +27,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     private final SpawnManager spawner;
 
     private Player player;
-    private final List<AbstractEntity> entities = new LinkedList<>();
+    private final List<Entity> entities = new LinkedList<>();
     private Viewport viewport;
 
     private boolean devMode = false;
@@ -118,7 +118,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         if (entities != null && state != State.PAUSED) {
             for (int i = 0; i < entities.size(); i++) {
 
-                AbstractEntity s = entities.get(i);
+                Entity s = entities.get(i);
                 s.doLogic(delta);
                 s.move(delta);
 
@@ -210,12 +210,12 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         return fps;
     }
 
-    public List<AbstractEntity> getEntities() {
+    public List<Entity> getEntities() {
         return entities;
     }
 
     @Override
-    public void spawnEntity(AbstractEntity entity) {
+    public void spawnEntity(Entity entity) {
         entities.add(entity);
     }
 

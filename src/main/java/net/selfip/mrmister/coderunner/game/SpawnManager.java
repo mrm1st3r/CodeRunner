@@ -1,6 +1,6 @@
 package net.selfip.mrmister.coderunner.game;
 
-import net.selfip.mrmister.coderunner.entities.AbstractEntity;
+import net.selfip.mrmister.coderunner.entities.Entity;
 import net.selfip.mrmister.coderunner.entities.EntityFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,7 @@ class SpawnManager implements ActionListener {
 		if (gameBounds.getOffset() - lastSpawnPosition < SPAWN_DIST) {
 			return;
 		}
-		AbstractEntity e = null;
+		Entity e = null;
 
 		if (Math.random() <= BUG_CHANCE) {
 			LOG.info("spawning new bug");
@@ -83,6 +83,6 @@ class SpawnManager implements ActionListener {
 
 	interface SpawnTarget {
 
-		void spawnEntity(AbstractEntity entity);
+		void spawnEntity(Entity entity);
 	}
 }
