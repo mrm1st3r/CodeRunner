@@ -3,15 +3,15 @@ package net.selfip.mrmister.coderunner.game;
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
 import net.selfip.mrmister.coderunner.entities.EntityFactory;
 import net.selfip.mrmister.coderunner.entities.Player;
-import net.selfip.mrmister.coderunner.event.KeyConfig;
+import net.selfip.mrmister.coderunner.event.Keyboard;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Main game loop.
@@ -21,14 +21,13 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     private static final int FPS_LIMIT = 60;
     private static final Logger LOG = LoggerFactory.getLogger(GameLoop.class);
 
-    private JFrame mainFrame;
+    private final GameKeyHandler keyHandler;
     private final Bounds gameBounds;
     private final I18n i18n;
-    private final KeyConfig keyConfig;
     private final SpawnManager spawner;
 
     private Player player;
-    private Vector<AbstractEntity> entities;
+    private final List<AbstractEntity> entities = new LinkedList<>();
     private Viewport viewport;
 
     private boolean paused = false;
@@ -39,12 +38,12 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     private long last = 0;
     private long fps = 0;
 
-    public GameLoop(Bounds gameBounds, I18n i18n, KeyConfig keyConfig, EntityFactory factory) {
+    public GameLoop(Bounds gameBounds, I18n i18n, EntityFactory factory) {
         this.gameBounds = gameBounds;
         this.i18n = i18n;
-        this.keyConfig = keyConfig;
         spawner = new SpawnManager(this, gameBounds, factory);
         createPlayerObject(factory);
+        this.keyHandler = new GameKeyHandler(this, player);
     }
 
     private void createPlayerObject(EntityFactory factory) {
@@ -53,6 +52,10 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         } catch (IOException e) {
             LOG.warn("Could not create player object", e);
         }
+    }
+
+    public Keyboard.KeyEventHandler getKeyHandler() {
+        return keyHandler;
     }
 
     /**
@@ -69,10 +72,6 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         devMode = !devMode;
     }
 
-    public void setFrame(JFrame frame) {
-        mainFrame = frame;
-    }
-
     public void setViewport(Viewport viewport) {
         this.viewport = viewport;
     }
@@ -84,10 +83,6 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         if (started) {
             return;
         }
-
-        entities = new Vector<>();
-        player = new Player(gameBounds, i18n, this);
-        player.registerKeyHandler(mainFrame, keyConfig);
         entities.add(player);
 
         LOG.info("starting a new game");
@@ -124,7 +119,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         if (entities != null && !paused) {
             for (int i = 0; i < entities.size(); i++) {
 
-                AbstractEntity s = entities.elementAt(i);
+                AbstractEntity s = entities.get(i);
                 s.doLogic(delta);
                 s.move(delta);
 
@@ -139,8 +134,8 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
 
     private void calculateCollisions() {
         for (int i = 0; i < entities.size(); i++) {
-            if (!(entities.elementAt(i) instanceof Player)
-                    && entities.elementAt(i).collidedWith(player)) {
+            if (!(entities.get(i) instanceof Player)
+                    && entities.get(i).collidedWith(player)) {
                 entities.remove(i);
             }
         }
@@ -216,7 +211,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         return fps;
     }
 
-    public Vector<AbstractEntity> getEntities() {
+    public List<AbstractEntity> getEntities() {
         return entities;
     }
 

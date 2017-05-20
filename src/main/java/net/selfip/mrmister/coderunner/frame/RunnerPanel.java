@@ -1,8 +1,6 @@
 package net.selfip.mrmister.coderunner.frame;
 
 import net.selfip.mrmister.coderunner.entities.AbstractEntity;
-import net.selfip.mrmister.coderunner.entities.Bug;
-import net.selfip.mrmister.coderunner.entities.Coffee;
 import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
@@ -34,8 +32,6 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Coffee.init();
-		Bug.init();
 
 		msg = i18n.t("start_msg");
 	}
@@ -43,10 +39,9 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		drawBackground(g);
 
 		DisplayWriter out = new DisplayWriter(g, this);
-
-		drawBackground(g);
 
 		if (game.devMode()) {
 			out.println("FPS: " + game.currentFps());

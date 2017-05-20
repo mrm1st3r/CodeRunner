@@ -1,6 +1,5 @@
 package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.coderunner.event.KeyConfig;
 import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
@@ -8,11 +7,7 @@ import net.selfip.mrmister.coderunner.util.DisplayWriter;
 import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.util.Time;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
@@ -103,7 +98,7 @@ public class Player extends AbstractEntity {
 		if (jump != 0) {
 			int calcX = (int) (System.nanoTime() - jump) / Time.NANOS_PER_MILLI;
 			if (calcX >= JUMP_TIME) {
-				endJump();
+				stopJump();
 			}
 
 			if (deltaY == JUMP_SPEED && getRelativeY() <= 0) {
@@ -119,14 +114,14 @@ public class Player extends AbstractEntity {
 		return false;
 	}
 
-	private void startJump() {
+	public void startJump() {
 		if (jump == 0 && onGround()) {
 			jump = System.nanoTime();
 			deltaY = -1 * JUMP_SPEED;
 		}
 	}
 
-	private void endJump() {
+	public void stopJump() {
 		deltaY = JUMP_SPEED;
 	}
 
@@ -141,61 +136,15 @@ public class Player extends AbstractEntity {
 		super.draw(g, d);
 	}
 
-	public void registerKeyHandler(JFrame p, KeyConfig c) {
-		KeyListener[] l = p.getKeyListeners();
-
-		for (KeyListener k : l) {
-			if (k instanceof Keyboard) {
-				p.removeKeyListener(k);
-			}
-		}
-
-		p.addKeyListener(new Keyboard(c));
+	public void moveLeft() {
+		deltaX = -1 * MOVE_SPEED;
 	}
 
-	class Keyboard extends KeyAdapter {
+	public void moveRight() {
+		deltaX = MOVE_SPEED;
+	}
 
-		private KeyConfig conf;
-
-		Keyboard(KeyConfig c) {
-			conf = c;
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			int key = Character.toLowerCase((char) e.getKeyCode());
-
-			if (game.isPaused()) {
-				if (key == conf.get("pause")) {
-					game.resume();
-				}
-				return;
-			}
-
-			if (key == conf.get("move_left")) {
-				deltaX = -1 * MOVE_SPEED;
-			} else if (key == conf.get("move_right")) {
-				deltaX = MOVE_SPEED;
-			} else if (key == conf.get("jump")) {
-				startJump();
-			} else if (key == conf.get("pause")) {
-				game.pause();
-			} else if (key == conf.get("dev_mode")) {
-				game.toggleDevMode();
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			int key = Character.toLowerCase((char) e.getKeyCode());
-
-			if (key == conf.get("move_left")) {
-				deltaX = 0;
-			} else if (key == conf.get("move_right")) {
-				deltaX = 0;
-			} else if (key == conf.get("jump")) {
-				endJump();
-			}
-		}
+	public void stop() {
+		deltaX = 0;
 	}
 }

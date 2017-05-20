@@ -28,7 +28,7 @@ public final class CodeRunner {
 		KeyConfig keyConfig = new KeyConfig(KEY_CONFIGURATION_FILE, applicationInfo.getSignature());
 		Bounds gameBounds = new Bounds(WIDTH, HEIGHT);
 		EntityFactory factory = EntityFactory.create(gameBounds);
-		GameLoop gameLoop = new GameLoop(gameBounds, i18n, keyConfig, factory);
+		GameLoop gameLoop = new GameLoop(gameBounds, i18n, factory);
 		new MainFrame(applicationInfo, i18n, keyConfig, gameBounds, gameLoop);
 	}
 }

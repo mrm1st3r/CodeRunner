@@ -1,6 +1,7 @@
 package net.selfip.mrmister.coderunner.frame;
 
 import net.selfip.mrmister.coderunner.event.KeyConfig;
+import net.selfip.mrmister.coderunner.event.Keyboard;
 import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
@@ -29,7 +30,7 @@ public class MainFrame extends JFrame {
 		this.game = game;
 		setupFrameParameters();
 		buildGameComponent();
-		game.setFrame(this);
+		Keyboard.registerKeyHandler(this, keyConfig, game.getKeyHandler());
 		setVisible(true);
 	}
 
