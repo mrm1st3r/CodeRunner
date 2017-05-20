@@ -30,9 +30,8 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     private final List<AbstractEntity> entities = new LinkedList<>();
     private Viewport viewport;
 
-    private boolean paused = false;
-    private boolean started = false;
     private boolean devMode = false;
+    private State state = State.STOPPED;
 
     private long delta = 0;
     private long last = 0;
@@ -68,7 +67,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     /**
      * toggle developer mode.
      */
-    public void toggleDevMode() {
+    void toggleDevMode() {
         devMode = !devMode;
     }
 
@@ -80,7 +79,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
      * start a new game.
      */
     public void start() throws IOException {
-        if (started) {
+        if (state != State.STOPPED) {
             return;
         }
         entities.add(player);
@@ -88,7 +87,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         LOG.info("starting a new game");
         last = System.nanoTime();
 
-        started = true;
+        state = State.STARTED;
         Thread th = new Thread(this);
         th.start();
         spawner.start();
@@ -97,7 +96,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     @Override
     public void run() {
         LOG.info("Main Loop starting");
-        while (started) {
+        while (state != State.STOPPED) {
 
             calculateDelta();
 
@@ -116,7 +115,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     }
 
     private void doLogic() {
-        if (entities != null && !paused) {
+        if (entities != null && state != State.PAUSED) {
             for (int i = 0; i < entities.size(); i++) {
 
                 AbstractEntity s = entities.get(i);
@@ -146,51 +145,51 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
      * @param newMsg message to be displayed
      */
     public void stop(String newMsg) {
-        if (!started) {
+        if (state == State.STOPPED) {
             return;
         }
 
         viewport.print(String.format("%s\n %s: %d", newMsg, i18n.t("score"), gameBounds.getOffset()));
-        started = false;
+        state = State.STOPPED;
         spawner.stop();
     }
 
     /**
      * pause the current game.
      */
-    public void pause() {
-        if (paused || !started) {
+    void pause() {
+        if (state != State.STARTED) {
             return;
         }
 
         LOG.info("paused the running game");
-        paused = true;
+        state = State.PAUSED;
     }
 
     /**
      * resume a paused game.
      */
-    public void resume() {
-        if (!paused || !started) {
+    void resume() {
+        if (state != State.PAUSED) {
             return;
         }
 
         LOG.info("resumed the game");
-        paused = false;
+        state = State.STARTED;
     }
 
     /**
      * @return whether or not the game is paused
      */
-    public boolean isPaused() {
-        return paused;
+    boolean isPaused() {
+        return state == State.PAUSED;
     }
 
     /**
      * @return whether or not the game is paused
      */
     public boolean isStarted() {
-        return started;
+        return state == State.STARTED;
     }
 
     /**
@@ -224,5 +223,9 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         void update();
 
         void print(String info);
+    }
+
+    public enum State {
+        STOPPED, STARTED, PAUSED
     }
 }

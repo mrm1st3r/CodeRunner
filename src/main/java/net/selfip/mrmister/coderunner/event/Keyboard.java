@@ -53,7 +53,7 @@ public class Keyboard extends KeyAdapter {
         if (key == keyConfig.get("move_left")) {
             handler.onMoveLeftReleased();
         } else if (key == keyConfig.get("move_right")) {
-         //   handler.onMoveRightReleased();
+            handler.onMoveRightReleased();
         } else if (key == keyConfig.get("jump")) {
             handler.onJumpReleased();
         }
