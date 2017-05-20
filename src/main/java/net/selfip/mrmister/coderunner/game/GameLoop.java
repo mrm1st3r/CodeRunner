@@ -2,7 +2,7 @@ package net.selfip.mrmister.coderunner.game;
 
 import net.selfip.mrmister.coderunner.entities.Entity;
 import net.selfip.mrmister.coderunner.entities.EntityFactory;
-import net.selfip.mrmister.coderunner.entities.Player;
+import net.selfip.mrmister.coderunner.entities.PlayableEntity;
 import net.selfip.mrmister.coderunner.event.Keyboard;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.Time;
@@ -26,7 +26,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     private final I18n i18n;
     private final SpawnManager spawner;
 
-    private Player player;
+    private PlayableEntity player;
     private final List<Entity> entities = new LinkedList<>();
     private Viewport viewport;
 
@@ -133,7 +133,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
 
     private void calculateCollisions() {
         for (int i = 0; i < entities.size(); i++) {
-            if (!(entities.get(i) instanceof Player)
+            if (!(entities.get(i) instanceof PlayableEntity)
                     && entities.get(i).collidedWith(player)) {
                 entities.remove(i);
             }

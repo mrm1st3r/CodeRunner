@@ -11,7 +11,7 @@ import net.selfip.mrmister.coderunner.util.DisplayWriter;
  * a bed makes the player tired and maybe fall to sleep.
  *
  */
-public class Bed extends AbstractEntity {
+class Bed extends AbstractEntity {
 
 	private static final int HEIGHT = 25;
 	private static final int WIDTH = 60;
@@ -24,10 +24,6 @@ public class Bed extends AbstractEntity {
 	private static final Color POST_COLOR = new Color(64, 64, 60);
 	private static final Color FRAME_COLOR = new Color(132, 92, 48);
 
-	/**
-	 * @param pos spawn position
-	 * @param gameBounds
-	 */
 	Bed(Point2D pos, Bounds gameBounds) {
 		super(null, pos, 0, gameBounds);
 
@@ -64,8 +60,8 @@ public class Bed extends AbstractEntity {
 	}
 
 	@Override
-	public boolean collidedWith(AbstractEntity e) {
-		if (this.intersects(e)) {
+	public boolean collidedWith(Entity e) {
+		if (this.intersects((AbstractEntity) e)) {
 			if (e instanceof Player) {
 				((Player) e).reduceEnergy();
 			}

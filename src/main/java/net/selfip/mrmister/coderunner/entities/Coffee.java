@@ -10,25 +10,20 @@ import java.awt.image.BufferedImage;
  * a friendly entity, which gives +1 energy.
  *
  */
-public class Coffee extends AbstractEntity {
+class Coffee extends AbstractEntity {
 
 	private static BufferedImage[] pics = null;
 
 	private static final int ANIMATION_STEPS = 1;
 	private static final int ANIMATION_TIMEOUT = 0;
 
-	public Coffee(Point2D pos, Bounds gameBounds) {
+	Coffee(Point2D pos, Bounds gameBounds) {
 		super(Coffee.pics, pos, ANIMATION_TIMEOUT, gameBounds);
 	}
 
-	/**
-	 * check for collisions. If collides with the player, add one energy.
-	 * @param e entity to check collision with.
-	 * @return return if a collision is detected
-	 */
 	@Override
-	public boolean collidedWith(AbstractEntity e) {
-		if (this.intersects(e)) {
+	public boolean collidedWith(Entity e) {
+		if (this.intersects((AbstractEntity) e)) {
 			if (e instanceof Player) {
 				((Player) e).addEnergy();
 			}
@@ -38,10 +33,7 @@ public class Coffee extends AbstractEntity {
 		return false;
 	}
 
-	/**
-	 * register animation for Coffee entities.
-	 */
-	public static void init() {
+	static void init() {
 		try {
 			pics = Images.loadAnimation("coffee.png", ANIMATION_STEPS);
 		} catch (Exception e) {

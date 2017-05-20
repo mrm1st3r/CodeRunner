@@ -9,7 +9,7 @@ import net.selfip.mrmister.coderunner.util.Images;
 /**
  * a software-bug, which depresses the player.
  */
-public class Bug extends AbstractEntity {
+class Bug extends AbstractEntity {
 
 	private static BufferedImage[] pics;
 	private static final int ANIMATION_TIMEOUT = 200;
@@ -18,16 +18,13 @@ public class Bug extends AbstractEntity {
 	private static final int JUMP_HEIGHT = 120;
 	private static final int JUMP_SPEED = 100;
 
-	/**
-	 * @param pos spawn position
-	 */
-	public Bug(Point2D pos, Bounds gameBounds) {
+	Bug(Point2D pos, Bounds gameBounds) {
 		super(pics, pos, ANIMATION_TIMEOUT, gameBounds);
 	}
 
 	@Override
-	public boolean collidedWith(AbstractEntity e) {
-		if (this.intersects(e)) {
+	public boolean collidedWith(Entity e) {
+		if (this.intersects((AbstractEntity) e)) {
 			if (e instanceof Player) {
 				((Player) e).depress();
 			}
@@ -50,10 +47,7 @@ public class Bug extends AbstractEntity {
 		super.move(delta);
 	}
 
-	/**
-	 * load animation for Bug entities.
-	 */
-	public static void init() {
+	static void init() {
 		try {
 			pics = Images.loadAnimation("bug.png", ANIMATION_STEPS);
 		} catch (Exception e) {

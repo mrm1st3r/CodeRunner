@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * the player object.
  */
-public class Player extends AbstractEntity {
+class Player extends AbstractEntity implements PlayableEntity {
 
 	private static final int MOVE_SPEED = 180;
 	private static final int MIN_SIGHT = 250;
@@ -110,10 +110,11 @@ public class Player extends AbstractEntity {
 	}
 
 	@Override
-	public boolean collidedWith(AbstractEntity e) {
+	public boolean collidedWith(Entity e) {
 		return false;
 	}
 
+	@Override
 	public void startJump() {
 		if (jump == 0 && onGround()) {
 			jump = System.nanoTime();
@@ -121,6 +122,7 @@ public class Player extends AbstractEntity {
 		}
 	}
 
+	@Override
 	public void stopJump() {
 		deltaY = JUMP_SPEED;
 	}
@@ -136,14 +138,17 @@ public class Player extends AbstractEntity {
 		super.draw(g, d);
 	}
 
+	@Override
 	public void moveLeft() {
 		deltaX = -1 * MOVE_SPEED;
 	}
 
+	@Override
 	public void moveRight() {
 		deltaX = MOVE_SPEED;
 	}
 
+	@Override
 	public void stop() {
 		deltaX = 0;
 	}

@@ -1,6 +1,6 @@
 package net.selfip.mrmister.coderunner.game;
 
-import net.selfip.mrmister.coderunner.entities.Player;
+import net.selfip.mrmister.coderunner.entities.PlayableEntity;
 import net.selfip.mrmister.coderunner.event.Keyboard;
 
 /**
@@ -9,9 +9,9 @@ import net.selfip.mrmister.coderunner.event.Keyboard;
 public class GameKeyHandler implements Keyboard.KeyEventHandler {
 
     private final GameLoop game;
-    private final Player player;
+    private final PlayableEntity player;
 
-    GameKeyHandler(GameLoop gameLoop, Player player) {
+    GameKeyHandler(GameLoop gameLoop, PlayableEntity player) {
         this.game = gameLoop;
         this.player = player;
     }

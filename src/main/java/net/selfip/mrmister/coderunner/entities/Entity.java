@@ -14,7 +14,7 @@ public interface Entity {
      * @param e the other entity
      * @return whether the collision happened
      */
-    boolean collidedWith(AbstractEntity e);
+    boolean collidedWith(Entity e);
 
     void draw(Graphics g, DisplayWriter d);
 

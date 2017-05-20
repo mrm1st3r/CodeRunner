@@ -36,7 +36,7 @@ public class EntityFactory {
         return new Bug(position, bounds);
     }
 
-    public Player createPlayer(I18n i18n, GameLoop gameLoop) throws IOException {
+    public PlayableEntity createPlayer(I18n i18n, GameLoop gameLoop) throws IOException {
         return new Player(bounds, i18n, gameLoop);
     }
 }
