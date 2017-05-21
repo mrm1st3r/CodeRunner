@@ -131,7 +131,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         for (Entity entity : entities) {
             entity.doLogic(delta);
             entity.move(delta);
-            if (entity.outOfSight()) {
+            if (gameBounds.hasPassed(entity)) {
                 entities.remove(entity);
             }
             if (!(entity instanceof PlayableEntity) && entity.collidedWith(player)) {

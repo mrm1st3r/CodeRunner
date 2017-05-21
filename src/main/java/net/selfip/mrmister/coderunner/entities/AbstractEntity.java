@@ -14,8 +14,6 @@ import java.awt.image.BufferedImage;
  */
 abstract class AbstractEntity extends Rectangle2D.Double implements Entity {
 
-	private static final int SIGHT_OFFSET = 5;
-
 	int deltaX = 0;
 	int deltaY = 0;
 	int currPic = 0;
@@ -24,7 +22,7 @@ abstract class AbstractEntity extends Rectangle2D.Double implements Entity {
 	private final BufferedImage[] pics;
 	private final long delay;
 
-	private long anim = 0;
+	private long animationDuration = 0;
 
 	AbstractEntity(BufferedImage[] i, Point2D pos, long d, Bounds gameBounds) {
 
@@ -87,11 +85,11 @@ abstract class AbstractEntity extends Rectangle2D.Double implements Entity {
 
 	@Override
 	public void doLogic(long delta) {
-		anim += delta / Time.NANOS_PER_MILLI;
+		animationDuration += delta / Time.NANOS_PER_MILLI;
 
 		// show next animation image
-		if (anim > delay) {
-			anim = 0;
+		if (animationDuration > delay) {
+			animationDuration = 0;
 			currPic++;
 			if (currPic >= pics.length) {
 				currPic = 0;
@@ -109,10 +107,4 @@ abstract class AbstractEntity extends Rectangle2D.Double implements Entity {
 			y += deltaY * (1.0 * delta / Time.NANOS_PER_SEC);
 		}
 	}
-
-	@Override
-	public boolean outOfSight() {
-		return getRelativeX() + AbstractEntity.SIGHT_OFFSET + width < 0;
-	}
-
 }

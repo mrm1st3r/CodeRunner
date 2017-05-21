@@ -30,12 +30,7 @@ class Player extends AbstractEntity implements PlayableEntity {
 	private State state = State.ALIVE;
 
 	Player(Bounds gameBounds, BufferedImage[] animation) throws IOException {
-		super(
-				animation,
-				new Point2D.Double(START_POS, 0),
-				ANIMATION_TIMEOUT,
-				gameBounds
-		);
+		super(animation, new Point2D.Double(START_POS, 0), ANIMATION_TIMEOUT, gameBounds);
 	}
 
 	@Override
@@ -135,7 +130,7 @@ class Player extends AbstractEntity implements PlayableEntity {
 	@Override
 	public void reset() {
 		state = State.ALIVE;
-		resetRelativeX();
+		x = START_POS;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package net.selfip.mrmister.coderunner.game;
 
+import net.selfip.mrmister.coderunner.entities.Entity;
+
 /**
  * The games current viewport bounds.
  */
@@ -39,5 +41,13 @@ public class Bounds {
 
     int rightHorizon() {
         return offset + width;
+    }
+
+    int leftHorizon() {
+        return offset;
+    }
+
+    boolean hasPassed(Entity entity) {
+        return entity.getXPosition() < leftHorizon();
     }
 }

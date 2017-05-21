@@ -24,10 +24,4 @@ public interface Entity {
     void doLogic(long delta);
 
     void move(long delta);
-
-    /**
-     * whether or not the entity is out of the currently displayed area.
-     * @return true if not visible
-     */
-    boolean outOfSight();
 }
