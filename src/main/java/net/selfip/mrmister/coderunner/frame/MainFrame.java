@@ -6,6 +6,8 @@ import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.ApplicationInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +16,8 @@ import java.awt.*;
  * the main frame.
  */
 public class MainFrame extends JFrame {
+
+	private static final Logger LOG = LoggerFactory.getLogger(MainFrame.class);
 
 	private final ApplicationInfo applicationInfo;
 	private final I18n i18n;
@@ -55,7 +59,7 @@ public class MainFrame extends JFrame {
 			try {
 				game.start();
 			} catch (Exception e1) {
-				e1.printStackTrace();
+				LOG.error("Could not start game", e1);
 			}
 		});
 		menuItem.setAccelerator(KeyStroke.getKeyStroke((char) keyConfig.get("start")));

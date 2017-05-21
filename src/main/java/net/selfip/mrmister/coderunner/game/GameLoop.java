@@ -74,7 +74,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     /**
      * start a new game.
      */
-    public void start() throws IOException {
+    public void start() {
         if (state != State.STOPPED) {
             return;
         }
@@ -115,6 +115,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
             Thread.sleep(Math.max((Time.MILLIS_PER_SEC / FPS_LIMIT) - (delta / NANOS_PER_MILLI), 0));
         } catch (InterruptedException e) {
             LOG.info("interrupted during sleep!");
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -155,7 +156,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
             return;
         }
 
-        viewport.print(String.format("%s\n %s: %d", newMsg, i18n.t("score"), gameBounds.getOffset()));
+        viewport.print(String.format("%s%n %s: %d", newMsg, i18n.t("score"), gameBounds.getOffset()));
         state = State.STOPPED;
         spawner.stop();
     }

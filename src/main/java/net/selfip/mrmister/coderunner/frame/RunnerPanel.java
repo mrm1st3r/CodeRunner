@@ -6,6 +6,8 @@ import net.selfip.mrmister.coderunner.game.GameLoop;
 import net.selfip.mrmister.coderunner.lang.I18n;
 import net.selfip.mrmister.coderunner.util.DisplayWriter;
 import net.selfip.mrmister.coderunner.util.Images;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +17,8 @@ import java.awt.image.BufferedImage;
  * Panel showing the actual game.
  */
 public class RunnerPanel extends JPanel implements GameLoop.Viewport {
+
+	private static final Logger LOG = LoggerFactory.getLogger(RunnerPanel.class);
 
 	private final I18n i18n;
 	private final GameLoop game;
@@ -32,7 +36,7 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 		try {
 			backgroundImage = Images.loadImage("background.png");
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.warn("Could not load background image", e);
 		}
 
 		msg = i18n.t("start_msg");

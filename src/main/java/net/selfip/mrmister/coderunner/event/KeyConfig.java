@@ -1,5 +1,6 @@
 package net.selfip.mrmister.coderunner.event;
 
+import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -27,7 +28,7 @@ public class KeyConfig {
 	private static final int DEFAULT_KEY_TOGGLE_DEV = KeyEvent.VK_F11;
 
 	private final String configFile;
-	private final Hashtable<String, String> defaults = new Hashtable<>();
+	private final Map<String, String> defaults;
 	private final String applicationSignature;
 	private final Properties prop = new Properties();
 
@@ -40,7 +41,7 @@ public class KeyConfig {
 		this.applicationSignature = applicationSignature;
 		this.configFile = configFile;
 		loadFile(configFile);
-		loadDefaults();
+		defaults = loadDefaults();
 	}
 
 	private void loadFile(String f) {
@@ -48,27 +49,29 @@ public class KeyConfig {
 		if (file.exists()) {
 			try {
 				prop.load(new FileInputStream(file));
-				LOG.info("Read KeyConfig from: " + f);
+				LOG.info("Read KeyConfig from: {}", f);
 			} catch (Exception e) {
 				LOG.warn("Failed to load KeyConfig", e);
 			}
 		}
 	}
 
-	private void loadDefaults() {
-		setDefaultValue("start", DEFAULT_KEY_START);
-		setDefaultValue("pause", DEFAULT_KEY_PAUSE);
-		setDefaultValue("move_left", DEFAULT_KEY_LEFT);
-		setDefaultValue("move_right", DEFAULT_KEY_RIGHT);
-		setDefaultValue("jump", DEFAULT_KEY_JUMP);
-		setDefaultValue("dev_mode", DEFAULT_KEY_TOGGLE_DEV);
+	private Map<String, String> loadDefaults() {
+		ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+		setDefaultValue(builder, "start", DEFAULT_KEY_START);
+		setDefaultValue(builder, "pause", DEFAULT_KEY_PAUSE);
+		setDefaultValue(builder, "move_left", DEFAULT_KEY_LEFT);
+		setDefaultValue(builder, "move_right", DEFAULT_KEY_RIGHT);
+		setDefaultValue(builder, "jump", DEFAULT_KEY_JUMP);
+		setDefaultValue(builder, "dev_mode", DEFAULT_KEY_TOGGLE_DEV);
+		return builder.build();
 	}
 
-	private void setDefaultValue(String key, int value) {
+	private void setDefaultValue(ImmutableMap.Builder<String, String> builder, String key, int value) {
 		if (!prop.contains(key)) {
 			prop.setProperty(key, Integer.toString(value));
 		}
-		defaults.put(key, Integer.toString(value));
+		builder.put(key, Integer.toString(value));
 	}
 
 	/**
@@ -104,7 +107,7 @@ public class KeyConfig {
 	public void save() {
 		try {
 			prop.store(new FileOutputStream(configFile), getFileComment());
-			LOG.info("Saved configuration to: " + configFile);
+			LOG.info("Saved configuration to: {} ", configFile);
 		} catch (IOException e) {
 			LOG.warn("Failed to save configuration", e);
 		}
