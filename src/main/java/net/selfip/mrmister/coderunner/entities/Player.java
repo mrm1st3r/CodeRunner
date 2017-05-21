@@ -17,7 +17,6 @@ import java.io.IOException;
 class Player extends AbstractEntity implements PlayableEntity {
 
 	private static final int MOVE_SPEED = 180;
-	private static final int MIN_SIGHT = 250;
 	private static final int COFFEE_SHOCK = 10;
 
 	private static final int JUMP_TIME = 500;
@@ -28,7 +27,6 @@ class Player extends AbstractEntity implements PlayableEntity {
 	private static final int ANIMATION_TIMEOUT = 300;
 	private static final int ANIMATION_STEPS = 2;
 	private static final int START_POS = 100;
-	private final Bounds gameBounds;
 	private final I18n i18n;
 	private final GameLoop game;
 
@@ -43,7 +41,6 @@ class Player extends AbstractEntity implements PlayableEntity {
 				ANIMATION_TIMEOUT,
 				gameBounds
 		);
-		this.gameBounds = gameBounds;
 		this.i18n = i18n;
 		this.game = game;
 	}
@@ -80,10 +77,6 @@ class Player extends AbstractEntity implements PlayableEntity {
 		calculateJump();
 
 		super.move(delta);
-
-		if (getRelativeX() >= (gameBounds.getWidth() - MIN_SIGHT)) {
-			game.progress(getRelativeX() - (gameBounds.getWidth() - MIN_SIGHT));
-		}
 
 		if (getRelativeX() < 0) {
 			resetRelativeX();
@@ -155,5 +148,11 @@ class Player extends AbstractEntity implements PlayableEntity {
 	@Override
 	public State getState() {
 		return state;
+	}
+
+	@Override
+	public void reset() {
+		state = State.ALIVE;
+		resetRelativeX();
 	}
 }

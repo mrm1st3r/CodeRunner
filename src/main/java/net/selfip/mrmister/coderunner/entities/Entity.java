@@ -8,6 +8,9 @@ import java.awt.*;
  * Base functionality for all entities.
  */
 public interface Entity {
+
+    int getXPosition();
+
     /**
      * check whether a collision with another entity happened
      * and perform the relevant action.

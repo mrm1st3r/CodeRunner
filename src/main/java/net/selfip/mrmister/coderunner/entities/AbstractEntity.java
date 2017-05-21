@@ -76,6 +76,11 @@ abstract class AbstractEntity extends Rectangle2D.Double implements Entity {
 	}
 
 	@Override
+	public int getXPosition() {
+		return (int) x;
+	}
+
+	@Override
 	public void draw(Graphics g, DisplayWriter d) {
 		g.drawImage(pics[currPic], getRelativeX(), (int) y, null);
 	}

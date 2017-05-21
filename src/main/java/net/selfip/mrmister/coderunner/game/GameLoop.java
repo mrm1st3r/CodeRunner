@@ -22,6 +22,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
 
     private static final int FPS_LIMIT = 60;
     private static final Logger LOG = LoggerFactory.getLogger(GameLoop.class);
+    private static final int MINIMAL_SIGHT = 250;
 
     private final KeyHandler keyHandler;
     private final Bounds gameBounds;
@@ -81,6 +82,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         gameBounds.reset();
         entities.clear();
         entities.add(player);
+        player.reset();
 
         LOG.info("starting a new game");
         last = System.nanoTime();
@@ -97,10 +99,15 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         while (state != State.STOPPED) {
             calculateDelta();
             doLogic();
+            scroll();
             viewport.update();
             sleep();
         }
         LOG.info("Main-Loop is over!");
+    }
+
+    private void scroll() {
+        gameBounds.addToOffset(player.getXPosition() - gameBounds.rightHorizon() + MINIMAL_SIGHT);
     }
 
     private void sleep() {
@@ -158,14 +165,6 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
      */
     public boolean isStarted() {
         return state == State.STARTED;
-    }
-
-    /**
-     * increment game progress.
-     * @param p increment value
-     */
-    public void progress(int p) {
-        gameBounds.addToOffset(p);
     }
 
     private void calculateDelta() {

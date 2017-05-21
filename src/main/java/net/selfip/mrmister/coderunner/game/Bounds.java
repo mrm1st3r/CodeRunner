@@ -23,6 +23,9 @@ public class Bounds {
     }
 
     void addToOffset(int addition) {
+        if (addition <= 0) {
+            return;
+        }
         offset += addition;
     }
 
@@ -32,5 +35,9 @@ public class Bounds {
 
     void reset() {
         offset = 0;
+    }
+
+    int rightHorizon() {
+        return offset + width;
     }
 }
