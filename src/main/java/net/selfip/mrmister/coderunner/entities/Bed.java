@@ -13,10 +13,9 @@ import java.awt.image.BufferedImage;
 class Bed extends AbstractEntity {
 
 	private static final int ANIMATION_STEPS = 1;
-	private static BufferedImage[] pics;
 
-	Bed(Point2D pos, Bounds gameBounds) {
-		super(Bed.pics, pos, 0, gameBounds);
+	Bed(Point2D pos, BufferedImage[] bedAnimation, Bounds gameBounds) {
+		super(bedAnimation, pos, 0, gameBounds);
 	}
 
 	@Override
@@ -30,11 +29,7 @@ class Bed extends AbstractEntity {
 		return false;
 	}
 
-	static void init() {
-		try {
-			pics = Images.loadAnimation("bed.png", ANIMATION_STEPS);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	static BufferedImage[] init() throws Exception {
+		return Images.loadAnimation("bed.png", ANIMATION_STEPS);
 	}
 }

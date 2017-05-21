@@ -11,15 +11,14 @@ import net.selfip.mrmister.coderunner.util.Images;
  */
 class Bug extends AbstractEntity {
 
-	private static BufferedImage[] pics;
 	private static final int ANIMATION_TIMEOUT = 200;
 	private static final int ANIMATION_STEPS = 4;
 
 	private static final int JUMP_HEIGHT = 120;
 	private static final int JUMP_SPEED = 100;
 
-	Bug(Point2D pos, Bounds gameBounds) {
-		super(pics, pos, ANIMATION_TIMEOUT, gameBounds);
+	Bug(Point2D pos, BufferedImage[] bugAnimation, Bounds gameBounds) {
+		super(bugAnimation, pos, ANIMATION_TIMEOUT, gameBounds);
 	}
 
 	@Override
@@ -31,7 +30,6 @@ class Bug extends AbstractEntity {
 
 			return true;
 		}
-
 		return false;
 	}
 
@@ -43,15 +41,10 @@ class Bug extends AbstractEntity {
 		if (getRelativeY() <= 0) {
 			deltaY = -JUMP_SPEED;
 		}
-
 		super.move(delta);
 	}
 
-	static void init() {
-		try {
-			pics = Images.loadAnimation("bug.png", ANIMATION_STEPS);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	static BufferedImage[] init() throws Exception {
+		return Images.loadAnimation("bug.png", ANIMATION_STEPS);
 	}
 }

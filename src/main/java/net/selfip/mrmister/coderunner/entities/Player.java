@@ -5,6 +5,7 @@ import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.util.Time;
 
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
@@ -28,9 +29,9 @@ class Player extends AbstractEntity implements PlayableEntity {
 	private int energy = 0;
 	private State state = State.ALIVE;
 
-	Player(Bounds gameBounds) throws IOException {
+	Player(Bounds gameBounds, BufferedImage[] animation) throws IOException {
 		super(
-				Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
+				animation,
 				new Point2D.Double(START_POS, 0),
 				ANIMATION_TIMEOUT,
 				gameBounds
@@ -140,5 +141,9 @@ class Player extends AbstractEntity implements PlayableEntity {
 	@Override
 	public int getEnergy() {
 		return energy;
+	}
+
+	static BufferedImage[] init() throws IOException {
+		return Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS);
 	}
 }

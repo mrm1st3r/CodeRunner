@@ -12,13 +12,11 @@ import java.awt.image.BufferedImage;
  */
 class Coffee extends AbstractEntity {
 
-	private static BufferedImage[] pics = null;
-
 	private static final int ANIMATION_STEPS = 1;
 	private static final int ANIMATION_TIMEOUT = 0;
 
-	Coffee(Point2D pos, Bounds gameBounds) {
-		super(Coffee.pics, pos, ANIMATION_TIMEOUT, gameBounds);
+	Coffee(Point2D pos, BufferedImage[] coffeeAnimation, Bounds gameBounds) {
+		super(coffeeAnimation, pos, ANIMATION_TIMEOUT, gameBounds);
 	}
 
 	@Override
@@ -29,15 +27,10 @@ class Coffee extends AbstractEntity {
 			}
 			return true;
 		}
-
 		return false;
 	}
 
-	static void init() {
-		try {
-			pics = Images.loadAnimation("coffee.png", ANIMATION_STEPS);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	static BufferedImage[] init() throws Exception {
+		return Images.loadAnimation("coffee.png", ANIMATION_STEPS);
 	}
 }
