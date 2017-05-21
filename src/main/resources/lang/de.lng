@@ -1,7 +1,7 @@
 start_msg=drücke Enter um das Spiel zu starten
-coffee_shock=Du bist an einem Koffeinschock gestorben!
-sleeping=Du bist eingeschlafen!
-depression=Du bist deprimiert und gibst auf!
+CAFFEINE_SHOCKED=Du bist an einem Koffeinschock gestorben!
+ASLEEP=Du bist eingeschlafen!
+DEPRESSED=Du bist deprimiert und gibst auf!
 energy=Energie
 move_left=Nach Links
 move_right=Nach Rechts

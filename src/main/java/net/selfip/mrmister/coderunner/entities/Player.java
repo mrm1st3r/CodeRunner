@@ -34,6 +34,7 @@ class Player extends AbstractEntity implements PlayableEntity {
 
 	private long jump = 0;
 	private int energy = 0;
+	private State state = State.ALIVE;
 
 	Player(Bounds gameBounds, I18n i18n, GameLoop game) throws IOException {
 		super(
@@ -58,22 +59,20 @@ class Player extends AbstractEntity implements PlayableEntity {
 
 	void addEnergy() {
 		energy++;
-
 		if (energy >= COFFEE_SHOCK) {
-			game.stop(i18n.t("coffee_shock"));
+			state = State.CAFFEINE_SHOCKED;
 		}
 	}
 
 	void reduceEnergy() {
 		energy--;
-
 		if (energy < 0) {
-			game.stop(i18n.t("sleeping"));
+			state = State.ASLEEP;
 		}
 	}
 
 	void depress() {
-		game.stop(i18n.t("depression"));
+		state = State.DEPRESSED;
 	}
 
 	@Override
@@ -151,5 +150,10 @@ class Player extends AbstractEntity implements PlayableEntity {
 	@Override
 	public void stop() {
 		deltaX = 0;
+	}
+
+	@Override
+	public State getState() {
+		return state;
 	}
 }

@@ -14,4 +14,10 @@ public interface PlayableEntity extends Entity {
     void moveRight();
 
     void stop();
+
+    State getState();
+
+    enum State {
+        ALIVE, ASLEEP, CAFFEINE_SHOCKED, DEPRESSED
+    }
 }

@@ -77,6 +77,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         if (state != State.STOPPED) {
             return;
         }
+        viewport.print("");
         gameBounds.reset();
         entities.clear();
         entities.add(player);
@@ -114,6 +115,11 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
         if (state == State.PAUSED) {
             return;
         }
+        checkCollisions();
+        checkPlayerState();
+    }
+
+    private void checkCollisions() {
         for (Entity entity : entities) {
             entity.doLogic(delta);
             entity.move(delta);
@@ -124,6 +130,13 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
                 entities.remove(entity);
             }
         }
+    }
+
+    private void checkPlayerState() {
+        if (player.getState() == PlayableEntity.State.ALIVE) {
+            return;
+        }
+        stop(i18n.t(player.getState().name()));
     }
 
     /**
