@@ -1,13 +1,9 @@
 package net.selfip.mrmister.coderunner.entities;
 
 import net.selfip.mrmister.coderunner.game.Bounds;
-import net.selfip.mrmister.coderunner.game.GameLoop;
-import net.selfip.mrmister.coderunner.lang.I18n;
-import net.selfip.mrmister.coderunner.util.DisplayWriter;
 import net.selfip.mrmister.coderunner.util.Images;
 import net.selfip.mrmister.coderunner.util.Time;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
@@ -27,22 +23,18 @@ class Player extends AbstractEntity implements PlayableEntity {
 	private static final int ANIMATION_TIMEOUT = 300;
 	private static final int ANIMATION_STEPS = 2;
 	private static final int START_POS = 100;
-	private final I18n i18n;
-	private final GameLoop game;
 
 	private long jump = 0;
 	private int energy = 0;
 	private State state = State.ALIVE;
 
-	Player(Bounds gameBounds, I18n i18n, GameLoop game) throws IOException {
+	Player(Bounds gameBounds) throws IOException {
 		super(
 				Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS),
 				new Point2D.Double(START_POS, 0),
 				ANIMATION_TIMEOUT,
 				gameBounds
 		);
-		this.i18n = i18n;
-		this.game = game;
 	}
 
 	@Override
@@ -120,17 +112,6 @@ class Player extends AbstractEntity implements PlayableEntity {
 	}
 
 	@Override
-	public void draw(Graphics g, DisplayWriter d) {
-		if (game.devMode()) {
-			d.println("pos: " + (int) x + " / " + getRelativeY());
-			d.println("speed: " + deltaX + " / " + deltaY);
-		}
-		d.printlnRight(i18n.t("energy") + ": " + energy);
-
-		super.draw(g, d);
-	}
-
-	@Override
 	public void moveLeft() {
 		deltaX = -1 * MOVE_SPEED;
 	}
@@ -154,5 +135,10 @@ class Player extends AbstractEntity implements PlayableEntity {
 	public void reset() {
 		state = State.ALIVE;
 		resetRelativeX();
+	}
+
+	@Override
+	public int getEnergy() {
+		return energy;
 	}
 }

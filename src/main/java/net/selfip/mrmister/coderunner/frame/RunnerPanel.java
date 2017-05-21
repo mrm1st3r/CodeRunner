@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
  */
 public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 
+	private final I18n i18n;
 	private final GameLoop game;
 	private final Bounds gameBounds;
 	private BufferedImage backgroundImage;
@@ -23,6 +24,7 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 
 	RunnerPanel(I18n i18n, GameLoop game, Bounds gameBounds) {
 		super();
+		this.i18n = i18n;
 		this.game = game;
 		this.gameBounds = gameBounds;
 		game.setViewport(this);
@@ -51,6 +53,7 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 		for (Entity e : game.getEntities()) {
 			e.draw(g, out);
 		}
+		out.printlnRight(i18n.t("energy") + ": " + game.getPlayer().getEnergy());
 
 		if (msg != null) {
 			out.printCentered(msg);

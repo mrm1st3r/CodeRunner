@@ -1,8 +1,6 @@
 package net.selfip.mrmister.coderunner.entities;
 
 import net.selfip.mrmister.coderunner.game.Bounds;
-import net.selfip.mrmister.coderunner.game.GameLoop;
-import net.selfip.mrmister.coderunner.lang.I18n;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -37,7 +35,7 @@ public class EntityFactory {
         return new Bug(position, bounds);
     }
 
-    public PlayableEntity createPlayer(I18n i18n, GameLoop gameLoop) throws IOException {
-        return new Player(bounds, i18n, gameLoop);
+    public PlayableEntity createPlayer() throws IOException {
+        return new Player(bounds);
     }
 }

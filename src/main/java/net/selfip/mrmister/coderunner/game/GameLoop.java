@@ -50,7 +50,7 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
 
     private void createPlayerObject(EntityFactory factory) {
         try {
-            this.player = factory.createPlayer(i18n, this);
+            this.player = factory.createPlayer();
         } catch (IOException e) {
             LOG.warn("Could not create player object", e);
         }
@@ -179,6 +179,10 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
 
     public List<Entity> getEntities() {
         return entities;
+    }
+
+    public PlayableEntity getPlayer() {
+        return player;
     }
 
     @Override
