@@ -1,6 +1,5 @@
 package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.util.Images;
 
 import java.awt.geom.Point2D;
@@ -14,8 +13,8 @@ class Bed extends AbstractEntity {
 
 	private static final int ANIMATION_STEPS = 1;
 
-	Bed(Point2D pos, BufferedImage[] bedAnimation, Bounds gameBounds) {
-		super(bedAnimation, pos, 0, gameBounds);
+	Bed(Point2D pos, BufferedImage[] bedAnimation) {
+		super(bedAnimation, pos, 0);
 	}
 
 	@Override

@@ -141,6 +141,10 @@ public class GameLoop implements Runnable, SpawnManager.SpawnTarget {
     }
 
     private void checkPlayerState() {
+        if (player.getXPosition() < gameBounds.getOffset()) {
+            player.setXPosition(gameBounds.getOffset());
+        }
+
         if (player.getState() == PlayableEntity.State.ALIVE) {
             return;
         }

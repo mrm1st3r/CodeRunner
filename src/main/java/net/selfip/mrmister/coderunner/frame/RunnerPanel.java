@@ -55,7 +55,7 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 		}
 
 		for (Entity e : game.getEntities()) {
-			e.draw(g, out);
+			drawEntity(g, e);
 		}
 		out.printlnRight(i18n.t("energy") + ": " + game.getPlayer().getEnergy());
 
@@ -68,6 +68,14 @@ public class RunnerPanel extends JPanel implements GameLoop.Viewport {
 		int splitPoint = -(gameBounds.getOffset() % gameBounds.getWidth());
 		g.drawImage(backgroundImage, splitPoint, 0, this);
 		g.drawImage(backgroundImage, splitPoint + gameBounds.getWidth(), 0, this);
+	}
+
+	private void drawEntity(Graphics g, Entity e) {
+		g.drawImage(e.currentImage(), e.getXPosition() - gameBounds.getOffset(), relativeYPosition(e) , null);
+	}
+
+	private int relativeYPosition(Entity e) {
+		return gameBounds.getHeight() - e.getYPosition() - e.height();
 	}
 
 	@Override

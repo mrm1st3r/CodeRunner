@@ -19,7 +19,6 @@ class Player extends AbstractEntity implements PlayableEntity {
 	private static final int JUMP_TIME = 500;
 	private static final int JUMP_SPEED = 200;
 
-	private static final long serialVersionUID = 1L;
 	private static final String PLAYER_SPRITE = "player.png";
 	private static final int ANIMATION_TIMEOUT = 300;
 	private static final int ANIMATION_STEPS = 2;
@@ -29,8 +28,8 @@ class Player extends AbstractEntity implements PlayableEntity {
 	private int energy = 0;
 	private State state = State.ALIVE;
 
-	Player(Bounds gameBounds, BufferedImage[] animation) throws IOException {
-		super(animation, new Point2D.Double(START_POS, 0), ANIMATION_TIMEOUT, gameBounds);
+	Player(BufferedImage[] animation) throws IOException {
+		super(animation, new Point2D.Double(START_POS, 0), ANIMATION_TIMEOUT);
 	}
 
 	@Override
@@ -38,7 +37,7 @@ class Player extends AbstractEntity implements PlayableEntity {
 		if (deltaX != 0) {
 			super.doLogic(delta);
 		} else {
-			currPic = 0;
+			currentImage = 0;
 		}
 	}
 
@@ -66,11 +65,8 @@ class Player extends AbstractEntity implements PlayableEntity {
 
 		super.move(delta);
 
-		if (getRelativeX() < 0) {
-			resetRelativeX();
-		}
-		if (getRelativeY() < 0) {
-			setRelativeY(0);
+		if (y < 0) {
+			y = 0;
 		}
 	}
 
@@ -81,13 +77,13 @@ class Player extends AbstractEntity implements PlayableEntity {
 				stopJump();
 			}
 
-			if (deltaY == JUMP_SPEED && getRelativeY() <= 0) {
+			if (deltaY == -1 * JUMP_SPEED && y <= 0) {
 				deltaY = 0;
 				jump = 0;
-				setRelativeY(0);
+				y = 0;
 			}
 		}
-	}
+ 	}
 
 	@Override
 	public boolean collidedWith(Entity e) {
@@ -98,13 +94,13 @@ class Player extends AbstractEntity implements PlayableEntity {
 	public void startJump() {
 		if (jump == 0 && onGround()) {
 			jump = System.nanoTime();
-			deltaY = -1 * JUMP_SPEED;
+			deltaY = JUMP_SPEED;
 		}
 	}
 
 	@Override
 	public void stopJump() {
-		deltaY = JUMP_SPEED;
+		deltaY = -1 * JUMP_SPEED;
 	}
 
 	@Override
@@ -140,5 +136,9 @@ class Player extends AbstractEntity implements PlayableEntity {
 
 	static BufferedImage[] init() throws IOException {
 		return Images.loadAnimation(PLAYER_SPRITE, ANIMATION_STEPS);
+	}
+
+	private boolean onGround() {
+		return (int) y == 0;
 	}
 }

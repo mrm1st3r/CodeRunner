@@ -1,6 +1,5 @@
 package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.coderunner.game.Bounds;
 import net.selfip.mrmister.coderunner.util.Images;
 
 import java.awt.geom.Point2D;
@@ -15,8 +14,8 @@ class Coffee extends AbstractEntity {
 	private static final int ANIMATION_STEPS = 1;
 	private static final int ANIMATION_TIMEOUT = 0;
 
-	Coffee(Point2D pos, BufferedImage[] coffeeAnimation, Bounds gameBounds) {
-		super(coffeeAnimation, pos, ANIMATION_TIMEOUT, gameBounds);
+	Coffee(Point2D pos, BufferedImage[] coffeeAnimation) {
+		super(coffeeAnimation, pos, ANIMATION_TIMEOUT);
 	}
 
 	@Override

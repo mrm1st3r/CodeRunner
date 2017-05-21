@@ -1,8 +1,6 @@
 package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.coderunner.util.DisplayWriter;
-
-import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Base functionality for all entities.
@@ -10,6 +8,10 @@ import java.awt.*;
 public interface Entity {
 
     int getXPosition();
+
+    void setXPosition(int x);
+
+    int getYPosition();
 
     /**
      * check whether a collision with another entity happened
@@ -19,9 +21,13 @@ public interface Entity {
      */
     boolean collidedWith(Entity e);
 
-    void draw(Graphics g, DisplayWriter d);
+    BufferedImage currentImage();
 
     void doLogic(long delta);
 
     void move(long delta);
+
+    int height();
+
+    int width();
 }

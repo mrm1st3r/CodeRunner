@@ -1,10 +1,9 @@
 package net.selfip.mrmister.coderunner.entities;
 
+import net.selfip.mrmister.coderunner.util.Images;
+
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-
-import net.selfip.mrmister.coderunner.game.Bounds;
-import net.selfip.mrmister.coderunner.util.Images;
 
 /**
  * a software-bug, which depresses the player.
@@ -17,8 +16,8 @@ class Bug extends AbstractEntity {
 	private static final int JUMP_HEIGHT = 120;
 	private static final int JUMP_SPEED = 100;
 
-	Bug(Point2D pos, BufferedImage[] bugAnimation, Bounds gameBounds) {
-		super(bugAnimation, pos, ANIMATION_TIMEOUT, gameBounds);
+	Bug(Point2D pos, BufferedImage[] bugAnimation) {
+		super(bugAnimation, pos, ANIMATION_TIMEOUT);
 	}
 
 	@Override
@@ -35,11 +34,11 @@ class Bug extends AbstractEntity {
 
 	@Override
 	public void move(long delta) {
-		if (getRelativeY() >= JUMP_HEIGHT) {
-			deltaY = JUMP_SPEED;
-		}
-		if (getRelativeY() <= 0) {
+		if ((int) y >= JUMP_HEIGHT) {
 			deltaY = -JUMP_SPEED;
+		}
+		if ((int) y <= 0) {
+			deltaY = JUMP_SPEED;
 		}
 		super.move(delta);
 	}

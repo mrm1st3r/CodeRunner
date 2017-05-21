@@ -1,6 +1,5 @@
 package net.selfip.mrmister.coderunner.entities;
 
-import net.selfip.mrmister.coderunner.game.Bounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,14 +14,12 @@ public class EntityFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityFactory.class);
 
-    private final Bounds bounds;
     private BufferedImage[] playerAnimation;
     private BufferedImage[] bugAnimation;
     private BufferedImage[] bedAnimation;
     private BufferedImage[] coffeeAnimation;
 
-    private EntityFactory(Bounds bounds) {
-        this.bounds = bounds;
+    private EntityFactory() {
         try {
             coffeeAnimation = Coffee.init();
             bugAnimation = Bug.init();
@@ -33,23 +30,23 @@ public class EntityFactory {
         }
     }
 
-    public static EntityFactory create(Bounds bounds) {
-        return new EntityFactory(bounds);
+    public static EntityFactory create() {
+        return new EntityFactory();
     }
 
     public Entity createBed(Point2D position) {
-        return new Bed(position, bedAnimation, bounds);
+        return new Bed(position, bedAnimation);
     }
 
     public Entity createCoffee(Point2D position) {
-        return new Coffee(position, coffeeAnimation, bounds);
+        return new Coffee(position, coffeeAnimation);
     }
 
     public Entity createBug(Point2D position) {
-        return new Bug(position, bugAnimation, bounds);
+        return new Bug(position, bugAnimation);
     }
 
     public PlayableEntity createPlayer() throws IOException {
-        return new Player(bounds, playerAnimation);
+        return new Player(playerAnimation);
     }
 }

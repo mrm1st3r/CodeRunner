@@ -43,11 +43,7 @@ public class Bounds {
         return offset + width;
     }
 
-    int leftHorizon() {
-        return offset;
-    }
-
     boolean hasPassed(Entity entity) {
-        return entity.getXPosition() < leftHorizon();
+        return entity.getXPosition() + entity.width() < offset;
     }
 }
